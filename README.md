@@ -1,7 +1,5 @@
-# Skeleton Angular Application
+# School AI - Intelligent School Management System
 
-### version 19.0.1
+## Overview
 
-### Client Side rendering (CSR)
-### Server Side Rendering (SSR)
-### Static Site Generation (SSG) 
+School AI is a modern school management system that leverages artificial intelligence to enhance educational administration and management processes. Built with Angular and incorporating advanced AI capabilities, this system aims to streamline school operations and improve educational outcomes.
