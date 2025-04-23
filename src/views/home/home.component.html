@@ -1,0 +1,18 @@
+<!-- home.component.html -->
+<div class="min-h-screen flex flex-col decorative-pattern">
+  <!-- Navbar (fixed height) -->
+  <div class="h-20 flex-shrink-0">
+    <app-navbar></app-navbar>
+  </div>
+
+  <!-- Main Content -->
+  <div class="flex-1 min-h-0 overflow-hidden p-6">
+    <main
+      class="h-full max-w-7xl mx-auto bg-white rounded-xl shadow-lg overflow-auto"
+    >
+      <div class="p-6">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+<svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="12" cy="12" r="12" fill="#3B82F6"/>
+  
+  <!-- School Icon -->
+  <path d="M12,3L1,9L12,15L21,10.09V17H23V9M5,13.18V17.18L12,21L19,17.18V13.18L12,17L5,13.18Z" fill="white"/>
+  
+  <!-- AI Circuit Pattern -->
+  <path d="M8 8H10V10H8V8Z" fill="white"/>
+  <path d="M14 8H16V10H14V8Z" fill="white"/>
+  <path d="M10 10H14V12H10V10Z" fill="white"/>
+  <path d="M8 12H16V14H8V12Z" fill="white"/>
+  <path d="M10 14H14V16H10V14Z" fill="white"/>
+</svg> 

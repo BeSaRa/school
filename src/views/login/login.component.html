@@ -1,0 +1,92 @@
+<div
+  class="min-h-screen decorative-pattern flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
+>
+  <!-- Existing login container -->
+  <div
+    class="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-xl relative z-10"
+  >
+    <!-- Logo/Title Section -->
+    <div class="text-center">
+      <div class="flex justify-center mb-4">
+        <svg
+          class="h-16 w-16 text-blue-600"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+        >
+          <path
+            d="M12,3L1,9L12,15L21,10.09V17H23V9M5,13.18V17.18L12,21L19,17.18V13.18L12,17L5,13.18Z"
+          />
+        </svg>
+      </div>
+      <h2 class="mt-2 text-3xl font-extrabold text-gray-900">School AI</h2>
+      <p class="mt-2 text-sm text-gray-600">
+        Intelligent School Management System
+      </p>
+    </div>
+    <!-- Login Form -->
+    <form
+      [formGroup]="loginForm"
+      (ngSubmit)="onSubmit()"
+      class="mt-8 space-y-6"
+    >
+      <div class="rounded-md shadow-sm -space-y-px">
+        <!-- Username Input -->
+        <div>
+          <label for="username" class="sr-only">Username</label>
+          <input
+            id="username"
+            formControlName="username"
+            type="text"
+            required
+            class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+            placeholder="Username"
+          />
+        </div>
+        <!-- Password Input -->
+        <div>
+          <label for="password" class="sr-only">Password</label>
+          <input
+            id="password"
+            formControlName="password"
+            type="password"
+            required
+            class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+            placeholder="Password"
+          />
+        </div>
+      </div>
+
+      <!-- Error Message -->
+      @if (errorMessage) {
+        <div class="text-red-500 text-sm text-center">
+          {{ errorMessage }}
+        </div>
+      }
+
+      <!-- Forgot Password Link -->
+      <div class="flex items-center justify-end">
+        <div class="text-sm">
+          <a href="#" class="font-medium text-blue-600 hover:text-blue-500">
+            Forgot your password?
+          </a>
+        </div>
+      </div>
+
+      <!-- Login Button -->
+      <div>
+        <button
+          type="submit"
+          [disabled]="isLoading || loginForm.invalid"
+          class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          @if (!isLoading) {
+            <span>Sign in</span>
+          }
+          @if (isLoading) {
+            <span>Signing in...</span>
+          }
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

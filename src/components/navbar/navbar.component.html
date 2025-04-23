@@ -1,0 +1,90 @@
+<nav class="bg-white shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-20">
+      <!-- Logo/Title Section -->
+      <div class="flex items-center space-x-4">
+        <div class="flex items-center justify-center">
+          <svg
+            class="h-12 w-12 text-blue-600"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path
+              d="M12,3L1,9L12,15L21,10.09V17H23V9M5,13.18V17.18L12,21L19,17.18V13.18L12,17L5,13.18Z"
+            />
+          </svg>
+        </div>
+        <div>
+          <h2 class="text-xl font-bold text-gray-900 leading-none">
+            School AI
+          </h2>
+          <p class="text-sm text-gray-600">Intelligent School Management</p>
+        </div>
+      </div>
+
+      <!-- Navigation Menu -->
+      <div class="flex items-center space-x-4">
+        @for (item of menuItems; track item.label) {
+          <div class="relative group">
+            @if (item.children) {
+              <!-- Parent item with children -->
+              <div class="flex items-center p-2 rounded-lg group-hover:bg-gray-50 cursor-pointer">
+                <div class="flex items-center">
+                  <div class="flex items-center min-w-[2.5rem]">
+                    <i
+                      [class]="getIcon(item.icon)"
+                      class="text-2xl text-gray-600 transform transition-all duration-500 ease-out group-hover:text-blue-600 group-hover:scale-110"
+                    ></i>
+                  </div>
+                  <span
+                    class="pl-1 text-gray-700 max-w-0 overflow-hidden transition-all duration-500 ease-out group-hover:max-w-[160px]"
+                  >
+                    {{ item.label }}
+                  </span>
+                </div>
+              </div>
+              <!-- Dropdown Menu -->
+              <div class="absolute top-full right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                @for (child of item.children; track child.label) {
+                  <a
+                    [routerLink]="child.route"
+                    class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100"
+                    [class.bg-blue-50]="isActiveRoute(child.route)"
+                    [class.text-blue-600]="isActiveRoute(child.route)"
+                  >
+                    <i [class]="getIcon(child.icon)" class="mr-3"></i>
+                    <span>{{ child.label }}</span>
+                  </a>
+                }
+              </div>
+            } @else {
+              <!-- Single item -->
+              <a
+                [routerLink]="item.route"
+                class="flex items-center p-2 rounded-lg group-hover:bg-gray-50"
+              >
+                <div class="flex items-center">
+                  <div class="flex items-center min-w-[2.5rem]">
+                    <i
+                      [class]="getIcon(item.icon)"
+                      class="text-2xl transform transition-all duration-500 ease-out"
+                      [class.text-blue-600]="isActiveRoute(item.route)"
+                      [class.text-gray-600]="!isActiveRoute(item.route)"
+                      [class.scale-110]="isActiveRoute(item.route)"
+                    ></i>
+                  </div>
+                  <span
+                    class="pl-1 text-gray-700 max-w-0 overflow-hidden transition-all duration-500 ease-out group-hover:max-w-[160px]"
+                    [class.text-blue-600]="isActiveRoute(item.route)"
+                  >
+                    {{ item.label }}
+                  </span>
+                </div>
+              </a>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</nav>
