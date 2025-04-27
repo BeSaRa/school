@@ -21,6 +21,11 @@ export class NavigationService {
       route: "/schools",
     },
     {
+      label: "AI Assistant",
+      icon: "COMMENT",
+      route: "/chat-assistant",
+    },
+    {
       label: "Settings",
       icon: "SETTINGS",
       route: "/settings",
