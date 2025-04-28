@@ -3,27 +3,25 @@ import { RouterModule } from "@angular/router";
 import { AuthService } from "../../services/auth.service";
 import { IconService } from "@/services/icon.service";
 import { AppIcons } from "@/constants/icons.constants";
-import {
-  NavigationService,
-  NavigationItem,
-} from "../../services/navigation.service";
+import { NavigationService } from "../../services/navigation.service";
+import { NavigationItem } from "@/types/navigation.types";
 
 @Component({
   selector: "app-navbar",
   standalone: true,
   imports: [RouterModule],
   templateUrl: "./navbar.component.html",
-  styles: [],
+  styleUrl: "./navbar.component.scss",
 })
 export class NavbarComponent {
-  private iconService = inject(IconService);
-  private authService = inject(AuthService);
+  private readonly iconService = inject(IconService);
+  private readonly authService = inject(AuthService);
   private readonly navigationService = inject(NavigationService);
 
   menuItems: NavigationItem[] = [];
-  AppIcons = AppIcons;
+  readonly AppIcons = AppIcons;
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.menuItems = this.navigationService.getMenuItems();
   }
 
