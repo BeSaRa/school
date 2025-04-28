@@ -1,6 +1,6 @@
 import { inject, Injectable, WritableSignal, signal } from "@angular/core";
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
-import { Observable, switchMap, catchError, of, Subject } from "rxjs";
+import { HttpClient } from "@angular/common/http";
+import { Observable, Subject } from "rxjs";
 import { UrlService } from "./url.service";
 import { Message } from "@/models/message";
 
@@ -11,109 +11,120 @@ export class ChatService {
   private readonly http = inject(HttpClient);
   private readonly urlService = inject(UrlService);
 
-  // Using WritableSignal to store the messages
   messages: WritableSignal<Message[]> = signal<Message[]>([]);
   status: WritableSignal<boolean> = signal<boolean>(false);
   conversationId: WritableSignal<string> = signal<string>("");
-
   private messagesSubject = new Subject<Message[]>();
+  private streamingAssistantSubject = new Subject<string>(); // Subject to stream assistant messages
 
   getUrlSegment(): string {
     return this.urlService.URLS.AI_CHAT_ASSISTANT;
   }
 
-  // Method to get the access token from localStorage
   private getAccessToken(): string | null {
     return localStorage.getItem("access_token");
   }
 
-  // Expose the messages as an observable
   getMessages(): Observable<Message[]> {
     return this.messagesSubject.asObservable();
   }
 
+  getStreamingAssistant(): Observable<string> {
+    return this.streamingAssistantSubject.asObservable();
+  }
+
   sendMessage(content: string): Observable<any> {
     const url = `${this.getUrlSegment()}`;
-    const body = { prompt: content };
-    const params = new HttpParams()
-      .set("nocache", "false")
-      .set("auto_set_title", "true");
+    const body = JSON.stringify({ prompt: content });
+    const token = this.getAccessToken();
 
-    // Update the chat with the user's message
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+
     this.messages.update((messages) => [
       ...messages,
       new Message(content, "user"),
     ]);
-    this.messagesSubject.next(this.messages()); // Emit the updated messages
+    this.messagesSubject.next(this.messages());
     this.status.set(true);
 
-    // Get the access token
-    const token = this.getAccessToken();
-
-    // Add authorization header if the token exists
-    const headers = token
-      ? new HttpHeaders().set("Authorization", `Bearer ${token}`)
-      : new HttpHeaders();
-
-    return this.http
-      .post(url, body, {
-        params,
+    return new Observable((observer) => {
+      fetch(url, {
+        method: "POST",
         headers,
-        responseType: "text", // Assuming text/event-stream is handled by client-side
+        body,
       })
-      .pipe(
-        switchMap((response: string) => {
+        .then((response) => {
+          if (!response.body) throw new Error("No response body");
+
+          const reader = response.body.getReader();
+          const decoder = new TextDecoder();
           let assistantMessage = new Message("", "assistant");
-          this.messages.update((messages) => [
-            ...messages,
-            new Message("", "assistant"),
-          ]);
-          this.messagesSubject.next(this.messages()); // Emit the updated messages
 
-          return new Observable((observer) => {
-            const processStream = async () => {
-              try {
-                const lines = response.split("\n");
+          // Insert empty assistant message for the initial state
+          this.messages.update((messages) => [...messages, assistantMessage]);
+          this.messagesSubject.next(this.messages());
+          this.streamingAssistantSubject.next(""); // Initialize streaming with empty content
 
-                for (const line of lines) {
-                  if (line.startsWith("data: ")) {
-                    try {
-                      const data = JSON.parse(line.slice(6));
-                      if (data.role === "assistant") {
-                        assistantMessage = new Message(
-                          assistantMessage.content + (data.content || ""),
-                          "assistant"
-                        );
-                        this.messages.update((messages) => {
-                          messages[messages.length - 1] = assistantMessage;
-                          return messages;
-                        });
-                        this.messagesSubject.next(this.messages()); // Emit the updated messages
-                        observer.next(data);
-                      }
-                    } catch (error) {
-                      console.error("Error parsing SSE data:", error);
-                    }
-                  }
-                }
+          const read = async () => {
+            let buffer = "";
+            while (true) {
+              const { done, value } = await reader.read();
 
+              if (done) {
+                console.log("Streaming finished.");
                 this.status.set(false);
                 observer.complete();
-              } catch (error) {
-                this.status.set(false);
-                observer.error(error);
+                break;
               }
-            };
 
-            processStream();
-          });
-        }),
-        catchError((error) => {
-          console.error("Error sending message:", error);
-          this.status.set(false);
-          return of(null);
+              const chunk = decoder.decode(value, { stream: true });
+              const lines = chunk.split("\n");
+
+              for (const line of lines) {
+                if (line.startsWith("data: ")) {
+                  try {
+                    const data = JSON.parse(line.slice(6));
+
+                    if (data.role === "assistant") {
+                      buffer += data.content || "";
+
+                      // Update the message content
+                      assistantMessage = new Message(buffer, "assistant");
+
+                      // Update messages array and emit updates
+                      this.messages.update((messages) => {
+                        const newMessages = [...messages];
+                        newMessages[newMessages.length - 1] = assistantMessage;
+                        return newMessages;
+                      });
+
+                      // Emit streaming update for each chunk
+                      this.streamingAssistantSubject.next(buffer);
+                      this.messagesSubject.next(this.messages());
+                      observer.next(data);
+                    }
+                  } catch (error) {
+                    console.error("Error parsing streamed data:", error);
+                  }
+                }
+              }
+            }
+          };
+
+          read();
         })
-      );
+        .catch((error) => {
+          console.error("Fetch error:", error);
+          this.status.set(false);
+          observer.error(error);
+        });
+    });
   }
 
   resetChat() {
