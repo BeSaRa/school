@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { AuthService } from "../../services/auth.service";
 import { IconService } from "@/services/icon.service";
@@ -18,12 +18,8 @@ export class NavbarComponent {
   private readonly authService = inject(AuthService);
   private readonly navigationService = inject(NavigationService);
 
-  menuItems: NavigationItem[] = [];
+  menuItems: NavigationItem[] = this.navigationService.getMenuItems();
   readonly AppIcons = AppIcons;
-
-  ngOnInit(): void {
-    this.menuItems = this.navigationService.getMenuItems();
-  }
 
   logout(): void {
     this.authService.logout();

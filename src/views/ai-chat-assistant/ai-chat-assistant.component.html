@@ -1,46 +1,22 @@
 <div
   class="h-[calc(100vh-14rem)] flex flex-col flex-1 overflow-y-auto mb-4 p-4 border rounded-lg"
 >
-  @for (msg of messages; track $index) {
-    <div
-      [ngClass]="{
-        'self-start bg-blue-100 text-blue-800': msg.role === 'user',
-        'self-end bg-green-100 text-green-800': msg.role === 'assistant',
-        'self-center bg-yellow-100 text-yellow-800 text-center':
-          msg.role === 'system',
-        'self-center bg-purple-100 text-purple-800 text-center':
-          msg.role === 'tool',
-        'self-center bg-pink-100 text-pink-800 text-center':
-          msg.role === 'developer',
+  @for (message of messages(); track message) {
+    <app-chat-message [message]="message" />
+  }
+  @if (streamingAssistantContent() && chatService.status()) {
+    <app-chat-message
+      [message]="{
+        role: 'assistant',
+        content: streamingAssistantContent(),
       }"
-      class="message p-3 mb-3 rounded-lg max-w-[80%]"
-    >
-      {{
-        msg.role === "assistant" &&
-        msg === messages[messages.length - 1] &&
-        messageBuffer
-          ? messageBuffer
-          : msg.content
-      }}
-    </div>
+    />
   }
 </div>
 
-<!-- Input Area -->
-<form [formGroup]="form" class="flex gap-2 mt-4">
-  <input
-    formControlName="prompt"
-    type="text"
-    placeholder="Type your message..."
-    class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-    (keydown.enter)="onEnter($event)"
-  />
-  <button
-    type="button"
-    [disabled]="form.invalid"
-    (click)="onSendClick()"
-    class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-400"
-  >
-    Send
-  </button>
-</form>
+<app-chat-input
+  [form]="form"
+  [isStreaming]="chatService.status()"
+  (send)="handleSendMessage($event)"
+  (reset)="resetChat()"
+/>

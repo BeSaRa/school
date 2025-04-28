@@ -1,138 +1,126 @@
-import { Message } from "@/models/message";
-import { ChatService } from "@/services/ai-chat-assistant.service";
-import { CommonModule } from "@angular/common";
-import { Component, inject, OnInit } from "@angular/core";
+import {
+  Component,
+  DestroyRef,
+  OnInit,
+  inject,
+  signal,
+  effect,
+} from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from "@angular/forms";
+import { CommonModule } from "@angular/common";
+import { ChatService } from "@/services/ai-chat-assistant.service";
+import { ChatMessageComponent } from "@/components/chat-message/chat-message.component";
+import { ChatInputComponent } from "@/components/chat-input/chat-input.component";
+import { Message } from "@/models/message";
 
+/**
+ * Component that provides the AI chat assistant interface
+ * Handles user interactions and displays the chat conversation
+ */
 @Component({
   selector: "app-ai-chat-assistant",
   standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ChatMessageComponent,
+    ChatInputComponent,
+  ],
   templateUrl: "./ai-chat-assistant.component.html",
-  imports: [ReactiveFormsModule, CommonModule],
 })
 export class AiChatAssistantComponent implements OnInit {
-  form!: FormGroup;
-  messages: Message[] = [];
-  messageBuffer = "";
-  private eventSource: EventSource | null = null;
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly fb = inject(FormBuilder);
+  readonly chatService = inject(ChatService);
 
-  private fb = inject(FormBuilder);
-  private chatService = inject(ChatService);
+  form: FormGroup;
+  messages = this.chatService.messages;
+  streamingAssistantContent = signal("");
+  isStreaming = this.chatService.status;
 
-  ngOnInit() {
+  constructor() {
     this.form = this.fb.group({
-      prompt: ["", Validators.required],
+      prompt: [
+        { value: "", disabled: false },
+        [Validators.required, Validators.minLength(1)],
+      ],
     });
 
-    // Subscribe to the messages
-    this.chatService.getMessages().subscribe((messages) => {
-      this.messages = messages;
+    // Subscribe to streaming state changes to update form control
+    effect(() => {
+      const isStreaming = this.chatService.status();
+      const control = this.form.get("prompt");
+      if (control) {
+        if (isStreaming) {
+          control.disable();
+        } else {
+          control.enable();
+        }
+      }
     });
-
-    // Subscribe to the streaming assistant updates
-    this.chatService.getStreamingAssistant().subscribe((buffer) => {
-      this.messageBuffer = buffer; // Update the buffer in real-time
-    });
   }
 
-  trackByFn(index: number, item: Message): any {
-    return item.content;
+  ngOnInit(): void {
+    this.subscribeToMessages();
+    this.subscribeToStreaming();
   }
 
-  onEnter(event: Event) {
-    event.preventDefault();
-    this.sendMessage();
+  private subscribeToMessages(): void {
+    this.chatService
+      .getMessages()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe();
   }
 
-  onSendClick() {
-    this.sendMessage();
+  private subscribeToStreaming(): void {
+    this.chatService
+      .getStreamingAssistant()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((content) => {
+        this.streamingAssistantContent.set(content);
+      });
   }
 
-  private async sendMessage() {
-    if (this.form.invalid) return;
+  /**
+   * Handles sending a new message
+   * @param event - Optional event that triggered the send action
+   */
+  async handleSendMessage(event?: Event): Promise<void> {
+    if (event) {
+      event.preventDefault();
+    }
+
+    if (this.form.invalid || this.chatService.status()) {
+      return;
+    }
 
     const userMessage = this.form.value.prompt;
-
-    if (this.eventSource) {
-      this.eventSource.close();
-    }
+    this.form.reset();
 
     try {
-      const url = `${this.chatService.getUrlSegment()}`;
-      const token = localStorage.getItem("access_token");
-
-      // Add user message to the chat
-      this.messages = [...this.messages, new Message(userMessage, "user")];
-
-      // Make initial request with headers
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+      this.chatService.sendMessage(userMessage).subscribe({
+        error: (error) => {
+          console.error("Failed to send message:", error);
+          // TODO: Add proper error handling UI
         },
-        body: JSON.stringify({ prompt: userMessage }),
       });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const reader = response.body?.getReader();
-      const decoder = new TextDecoder();
-
-      if (!reader) {
-        throw new Error("No reader available");
-      }
-
-      while (true) {
-        const { done, value } = await reader.read();
-
-        if (done) {
-          break;
-        }
-
-        const chunk = decoder.decode(value, { stream: true });
-        const lines = chunk.split("\n");
-
-        for (const line of lines) {
-          if (line.startsWith("data: ")) {
-            try {
-              const data = JSON.parse(line.slice(6));
-              if (data.role === "assistant") {
-                this.messageBuffer += data.content;
-
-                const lastMessage = this.messages[this.messages.length - 1];
-                if (lastMessage?.role === "assistant") {
-                  lastMessage.content = this.messageBuffer;
-                } else {
-                  this.messages = [
-                    ...this.messages,
-                    new Message(this.messageBuffer, "assistant"),
-                  ];
-                }
-              }
-            } catch (error) {
-              console.error("Error parsing stream data:", error);
-            }
-          }
-        }
-      }
     } catch (error) {
-      console.error("Error:", error);
-    } finally {
-      this.form.reset();
+      console.error("Failed to send message:", error);
+      // TODO: Add proper error handling UI
     }
   }
 
-  ngOnDestroy() {
-    if (this.eventSource) {
-      this.eventSource.close();
-    }
+  /**
+   * Resets the chat conversation
+   */
+  resetChat(): void {
+    this.chatService.resetChat();
+    this.form.reset();
   }
 }

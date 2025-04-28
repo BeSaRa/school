@@ -15,7 +15,7 @@ export class ChatService {
   status: WritableSignal<boolean> = signal<boolean>(false);
   conversationId: WritableSignal<string> = signal<string>("");
   private messagesSubject = new Subject<Message[]>();
-  private streamingAssistantSubject = new Subject<string>(); // Subject to stream assistant messages
+  private streamingAssistantSubject = new Subject<string>();
 
   getUrlSegment(): string {
     return this.urlService.URLS.AI_CHAT_ASSISTANT;
@@ -64,20 +64,21 @@ export class ChatService {
 
           const reader = response.body.getReader();
           const decoder = new TextDecoder();
-          let assistantMessage = new Message("", "assistant");
-
-          // Insert empty assistant message for the initial state
-          this.messages.update((messages) => [...messages, assistantMessage]);
-          this.messagesSubject.next(this.messages());
-          this.streamingAssistantSubject.next(""); // Initialize streaming with empty content
+          let buffer = "";
+          this.streamingAssistantSubject.next("");
 
           const read = async () => {
-            let buffer = "";
             while (true) {
               const { done, value } = await reader.read();
 
               if (done) {
-                console.log("Streaming finished.");
+                if (buffer) {
+                  this.messages.update((messages) => [
+                    ...messages,
+                    new Message(buffer, "assistant"),
+                  ]);
+                  this.messagesSubject.next(this.messages());
+                }
                 this.status.set(false);
                 observer.complete();
                 break;
@@ -93,20 +94,7 @@ export class ChatService {
 
                     if (data.role === "assistant") {
                       buffer += data.content || "";
-
-                      // Update the message content
-                      assistantMessage = new Message(buffer, "assistant");
-
-                      // Update messages array and emit updates
-                      this.messages.update((messages) => {
-                        const newMessages = [...messages];
-                        newMessages[newMessages.length - 1] = assistantMessage;
-                        return newMessages;
-                      });
-
-                      // Emit streaming update for each chunk
                       this.streamingAssistantSubject.next(buffer);
-                      this.messagesSubject.next(this.messages());
                       observer.next(data);
                     }
                   } catch (error) {
@@ -131,6 +119,6 @@ export class ChatService {
     this.messages.set([]);
     this.status.set(false);
     this.conversationId.set("");
-    this.messagesSubject.next(this.messages()); // Emit the reset messages
+    this.messagesSubject.next(this.messages());
   }
 }
