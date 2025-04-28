@@ -1,3 +1,4 @@
+import { Message } from "@/models/message";
 import { ChatService } from "@/services/ai-chat-assistant.service";
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnInit } from "@angular/core";
@@ -16,7 +17,7 @@ import {
 })
 export class AiChatAssistantComponent implements OnInit {
   form!: FormGroup;
-  messages: string[] = [];
+  messages: Message[] = [];
 
   private fb = inject(FormBuilder);
   private chatService = inject(ChatService);
@@ -24,6 +25,11 @@ export class AiChatAssistantComponent implements OnInit {
   ngOnInit() {
     this.form = this.fb.group({
       prompt: ["", Validators.required],
+    });
+
+    // Subscribe to the messages observable
+    this.chatService.getMessages().subscribe((messages) => {
+      this.messages = messages;
     });
   }
 
@@ -40,22 +46,8 @@ export class AiChatAssistantComponent implements OnInit {
     if (this.form.invalid) return;
 
     const userMessage = this.form.value.prompt;
-
-    this.messages.push(`You: ${userMessage}`);
-    this.messages.push("Assistant: ");
-
     this.chatService.sendMessage(userMessage).subscribe({
-      next: (chunk) => {
-        const lastIndex = this.messages.length - 1;
-
-        // Ensure chunk is properly processed
-        if (chunk && chunk.content) {
-          // Append the assistant's content to the last message
-          this.messages[lastIndex] += chunk.content;
-        } else {
-          console.error("Received chunk does not have content:", chunk);
-        }
-      },
+      next: () => {},
       error: (err) => {
         console.error("Error:", err);
       },

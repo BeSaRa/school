@@ -17,6 +17,11 @@ export const routes: Routes = [
       import("../views/home/home.component").then((m) => m.HomeComponent),
     children: [
       {
+        path: "",
+        pathMatch: "full",
+        redirectTo: "chat-assistant",
+      },
+      {
         path: "chat-assistant",
         loadComponent: () =>
           import("../views/ai-chat-assistant/ai-chat-assistant.component").then(

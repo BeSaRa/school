@@ -1,6 +1,6 @@
-import { inject, Injectable, signal, WritableSignal } from "@angular/core";
+import { inject, Injectable, WritableSignal, signal } from "@angular/core";
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
-import { Observable, switchMap, catchError, of } from "rxjs";
+import { Observable, switchMap, catchError, of, Subject } from "rxjs";
 import { UrlService } from "./url.service";
 import { Message } from "@/models/message";
 
@@ -11,9 +11,12 @@ export class ChatService {
   private readonly http = inject(HttpClient);
   private readonly urlService = inject(UrlService);
 
+  // Using WritableSignal to store the messages
   messages: WritableSignal<Message[]> = signal<Message[]>([]);
   status: WritableSignal<boolean> = signal<boolean>(false);
   conversationId: WritableSignal<string> = signal<string>("");
+
+  private messagesSubject = new Subject<Message[]>();
 
   getUrlSegment(): string {
     return this.urlService.URLS.AI_CHAT_ASSISTANT;
@@ -22,6 +25,11 @@ export class ChatService {
   // Method to get the access token from localStorage
   private getAccessToken(): string | null {
     return localStorage.getItem("access_token");
+  }
+
+  // Expose the messages as an observable
+  getMessages(): Observable<Message[]> {
+    return this.messagesSubject.asObservable();
   }
 
   sendMessage(content: string): Observable<any> {
@@ -36,6 +44,7 @@ export class ChatService {
       ...messages,
       new Message(content, "user"),
     ]);
+    this.messagesSubject.next(this.messages()); // Emit the updated messages
     this.status.set(true);
 
     // Get the access token
@@ -46,7 +55,6 @@ export class ChatService {
       ? new HttpHeaders().set("Authorization", `Bearer ${token}`)
       : new HttpHeaders();
 
-    // Use HttpClient to send a POST request
     return this.http
       .post(url, body, {
         params,
@@ -55,15 +63,16 @@ export class ChatService {
       })
       .pipe(
         switchMap((response: string) => {
-          // Process the response and stream data if necessary
           let assistantMessage = new Message("", "assistant");
-          this.messages.update((messages) => [...messages, assistantMessage]);
+          this.messages.update((messages) => [
+            ...messages,
+            new Message("", "assistant"),
+          ]);
+          this.messagesSubject.next(this.messages()); // Emit the updated messages
 
-          // Handling SSE stream logic
           return new Observable((observer) => {
             const processStream = async () => {
               try {
-                const reader = new TextDecoder();
                 const lines = response.split("\n");
 
                 for (const line of lines) {
@@ -79,6 +88,7 @@ export class ChatService {
                           messages[messages.length - 1] = assistantMessage;
                           return messages;
                         });
+                        this.messagesSubject.next(this.messages()); // Emit the updated messages
                         observer.next(data);
                       }
                     } catch (error) {
@@ -110,5 +120,6 @@ export class ChatService {
     this.messages.set([]);
     this.status.set(false);
     this.conversationId.set("");
+    this.messagesSubject.next(this.messages()); // Emit the reset messages
   }
 }
