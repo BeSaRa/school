@@ -1,43 +1,13 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { AppIcons } from "../constants/icons.constants";
-
-export interface NavigationItem {
-  label: string;
-  icon?: keyof typeof AppIcons;
-  route: string;
-  children?: (Omit<NavigationItem, "children"> & { route: string })[];
-  expanded?: boolean;
-}
+import { menuItems } from "../constants/navigation.constants";
+import { NavigationItem } from "@/types/navigation.types";
 
 @Injectable({
   providedIn: "root",
 })
 export class NavigationService {
-  private menuItems: NavigationItem[] = [
-    {
-      label: "Schools",
-      icon: "CLASSES",
-      route: "/schools",
-    },
-    {
-      label: "Settings",
-      icon: "SETTINGS",
-      route: "/settings",
-      children: [
-        {
-          label: "Profile",
-          icon: "PROFILE",
-          route: "/settings/profile",
-        },
-        {
-          label: "Account",
-          icon: "ACCOUNT",
-          route: "/settings/account",
-        },
-      ],
-    },
-  ];
+  private menuItems: NavigationItem[] = menuItems;
 
   constructor(private router: Router) {}
 

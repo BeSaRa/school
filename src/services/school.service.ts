@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
 import { BaseCrudService } from "@/abstracts/base-crud-service";
 
 import { School } from "@/models/school";
