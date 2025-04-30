@@ -58,7 +58,7 @@ export class LoginComponent {
         next: (response) => {
           if (response.access_token) {
             localStorage.setItem("access_token", response.access_token);
-            this.router.navigate(["/chat-assistant"]);
+            this.router.navigate(["/schools"]);
           } else {
             this.errorMessage = "Invalid response from server";
           }

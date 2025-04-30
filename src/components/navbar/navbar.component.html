@@ -24,83 +24,64 @@
 
       <!-- Navigation Menu -->
       <div class="flex items-center space-x-4">
-        @for (item of menuItems; track item.id) {
+        @for (item of menuItems; track item.label) {
           <div class="relative group">
-            <div class="flex flex-col">
-              @if (item.children) {
-                <!-- Parent item with dropdown -->
-                <div
-                  class="flex items-center p-2 rounded-lg cursor-pointer transition hover:bg-gray-50"
-                  (click)="toggleExpand(item)"
-                >
-                  <div class="flex items-center">
-                    <div class="flex items-center min-w-[2.5rem]">
-                      <i
-                        [class]="getIcon(item.icon)"
-                        class="text-2xl text-gray-600 transition-all duration-500 ease-out group-hover:text-blue-600 group-hover:scale-110"
-                      ></i>
-                    </div>
-                    <span
-                      class="pl-1 text-gray-700 max-w-0 overflow-hidden transition-all duration-500 ease-out group-hover:max-w-[160px]"
-                    >
-                      {{ item.label }}
-                    </span>
+            @if (item.children) {
+              <!-- Parent item with children -->
+              <div class="flex items-center p-2 rounded-lg group-hover:bg-gray-50 cursor-pointer">
+                <div class="flex items-center">
+                  <div class="flex items-center min-w-[2.5rem]">
+                    <i
+                      [class]="getIcon(item.icon)"
+                      class="text-2xl text-gray-600 transform transition-all duration-500 ease-out group-hover:text-blue-600 group-hover:scale-110"
+                    ></i>
                   </div>
+                  <span
+                    class="pl-1 text-gray-700 max-w-0 overflow-hidden transition-all duration-500 ease-out group-hover:max-w-[160px]"
+                  >
+                    {{ item.label }}
+                  </span>
                 </div>
-
-                <!-- Dropdown Menu -->
-                <div
-                  class="absolute top-full right-0 mt-2 w-48 bg-white rounded-md shadow-lg transition-all duration-200 origin-top-right transform"
-                  [class.dropdown-open]="item.expanded"
-                >
-                  @for (child of item.children; track child.id) {
-                    <a
-                      [routerLink]="child.route"
-                      class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100"
-                      [class.bg-blue-50]="isActiveRoute(child.route)"
-                      [class.text-blue-600]="isActiveRoute(child.route)"
-                    >
-                      <i [class]="getIcon(child.icon)" class="mr-3"></i>
-                      <span>{{ child.label }}</span>
-                    </a>
-                  }
-                </div>
-              } @else {
-                <!-- Single item -->
-                <a
-                  [routerLink]="item.route"
-                  class="flex items-center p-2 rounded-lg transition hover:bg-gray-50"
-                >
-                  <div class="flex items-center">
-                    <div class="flex items-center min-w-[2.5rem]">
-                      <i
-                        [class]="getIcon(item.icon)"
-                        class="text-2xl transition-all duration-500 ease-out"
-                        [class.text-blue-600]="isActiveRoute(item.route)"
-                        [class.text-gray-600]="!isActiveRoute(item.route)"
-                        [class.scale-110]="isActiveRoute(item.route)"
-                      ></i>
-                    </div>
-                    <span
-                      class="pl-1 text-gray-700 overflow-hidden transition-all duration-500 ease-in-out whitespace-nowrap"
-                      [class.max-w-0]="!isActiveRoute(item.route)"
-                      [class.max-w-[160px]]="isActiveRoute(item.route)"
-                      [class.group-hover:max-w-[160px]]="
-                        !isActiveRoute(item.route)
-                      "
+              </div>
+              <!-- Dropdown Menu -->
+              <div class="absolute top-full right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                @for (child of item.children; track child.label) {
+                  <a
+                    [routerLink]="child.route"
+                    class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100"
+                    [class.bg-blue-50]="isActiveRoute(child.route)"
+                    [class.text-blue-600]="isActiveRoute(child.route)"
+                  >
+                    <i [class]="getIcon(child.icon)" class="mr-3"></i>
+                    <span>{{ child.label }}</span>
+                  </a>
+                }
+              </div>
+            } @else {
+              <!-- Single item -->
+              <a
+                [routerLink]="item.route"
+                class="flex items-center p-2 rounded-lg group-hover:bg-gray-50"
+              >
+                <div class="flex items-center">
+                  <div class="flex items-center min-w-[2.5rem]">
+                    <i
+                      [class]="getIcon(item.icon)"
+                      class="text-2xl transform transition-all duration-500 ease-out"
                       [class.text-blue-600]="isActiveRoute(item.route)"
-                      [class.opacity-0]="!isActiveRoute(item.route)"
-                      [class.opacity-100]="isActiveRoute(item.route)"
-                      [class.group-hover:opacity-100]="
-                        !isActiveRoute(item.route)
-                      "
-                    >
-                      {{ item.label }}
-                    </span>
+                      [class.text-gray-600]="!isActiveRoute(item.route)"
+                      [class.scale-110]="isActiveRoute(item.route)"
+                    ></i>
                   </div>
-                </a>
-              }
-            </div>
+                  <span
+                    class="pl-1 text-gray-700 max-w-0 overflow-hidden transition-all duration-500 ease-out group-hover:max-w-[160px]"
+                    [class.text-blue-600]="isActiveRoute(item.route)"
+                  >
+                    {{ item.label }}
+                  </span>
+                </div>
+              </a>
+            }
           </div>
         }
       </div>

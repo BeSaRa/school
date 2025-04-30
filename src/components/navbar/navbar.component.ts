@@ -1,25 +1,31 @@
-import { Component, inject, OnInit } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { AuthService } from "../../services/auth.service";
 import { IconService } from "@/services/icon.service";
 import { AppIcons } from "@/constants/icons.constants";
-import { NavigationService } from "../../services/navigation.service";
-import { NavigationItem } from "@/types/navigation.types";
+import {
+  NavigationService,
+  NavigationItem,
+} from "../../services/navigation.service";
 
 @Component({
   selector: "app-navbar",
   standalone: true,
   imports: [RouterModule],
   templateUrl: "./navbar.component.html",
-  styleUrl: "./navbar.component.scss",
+  styles: [],
 })
 export class NavbarComponent {
-  private readonly iconService = inject(IconService);
-  private readonly authService = inject(AuthService);
+  private iconService = inject(IconService);
+  private authService = inject(AuthService);
   private readonly navigationService = inject(NavigationService);
 
-  menuItems: NavigationItem[] = this.navigationService.getMenuItems();
-  readonly AppIcons = AppIcons;
+  menuItems: NavigationItem[] = [];
+  AppIcons = AppIcons;
+
+  ngOnInit() {
+    this.menuItems = this.navigationService.getMenuItems();
+  }
 
   logout(): void {
     this.authService.logout();

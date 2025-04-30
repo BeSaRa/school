@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { RouterModule } from "@angular/router";
+import { RouterModule, RouterOutlet } from "@angular/router";
 import { NavbarComponent } from "../../components/navbar/navbar.component";
 import { CommonModule } from "@angular/common";
 
@@ -10,6 +10,8 @@ import { CommonModule } from "@angular/common";
   templateUrl: "./home.component.html",
   styleUrl: "./home.component.scss",
 })
-export class HomeComponent {}
+export class HomeComponent {
+  // component logic here
+}
 
 export default HomeComponent;
