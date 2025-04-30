@@ -5,6 +5,8 @@ import {
   inject,
   signal,
   effect,
+  ViewChild,
+  AfterViewInit,
 } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import {
@@ -34,10 +36,12 @@ import { Message } from "@/models/message";
   ],
   templateUrl: "./ai-chat-assistant.component.html",
 })
-export class AiChatAssistantComponent implements OnInit {
+export class AiChatAssistantComponent implements OnInit, AfterViewInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly fb = inject(FormBuilder);
   readonly chatService = inject(ChatService);
+
+  @ViewChild(ChatInputComponent) chatInput!: ChatInputComponent;
 
   form: FormGroup;
   messages = this.chatService.messages;
@@ -52,7 +56,6 @@ export class AiChatAssistantComponent implements OnInit {
       ],
     });
 
-    // Subscribe to streaming state changes to update form control
     effect(() => {
       const isStreaming = this.chatService.status();
       const control = this.form.get("prompt");
@@ -61,6 +64,7 @@ export class AiChatAssistantComponent implements OnInit {
           control.disable();
         } else {
           control.enable();
+          this.chatInput?.focus();
         }
       }
     });
@@ -69,6 +73,10 @@ export class AiChatAssistantComponent implements OnInit {
   ngOnInit(): void {
     this.subscribeToMessages();
     this.subscribeToStreaming();
+  }
+
+  ngAfterViewInit(): void {
+    this.chatInput?.focus();
   }
 
   private subscribeToMessages(): void {
@@ -102,6 +110,7 @@ export class AiChatAssistantComponent implements OnInit {
 
     const userMessage = this.form.value.prompt;
     this.form.reset();
+    this.streamingAssistantContent.set("");
 
     try {
       this.chatService.sendMessage(userMessage).subscribe({
@@ -122,5 +131,7 @@ export class AiChatAssistantComponent implements OnInit {
   resetChat(): void {
     this.chatService.resetChat();
     this.form.reset();
+    this.streamingAssistantContent.set("");
+    this.chatInput?.focus();
   }
 }

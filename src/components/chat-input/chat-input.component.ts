@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+  ElementRef,
+} from "@angular/core";
 import { FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { CommonModule } from "@angular/common";
 
@@ -11,9 +18,16 @@ import { CommonModule } from "@angular/common";
 export class ChatInputComponent {
   @Input() form!: FormGroup;
   @Input() isStreaming = false;
+  @ViewChild("promptInput") promptInput!: ElementRef<HTMLInputElement>;
 
   @Output() send = new EventEmitter<Event>();
   @Output() reset = new EventEmitter<void>();
+
+  focus(): void {
+    setTimeout(() => {
+      this.promptInput?.nativeElement.focus();
+    });
+  }
 
   onSubmit(): void {
     this.send.emit();

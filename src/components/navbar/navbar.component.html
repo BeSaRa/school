@@ -82,8 +82,18 @@
                       ></i>
                     </div>
                     <span
-                      class="pl-1 text-gray-700 max-w-0 overflow-hidden transition-all duration-500 ease-out group-hover:max-w-[160px]"
+                      class="pl-1 text-gray-700 overflow-hidden transition-all duration-500 ease-in-out whitespace-nowrap"
+                      [class.max-w-0]="!isActiveRoute(item.route)"
+                      [class.max-w-[160px]]="isActiveRoute(item.route)"
+                      [class.group-hover:max-w-[160px]]="
+                        !isActiveRoute(item.route)
+                      "
                       [class.text-blue-600]="isActiveRoute(item.route)"
+                      [class.opacity-0]="!isActiveRoute(item.route)"
+                      [class.opacity-100]="isActiveRoute(item.route)"
+                      [class.group-hover:opacity-100]="
+                        !isActiveRoute(item.route)
+                      "
                     >
                       {{ item.label }}
                     </span>

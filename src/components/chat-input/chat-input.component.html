@@ -1,5 +1,6 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex gap-2 mt-4">
   <input
+    #promptInput
     type="text"
     formControlName="prompt"
     placeholder="Type your message..."
@@ -10,14 +11,14 @@
   <button
     type="submit"
     [disabled]="form.invalid || isStreaming"
-    class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors duration-200"
+    class="px-6 py-2 bg-chat-button-primary-bg text-chat-button-primary-text rounded-lg hover:bg-chat-button-primary-hover focus:outline-none focus:ring-2 focus:ring-chat-button-primary-focus disabled:bg-chat-button-primary-disabled disabled:cursor-not-allowed transition-colors duration-200"
   >
     Send
   </button>
   <button
     type="button"
     (click)="onReset()"
-    class="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors duration-200"
+    class="px-6 py-2 bg-chat-button-secondary-bg text-chat-button-secondary-text rounded-lg hover:bg-chat-button-secondary-hover focus:outline-none focus:ring-2 focus:ring-chat-button-secondary-focus transition-colors duration-200"
   >
     Reset
   </button>
