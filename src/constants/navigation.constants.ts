@@ -14,24 +14,4 @@ export const menuItems: NavigationItem[] = [
     icon: "CLASSES",
     route: "/schools",
   },
-  // {
-  //   id: 3,
-  //   label: "Settings",
-  //   icon: "SETTINGS",
-  //   route: "/settings",
-  //   children: [
-  //     {
-  //       id: 31,
-  //       label: "Profile",
-  //       icon: "PROFILE",
-  //       route: "/settings/profile",
-  //     },
-  //     {
-  //       id: 32,
-  //       label: "Account",
-  //       icon: "ACCOUNT",
-  //       route: "/settings/account",
-  //     },
-  //   ],
-  // },
 ];
