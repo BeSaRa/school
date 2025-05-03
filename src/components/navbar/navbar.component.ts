@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from "@angular/core";
-import { RouterModule } from "@angular/router";
+import { RouterModule, Router } from "@angular/router";
 import { AuthService } from "../../services/auth.service";
 import { IconService } from "@/services/icon.service";
 import { AppIcons } from "@/constants/icons.constants";
@@ -17,12 +17,14 @@ export class NavbarComponent {
   private readonly iconService = inject(IconService);
   private readonly authService = inject(AuthService);
   private readonly navigationService = inject(NavigationService);
+  private readonly router = inject(Router);
 
   menuItems: NavigationItem[] = this.navigationService.getMenuItems();
   readonly AppIcons = AppIcons;
 
   logout(): void {
     this.authService.logout();
+    this.router.navigate(["/login"]);
   }
 
   getIcon(iconKey: string | undefined): string {
