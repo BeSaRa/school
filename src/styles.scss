@@ -4,3 +4,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+markdown {
+  @apply flex flex-col;
+
+  h1,
+  h2,
+  h3 {
+    @apply mt-4;
+  }
+
+  ul,
+  ol {
+    @apply ml-6 pl-4;
+  }
+
+  blockquote {
+    @apply border-l-4 border-slate-300 pl-4 italic text-chat-assistant-text;
+  }
+
+  pre {
+    @apply text-chat-user-text p-4 rounded-lg overflow-x-auto bg-chat-user-bg font-mono;
+  }
+
+  code {
+    @apply bg-chat-user-bg px-1 py-0.5 rounded;
+  }
+}
