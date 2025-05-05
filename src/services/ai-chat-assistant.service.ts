@@ -93,7 +93,7 @@ export class ChatService {
                     const data = JSON.parse(line.slice(6));
 
                     if (data.role === "assistant") {
-                      buffer += data.content || "";
+                      buffer += (data.content || "").replace(/\\n/g, "\n");
                       this.streamingAssistantSubject.next(buffer);
                       observer.next(data);
                     }
