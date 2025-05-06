@@ -1,8 +1,22 @@
 import { inject, Injectable, WritableSignal, signal } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Observable, Subject } from "rxjs";
+import {
+  catchError,
+  defer,
+  EMPTY,
+  expand,
+  filter,
+  finalize,
+  from,
+  map,
+  Observable,
+  Subject,
+  switchMap,
+  takeWhile,
+} from "rxjs";
 import { UrlService } from "./url.service";
 import { Message } from "@/models/message";
+import { safeJsonParse } from "@/utils/utils";
 
 @Injectable({
   providedIn: "root",
@@ -33,86 +47,93 @@ export class ChatService {
     return this.streamingAssistantSubject.asObservable();
   }
 
-  sendMessage(content: string): Observable<any> {
-    const url = `${this.getUrlSegment()}`;
-    const body = JSON.stringify({ prompt: content });
+  sendMessage(content: string, conversationId?: string): Observable<any> {
+    const url = `${this.getUrlSegment()}?nocache=true&auto_set_title=true`;
     const token = this.getAccessToken();
 
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
     };
+    if (token) headers["Authorization"] = `Bearer ${token}`;
+    const body = JSON.stringify({
+      prompt: content,
+      conversationId: conversationId || this.conversationId(),
+    });
 
-    if (token) {
-      headers["Authorization"] = `Bearer ${token}`;
-    }
-
-    this.messages.update((messages) => [
-      ...messages,
-      new Message(content, "user"),
-    ]);
+    this.messages.update((msgs) => [...msgs, new Message(content, "user")]);
     this.messagesSubject.next(this.messages());
     this.status.set(true);
 
-    return new Observable((observer) => {
-      fetch(url, {
-        method: "POST",
-        headers,
-        body,
-      })
-        .then((response) => {
-          if (!response.body) throw new Error("No response body");
+    let buffer = "";
 
-          const reader = response.body.getReader();
-          const decoder = new TextDecoder();
-          let buffer = "";
-          this.streamingAssistantSubject.next("");
+    return defer(() =>
+      from(fetch(url, { method: "POST", headers, body }))
+    ).pipe(
+      switchMap((response) => {
+        if (!response.ok || !response.body) {
+          throw new Error("Fetch failed or response has no body");
+        }
 
-          const read = async () => {
-            while (true) {
-              const { done, value } = await reader.read();
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
 
-              if (done) {
-                if (buffer) {
-                  this.messages.update((messages) => [
-                    ...messages,
-                    new Message(buffer, "assistant"),
-                  ]);
-                  this.messagesSubject.next(this.messages());
-                }
-                this.status.set(false);
-                observer.complete();
-                break;
-              }
+        return from(reader.read()).pipe(
+          expand(() => from(reader.read())),
+          takeWhile(({ done }) => !done, true),
+          map(({ value }) =>
+            decoder.decode(value || new Uint8Array(), { stream: true })
+          ),
+          map((chunk) =>
+            chunk
+              .split("\n")
+              .filter((line) => line.startsWith("data: "))
+              .map((line) => line.slice(6))
+          ),
+          switchMap((jsons) => from(jsons)),
+          map((json) => {
+            if (json === "[DONE]") return { type: "done" };
 
-              const chunk = decoder.decode(value, { stream: true });
-              const lines = chunk.split("\n");
+            const data = safeJsonParse(json);
 
-              for (const line of lines) {
-                if (line.startsWith("data: ")) {
-                  try {
-                    const data = JSON.parse(line.slice(6));
-
-                    if (data.role === "assistant") {
-                      buffer += (data.content || "").replace(/\\n/g, "\n");
-                      this.streamingAssistantSubject.next(buffer);
-                      observer.next(data);
-                    }
-                  } catch (error) {
-                    console.error("Error parsing streamed data:", error);
-                  }
-                }
-              }
+            if (data.event === "metadata") {
+              return { type: "metadata", data };
             }
-          };
-
-          read();
-        })
-        .catch((error) => {
-          console.error("Fetch error:", error);
-          this.status.set(false);
-          observer.error(error);
-        });
-    });
+            if (data.role === "assistant") {
+              return { type: "content", data };
+            }
+            return { type: "unknown", data };
+          }),
+          filter(
+            (event): event is { type: string; data?: any } => event !== null
+          ),
+          map((event) => {
+            if (event.data?.conversationId) {
+              this.conversationId.set(event.data.conversationId);
+            }
+            if (event.type === "content") {
+              buffer += event.data.content || "";
+              this.streamingAssistantSubject.next(buffer);
+            }
+            return event;
+          }),
+          finalize(() => {
+            if (buffer) {
+              this.messages.update((msgs) => [
+                ...msgs,
+                new Message(buffer, "assistant"),
+              ]);
+              this.messagesSubject.next(this.messages());
+            }
+            this.status.set(false);
+          }),
+          catchError((err) => {
+            console.error("SSE error:", err);
+            this.status.set(false);
+            return EMPTY;
+          })
+        );
+      })
+    );
   }
 
   resetChat() {
