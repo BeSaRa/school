@@ -1,4 +1,4 @@
-<div class="min-h-screen flex flex-col decorative-pattern">
+<div class="min-h-screen flex flex-col decorative-pattern dark:bg-dark-bg">
   <!-- Navbar (fixed height) -->
   <div class="h-20 flex-shrink-0">
     <app-navbar></app-navbar>
@@ -7,9 +7,9 @@
   <!-- Main Content -->
   <div class="flex-1 min-h-0 overflow-hidden p-6">
     <main
-      class="h-full max-w-7xl mx-auto bg-white rounded-xl shadow-lg overflow-auto"
+      class="h-full max-w-7xl mx-auto bg-white dark:bg-dark-surface rounded-xl shadow-lg dark:shadow-gray-900/30 overflow-auto transition-colors duration-200"
     >
-      <div class="p-6 flex flex-col h-full">
+      <div class="p-6 flex flex-col h-full dark:text-gray-200">
         <router-outlet></router-outlet>
       </div>
     </main>

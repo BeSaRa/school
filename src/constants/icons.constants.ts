@@ -1,5 +1,7 @@
 export const AppIcons = {
   DASHBOARD: "view-dashboard",
+  MOON: "weather-night",
+  SUN: "weather-sunny",
   STUDENTS: "account-group",
   TEACHERS: "account-tie",
   CLASSES: "school",

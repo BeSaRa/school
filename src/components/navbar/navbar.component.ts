@@ -13,7 +13,7 @@ import { NavigationItem } from "@/types/navigation.types";
   templateUrl: "./navbar.component.html",
   styleUrl: "./navbar.component.scss",
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
   private readonly iconService = inject(IconService);
   private readonly authService = inject(AuthService);
   private readonly navigationService = inject(NavigationService);
@@ -38,5 +38,27 @@ export class NavbarComponent {
 
   toggleExpand(item: NavigationItem): void {
     item.expanded = !item.expanded;
+  }
+
+  isDarkMode = false;
+
+  ngOnInit() {
+    this.isDarkMode = document.documentElement.classList.contains("dark");
+    this.applyTheme();
+  }
+
+  toggleTheme(): void {
+    this.isDarkMode = !this.isDarkMode;
+    this.applyTheme();
+  }
+
+  private applyTheme(): void {
+    if (this.isDarkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
   }
 }
