@@ -1,9 +1,12 @@
-/* You can add global styles to this file, and also import other style files */
 @import "@mdi/font/css/materialdesignicons.min.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  @apply bg-white dark:bg-dark-bg text-gray-900 dark:text-dark-text transition-colors duration-200;
+}
 
 markdown {
   @apply flex flex-col;
@@ -20,14 +23,14 @@ markdown {
   }
 
   blockquote {
-    @apply border-l-4 border-slate-300 pl-4 italic text-chat-assistant-text;
+    @apply border-l-4 border-slate-300 dark:border-slate-600 pl-4 italic text-chat-assistant-text dark:text-dark-text;
   }
 
   pre {
-    @apply text-chat-user-text p-4 rounded-lg overflow-x-auto bg-chat-user-bg font-mono;
+    @apply text-chat-user-text dark:text-dark-text p-4 rounded-lg overflow-x-auto bg-chat-user-bg dark:bg-dark-surface font-mono;
   }
 
   code {
-    @apply bg-chat-user-bg px-1 py-0.5 rounded;
+    @apply bg-chat-user-bg dark:bg-dark-surface px-1 py-0.5 rounded;
   }
 }

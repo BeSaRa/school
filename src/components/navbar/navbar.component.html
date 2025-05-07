@@ -1,11 +1,11 @@
-<nav class="bg-white shadow-sm">
+<nav class="bg-white dark:bg-dark-surface shadow-lg">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between items-center h-20">
       <!-- Logo/Title Section -->
       <div class="flex items-center space-x-4">
         <div class="flex items-center justify-center">
           <svg
-            class="h-12 w-12 text-blue-600"
+            class="h-12 w-12 text-blue-600 dark:text-accent-yellow"
             viewBox="0 0 24 24"
             fill="currentColor"
           >
@@ -15,10 +15,14 @@
           </svg>
         </div>
         <div>
-          <h2 class="text-xl font-bold text-gray-900 leading-none">
+          <h2
+            class="text-xl font-bold text-gray-900 dark:text-white leading-none"
+          >
             School AI
           </h2>
-          <p class="text-sm text-gray-600">Intelligent School Management</p>
+          <p class="text-sm text-gray-600 dark:text-gray-300">
+            Intelligent School Management
+          </p>
         </div>
       </div>
 
@@ -30,18 +34,18 @@
               @if (item.children) {
                 <!-- Parent item with dropdown -->
                 <div
-                  class="flex items-center p-2 rounded-lg cursor-pointer transition hover:bg-gray-50"
+                  class="flex items-center p-2 rounded-lg cursor-pointer transition hover:bg-gray-50 dark:hover:bg-dark-bg"
                   (click)="toggleExpand(item)"
                 >
                   <div class="flex items-center">
                     <div class="flex items-center min-w-[2.5rem]">
                       <i
                         [class]="getIcon(item.icon)"
-                        class="text-2xl text-gray-600 transition-all duration-500 ease-out group-hover:text-blue-600 group-hover:scale-110"
+                        class="text-2xl text-gray-600 dark:text-gray-300 transition-all duration-500 ease-out group-hover:text-blue-600 dark:group-hover:text-accent-yellow group-hover:scale-110"
                       ></i>
                     </div>
                     <span
-                      class="pl-1 text-gray-700 max-w-0 overflow-hidden transition-all duration-500 ease-out group-hover:max-w-[160px]"
+                      class="pl-1 text-gray-700 dark:text-gray-200 max-w-0 overflow-hidden transition-all duration-500 ease-out group-hover:max-w-[160px]"
                     >
                       {{ item.label }}
                     </span>
@@ -50,15 +54,19 @@
 
                 <!-- Dropdown Menu -->
                 <div
-                  class="absolute top-full right-0 mt-2 w-48 bg-white rounded-md shadow-lg transition-all duration-200 origin-top-right transform"
+                  class="absolute top-full right-0 mt-2 w-48 bg-white dark:bg-dark-surface rounded-md shadow-lg transition-all duration-200 origin-top-right transform"
                   [class.dropdown-open]="item.expanded"
                 >
                   @for (child of item.children; track child.id) {
                     <a
                       [routerLink]="child.route"
-                      class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100"
+                      class="flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-dark-bg"
                       [class.bg-blue-50]="isActiveRoute(child.route)"
+                      [class.dark:bg-dark-bg]="isActiveRoute(child.route)"
                       [class.text-blue-600]="isActiveRoute(child.route)"
+                      [class.dark:text-accent-yellow]="
+                        isActiveRoute(child.route)
+                      "
                     >
                       <i [class]="getIcon(child.icon)" class="mr-3"></i>
                       <span>{{ child.label }}</span>
@@ -69,7 +77,7 @@
                 <!-- Single item -->
                 <a
                   [routerLink]="item.route"
-                  class="flex items-center p-2 rounded-lg transition hover:bg-gray-50"
+                  class="flex items-center p-2 rounded-lg transition hover:bg-gray-50 dark:hover:bg-dark-bg"
                 >
                   <div class="flex items-center">
                     <div class="flex items-center min-w-[2.5rem]">
@@ -77,18 +85,25 @@
                         [class]="getIcon(item.icon)"
                         class="text-2xl transition-all duration-500 ease-out"
                         [class.text-blue-600]="isActiveRoute(item.route)"
+                        [class.dark:text-accent-yellow]="
+                          isActiveRoute(item.route)
+                        "
                         [class.text-gray-600]="!isActiveRoute(item.route)"
+                        [class.dark:text-gray-300]="!isActiveRoute(item.route)"
                         [class.scale-110]="isActiveRoute(item.route)"
                       ></i>
                     </div>
                     <span
-                      class="pl-1 text-gray-700 overflow-hidden transition-all duration-500 ease-in-out whitespace-nowrap"
+                      class="pl-1 text-gray-700 dark:text-gray-200 overflow-hidden transition-all duration-500 ease-in-out whitespace-nowrap"
                       [class.max-w-0]="!isActiveRoute(item.route)"
                       [class.max-w-[160px]]="isActiveRoute(item.route)"
                       [class.group-hover:max-w-[160px]]="
                         !isActiveRoute(item.route)
                       "
                       [class.text-blue-600]="isActiveRoute(item.route)"
+                      [class.dark:text-accent-yellow]="
+                        isActiveRoute(item.route)
+                      "
                       [class.opacity-0]="!isActiveRoute(item.route)"
                       [class.opacity-100]="isActiveRoute(item.route)"
                       [class.group-hover:opacity-100]="
@@ -105,11 +120,23 @@
         }
         <button
           (click)="logout()"
-          class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-700 bg-gray-100 hover:bg-gray-200 hover:text-gray-600 transition"
+          class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-dark-bg hover:bg-gray-200 dark:hover:bg-dark-surface hover:text-gray-600 dark:hover:text-white transition"
         >
           <i [class]="getIcon('LOGOUT')" class="text-xl"></i>
           <span class="font-medium">Logout</span>
         </button>
+        <div class="flex items-center gap-4">
+          <button
+            (click)="toggleTheme()"
+            class="p-2 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-dark-bg transition"
+            aria-label="Toggle theme"
+          >
+            <i
+              [class]="isDarkMode ? getIcon('SUN') : getIcon('MOON')"
+              class="text-xl"
+            ></i>
+          </button>
+        </div>
       </div>
     </div>
   </div>
