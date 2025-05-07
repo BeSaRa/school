@@ -56,8 +56,8 @@ export class ConversationSidebarComponent {
       { title: "Older", conversations: [] },
     ];
 
-    conversations.forEach((conv) => {
-      const updateDate = new Date(conv.updatedAt);
+    conversations.forEach((conversation) => {
+      const updateDate = new Date(conversation.updatedAt);
       const updateDay = new Date(
         updateDate.getFullYear(),
         updateDate.getMonth(),
@@ -65,19 +65,19 @@ export class ConversationSidebarComponent {
       );
 
       if (updateDay.getTime() === today.getTime()) {
-        groups[0].conversations.push(conv);
+        groups[0].conversations.push(conversation);
       } else if (updateDay.getTime() === yesterday.getTime()) {
-        groups[1].conversations.push(conv);
+        groups[1].conversations.push(conversation);
       } else if (updateDay >= threeDaysAgo && updateDay < yesterday) {
-        groups[2].conversations.push(conv);
+        groups[2].conversations.push(conversation);
       } else if (updateDay >= weekAgo && updateDay < threeDaysAgo) {
-        groups[3].conversations.push(conv);
+        groups[3].conversations.push(conversation);
       } else if (updateDay >= monthAgo && updateDay < weekAgo) {
-        groups[4].conversations.push(conv);
+        groups[4].conversations.push(conversation);
       } else if (updateDay >= yearAgo && updateDay < monthAgo) {
-        groups[5].conversations.push(conv);
+        groups[5].conversations.push(conversation);
       } else {
-        groups[6].conversations.push(conv);
+        groups[6].conversations.push(conversation);
       }
     });
     return groups.filter((group) => group.conversations.length > 0);
