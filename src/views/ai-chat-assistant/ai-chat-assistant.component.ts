@@ -20,6 +20,8 @@ import { ChatService } from "@/services/ai-chat-assistant.service";
 import { ChatMessageComponent } from "@/components/chat-message/chat-message.component";
 import { ChatInputComponent } from "@/components/chat-input/chat-input.component";
 import { Message } from "@/models/message";
+import { ConversationSidebarComponent } from "@/components/conversation-sidebar/conversation-sidebar.component";
+import { ConversationService } from "@/services/conversation.service";
 
 /**
  * Component that provides the AI chat assistant interface
@@ -33,13 +35,15 @@ import { Message } from "@/models/message";
     ReactiveFormsModule,
     ChatMessageComponent,
     ChatInputComponent,
+    ConversationSidebarComponent,
   ],
   templateUrl: "./ai-chat-assistant.component.html",
 })
-export class AiChatAssistantComponent implements OnInit, AfterViewInit {
+export class AIChatAssistantComponent implements OnInit, AfterViewInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly fb = inject(FormBuilder);
   readonly chatService = inject(ChatService);
+  readonly conversationService = inject(ConversationService);
 
   @ViewChild(ChatInputComponent) chatInput!: ChatInputComponent;
 
@@ -133,5 +137,22 @@ export class AiChatAssistantComponent implements OnInit, AfterViewInit {
     this.form.reset();
     this.streamingAssistantContent.set("");
     this.chatInput?.focus();
+  }
+
+  onConversationSelected(conversationId: string) {
+    this.chatService.conversationId.set(conversationId);
+    this.conversationService
+      .getConversationMessages(conversationId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          this.chatService.setMessages(response.messages);
+          this.chatInput.focus();
+        },
+        error: (error) => {
+          console.error("Failed to load conversation messages:", error);
+          // TODO: Add proper error handling UI
+        },
+      });
   }
 }
