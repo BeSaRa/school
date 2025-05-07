@@ -16,6 +16,7 @@ import {
 import { provideClientHydration } from "@angular/platform-browser";
 import { authInterceptor } from "@/http-interceptors/auth.interceptor";
 import { provideMarkdown } from "ngx-markdown";
+import { loadingInterceptor } from "../interceptors/loading.interceptor";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -24,7 +25,10 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(),
     provideRouter(routes),
     provideMarkdown({ loader: HttpClient }),
-    provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
+    provideHttpClient(
+      withFetch(),
+      withInterceptors([authInterceptor, loadingInterceptor])
+    ),
     provideInterceptors([GeneralInterceptor]),
   ],
 };
