@@ -43,6 +43,10 @@ export class ChatService {
     return this.messagesSubject.asObservable();
   }
 
+  setMessages(messages: Message[]) {
+    this.messages.set(messages);
+  }
+
   getStreamingAssistant(): Observable<string> {
     return this.streamingAssistantSubject.asObservable();
   }

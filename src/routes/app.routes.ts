@@ -25,7 +25,7 @@ export const routes: Routes = [
         path: "chat-assistant",
         loadComponent: () =>
           import("../views/ai-chat-assistant/ai-chat-assistant.component").then(
-            (m) => m.AiChatAssistantComponent
+            (m) => m.AIChatAssistantComponent
           ),
       },
       {
