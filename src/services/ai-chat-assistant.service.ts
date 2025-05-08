@@ -140,10 +140,98 @@ export class ChatService {
     );
   }
 
+  // private actions: WritableSignal<string[]> = signal<string[]>([]);
+  // private latestAction: WritableSignal<string | null> = signal<string | null>(
+  //   null
+  // );
+  // private actionsSubject = new Subject<string[]>();
+  // private latestActionSubject = new Subject<string>();
+  // private eventSource: EventSource | null = null;
+
   resetChat() {
     this.messages.set([]);
     this.status.set(false);
     this.conversationId.set("");
     this.messagesSubject.next(this.messages());
+    // this.closeActionStream();
+    // this.actions.set([]);
+    // this.latestAction.set(null);
   }
+
+  startActionStream(): void {
+    // this.closeActionStream();
+    const token = this.getAccessToken();
+    const url = `${this.getUrlSegment()}actions`;
+    fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+        Connection: "keep-alive",
+        "X-Client": "web",
+      },
+    })
+      .then((response) => {
+        if (!response.body) {
+          throw new Error("ReadableStream not supported by the browser");
+        }
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder("utf-8");
+        let buffer = "";
+        const read = () => {
+          reader.read().then(({ done, value }) => {
+            if (done) {
+              console.log("Stream closed by server");
+              // this.closeActionStream();
+              return;
+            }
+            buffer += decoder.decode(value, { stream: true });
+            let lines = buffer.split("\n");
+            buffer = lines.pop() || "";
+            for (const line of lines) {
+              if (line.startsWith("data:")) {
+                const action = line.replace("data:", "").trim();
+                this.messages.update((msgs) => [
+                  ...msgs,
+                  new Message(action, "tool"),
+                ]);
+                this.messagesSubject.next(this.messages());
+                // this.actions.update((actions) => [...actions, action]);
+                // this.actionsSubject.next(this.actions());
+                // this.latestAction.set(action);
+                // this.latestActionSubject.next(action);
+              }
+            }
+            read();
+          });
+        };
+        read();
+      })
+      .catch((err) => {
+        console.error("Streaming fetch error:", err);
+        // this.closeActionStream();
+      });
+  }
+
+  // getActions(): Observable<string[]> {
+  //   return this.actionsSubject.asObservable();
+  // }
+
+  // getLatestAction(): Observable<string> {
+  //   return this.latestActionSubject.asObservable();
+  // }
+
+  // getCurrentActions(): string[] {
+  //   return this.actions();
+  // }
+
+  // getCurrentLatestAction(): string | null {
+  //   return this.latestAction();
+  // }
+
+  // closeActionStream(): void {
+  //   if (this.eventSource) {
+  //     this.eventSource.close();
+  //     this.eventSource = null;
+  //   }
+  // }
 }

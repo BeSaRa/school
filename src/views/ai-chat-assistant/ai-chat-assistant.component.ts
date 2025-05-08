@@ -19,9 +19,10 @@ import { CommonModule } from "@angular/common";
 import { ChatService } from "@/services/ai-chat-assistant.service";
 import { ChatMessageComponent } from "@/components/chat-message/chat-message.component";
 import { ChatInputComponent } from "@/components/chat-input/chat-input.component";
-import { Message } from "@/models/message";
+// import { Message } from "@/models/message";
 import { ConversationSidebarComponent } from "@/components/conversation-sidebar/conversation-sidebar.component";
 import { ConversationService } from "@/services/conversation.service";
+import { MarkdownModule } from "ngx-markdown";
 
 /**
  * Component that provides the AI chat assistant interface
@@ -36,6 +37,7 @@ import { ConversationService } from "@/services/conversation.service";
     ChatMessageComponent,
     ChatInputComponent,
     ConversationSidebarComponent,
+    MarkdownModule,
   ],
   templateUrl: "./ai-chat-assistant.component.html",
 })
@@ -51,6 +53,7 @@ export class AIChatAssistantComponent implements OnInit, AfterViewInit {
   messages = this.chatService.messages;
   streamingAssistantContent = signal("");
   isStreaming = this.chatService.status;
+  // latestAction = signal<string | null>(null);
 
   constructor() {
     this.form = this.fb.group({
@@ -77,6 +80,9 @@ export class AIChatAssistantComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.subscribeToMessages();
     this.subscribeToStreaming();
+    this.chatService.startActionStream();
+
+    // this.subscribeToActions();
   }
 
   ngAfterViewInit(): void {
@@ -119,16 +125,32 @@ export class AIChatAssistantComponent implements OnInit, AfterViewInit {
     try {
       this.chatService.sendMessage(userMessage).subscribe({
         error: (error) => {
-          console.error("Failed to send message:", error);
-          // TODO: Add proper error handling UI
+          console.error("Error sending message:", error);
         },
       });
     } catch (error) {
-      console.error("Failed to send message:", error);
-      // TODO: Add proper error handling UI
+      console.error("Error sending message:", error);
     }
   }
 
+  onConversationSelected(conversationId: string) {
+    this.chatService.conversationId.set(conversationId);
+    // this.chatService.closeActionStream();
+    // this.chatService.startActionStream();
+
+    this.conversationService
+      .getConversationMessages(conversationId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          this.chatService.setMessages(response.messages);
+          this.chatInput.focus();
+        },
+        error: (error) => {
+          console.error("Error fetching conversation messages:", error);
+        },
+      });
+  }
   /**
    * Resets the chat conversation
    */
@@ -139,20 +161,16 @@ export class AIChatAssistantComponent implements OnInit, AfterViewInit {
     this.chatInput?.focus();
   }
 
-  onConversationSelected(conversationId: string) {
-    this.chatService.conversationId.set(conversationId);
-    this.conversationService
-      .getConversationMessages(conversationId)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (response) => {
-          this.chatService.setMessages(response.messages);
-          this.chatInput.focus();
-        },
-        error: (error) => {
-          console.error("Failed to load conversation messages:", error);
-          // TODO: Add proper error handling UI
-        },
-      });
-  }
+  // private subscribeToActions(): void {
+  //   this.chatService
+  //     .getLatestAction()
+  //     .pipe(takeUntilDestroyed(this.destroyRef))
+  //     .subscribe((action) => {
+  //       this.latestAction.set(action);
+  //     });
+  // this.latestAction.set("![](https://i.imgur.com/iHcKrIW.jpeg)");
+  // console.log(this.latestAction());
+
+  //   this.chatService.startActionStream();
+  // }
 }

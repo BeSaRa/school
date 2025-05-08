@@ -1,19 +1,49 @@
 <div
   class="flex h-[calc(100vh-11rem)] rounded-xl border border-gray-200 dark:border-gray-700"
 >
-  <div
-    class="w-72 h-full overflow-y-auto border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-dark-surface"
-  >
-    <app-conversation-sidebar
-      (conversationSelected)="onConversationSelected($event)"
-    />
-  </div>
+  <app-conversation-sidebar
+    class="w-80 border-r border-gray-200 dark:border-gray-700"
+    (conversationSelected)="onConversationSelected($event)"
+  ></app-conversation-sidebar>
+
   <div class="flex-1 flex flex-col h-full bg-white dark:bg-dark-surface">
     <h1
       class="text-xl font-bold p-4 text-center border-b border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white"
     >
       AI Chat Assistant
     </h1>
+
+    <!-- @if (latestAction()) {
+      <div class="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
+        <div class="flex justify-center items-center gap-2">
+          @if (latestAction()?.includes("![")) {
+            <div
+              class="relative group max-w-2xl w-full text-sm text-gray-600 dark:text-gray-300"
+            >
+              <span class="cursor-pointer w-full block text-center"
+                >image (hover to show)</span
+              >
+              <div
+                class="absolute top-full left-1/2 -translate-x-1/2 mt-2 hidden group-hover:block z-10 w-full"
+              >
+                <div
+                  class="markdown-wrapper bg-white dark:bg-gray-800 p-2 rounded max-w-2xl w-full"
+                >
+                  <markdown [data]="latestAction()"></markdown>
+                </div>
+              </div>
+            </div>
+          } @else {
+            <span
+              class="max-w-xs mx-auto text-sm text-gray-600 dark:text-gray-300"
+            >
+              {{ latestAction() }}
+            </span>
+          }
+        </div>
+      </div>
+    } -->
+
     <div class="flex-1 overflow-y-auto p-4">
       @for (message of messages(); track message) {
         <app-chat-message [message]="message" />
