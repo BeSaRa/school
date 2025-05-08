@@ -9,7 +9,7 @@ import { NavigationItem } from "@/types/navigation.types";
 @Component({
   selector: "app-navbar",
   standalone: true,
-  imports: [RouterModule],
+  imports: [RouterModule, IconService],
   templateUrl: "./navbar.component.html",
   styleUrl: "./navbar.component.scss",
 })
@@ -25,11 +25,6 @@ export class NavbarComponent implements OnInit {
   logout(): void {
     this.authService.logout();
     this.router.navigate(["/login"]);
-  }
-
-  getIcon(iconKey: string | undefined): string {
-    if (!iconKey) return "";
-    return this.iconService.getIcon(iconKey as keyof typeof AppIcons);
   }
 
   isActiveRoute(route: string): boolean {

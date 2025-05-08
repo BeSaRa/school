@@ -40,7 +40,7 @@
                   <div class="flex items-center">
                     <div class="flex items-center min-w-[2.5rem]">
                       <i
-                        [class]="getIcon(item.icon)"
+                        [class]="item.icon | icon"
                         class="text-2xl text-gray-600 dark:text-gray-300 transition-all duration-500 ease-out group-hover:text-blue-600 dark:group-hover:text-accent-yellow group-hover:scale-110"
                       ></i>
                     </div>
@@ -68,7 +68,7 @@
                         isActiveRoute(child.route)
                       "
                     >
-                      <i [class]="getIcon(child.icon)" class="mr-3"></i>
+                      <i [class]="child.icon | icon" class="mr-3"></i>
                       <span>{{ child.label }}</span>
                     </a>
                   }
@@ -82,7 +82,7 @@
                   <div class="flex items-center">
                     <div class="flex items-center min-w-[2.5rem]">
                       <i
-                        [class]="getIcon(item.icon)"
+                        [class]="item.icon | icon"
                         class="text-2xl transition-all duration-500 ease-out"
                         [class.text-blue-600]="isActiveRoute(item.route)"
                         [class.dark:text-accent-yellow]="
@@ -122,7 +122,7 @@
           (click)="logout()"
           class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-dark-bg hover:bg-gray-200 dark:hover:bg-dark-surface hover:text-gray-600 dark:hover:text-white transition"
         >
-          <i [class]="getIcon('LOGOUT')" class="text-xl"></i>
+          <i [class]="'LOGOUT' | icon" class="text-xl"></i>
           <span class="font-medium">Logout</span>
         </button>
         <div class="flex items-center gap-4">
@@ -132,7 +132,7 @@
             aria-label="Toggle theme"
           >
             <i
-              [class]="isDarkMode ? getIcon('SUN') : getIcon('MOON')"
+              [class]="(isDarkMode ? 'SUN' : 'MOON') | icon"
               class="text-xl"
             ></i>
           </button>
