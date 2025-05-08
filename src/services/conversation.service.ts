@@ -19,7 +19,6 @@ export class ConversationService {
 
   getConversations(skip = 0, limit = 100): Observable<ConversationsResponse> {
     const url = `${this.getUrlSegment()}?skip=${skip}&limit=${limit}`;
-    console.log(url);
 
     return this.http.get<ConversationsResponse>(url).pipe(
       map((response) => ({

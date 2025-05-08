@@ -1,18 +1,18 @@
 <div class="flex w-full mb-3">
   <div
+    class="p-3 rounded-lg max-w-[80%] whitespace-pre-wrap"
     [ngClass]="{
       'bg-chat-user-bg dark:bg-blue-900 text-chat-user-text dark:text-blue-100 ml-auto':
         message.role === 'user',
-      'bg-chat-assistant-bg dark:bg-dark-surface text-chat-assistant-text dark:text-accent-yellow mr-auto':
+      'bg-chat-assistant-bg dark:bg-purple-900 text-chat-assistant-text dark:text-purple-100 mr-auto':
         message.role === 'assistant',
+      'text-xs bg-chat-tool-bg dark:bg-accent-yellow/10 text-chat-tool-text dark:text-accent-yellow mx-auto text-center p-1':
+        message.role === 'tool',
       'bg-chat-system-bg dark:bg-yellow-900 text-chat-system-text dark:text-yellow-100 mx-auto text-center':
         message.role === 'system',
-      'bg-chat-tool-bg dark:bg-purple-900 text-chat-tool-text dark:text-purple-100 mx-auto text-center':
-        message.role === 'tool',
       'bg-chat-developer-bg dark:bg-pink-900 text-chat-developer-text dark:text-pink-100 mx-auto text-center':
         message.role === 'developer',
     }"
-    class="p-3 rounded-lg max-w-[80%] whitespace-pre-wrap"
   >
     <markdown [data]="message.content"></markdown>
   </div>
