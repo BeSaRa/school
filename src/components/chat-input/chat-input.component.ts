@@ -21,7 +21,7 @@ export class ChatInputComponent {
   @ViewChild("promptInput") promptInput!: ElementRef<HTMLInputElement>;
 
   @Output() send = new EventEmitter<Event>();
-  @Output() reset = new EventEmitter<void>();
+  // @Output() reset = new EventEmitter<void>();
 
   focus(): void {
     setTimeout(() => {
@@ -39,7 +39,7 @@ export class ChatInputComponent {
     }
   }
 
-  onReset(): void {
-    this.reset.emit();
-  }
+  // onReset(): void {
+  //   this.reset.emit();
+  // }
 }

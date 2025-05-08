@@ -17,12 +17,13 @@ import {
 import { UrlService } from "./url.service";
 import { Message } from "@/models/message";
 import { safeJsonParse } from "@/utils/utils";
+import { ConversationService } from "./conversation.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class ChatService {
-  private readonly http = inject(HttpClient);
+  private readonly conversationService = inject(ConversationService);
   private readonly urlService = inject(UrlService);
 
   messages: WritableSignal<Message[]> = signal<Message[]>([]);
@@ -153,9 +154,7 @@ export class ChatService {
     this.status.set(false);
     this.conversationId.set("");
     this.messagesSubject.next(this.messages());
-    // this.closeActionStream();
-    // this.actions.set([]);
-    // this.latestAction.set(null);
+    this.conversationService.getConversations();
   }
 
   startActionStream(): void {

@@ -2,16 +2,18 @@ import { Component, EventEmitter, Output, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ConversationService } from "@/services/conversation.service";
 import { Conversation, ConversationGroup } from "@/types/conversation.types";
+import { IconService } from "@/services/icon.service";
 
 @Component({
   selector: "app-conversation-sidebar",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, IconService],
   templateUrl: "./conversation-sidebar.component.html",
   styleUrls: ["./conversation-sidebar.component.scss"],
 })
 export class ConversationSidebarComponent {
   @Output() conversationSelected = new EventEmitter<string>();
+  @Output() createNewChat = new EventEmitter<string>();
   conversations = signal<ConversationGroup[]>([]);
 
   constructor(private conversationService: ConversationService) {
@@ -86,5 +88,9 @@ export class ConversationSidebarComponent {
   onConversationClick(conversation: Conversation) {
     console.log("Conversation clicked:", conversation.id);
     this.conversationSelected.emit(conversation.id);
+  }
+  onNewChatClick() {
+    console.log("New chat clicked");
+    this.createNewChat.emit();
   }
 }

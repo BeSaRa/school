@@ -132,7 +132,9 @@ export class AIChatAssistantComponent implements OnInit, AfterViewInit {
       console.error("Error sending message:", error);
     }
   }
-
+  onCreateNewChatClicked() {
+    this.chatService.resetChat();
+  }
   onConversationSelected(conversationId: string) {
     this.chatService.conversationId.set(conversationId);
     // this.chatService.closeActionStream();
@@ -154,12 +156,12 @@ export class AIChatAssistantComponent implements OnInit, AfterViewInit {
   /**
    * Resets the chat conversation
    */
-  resetChat(): void {
-    this.chatService.resetChat();
-    this.form.reset();
-    this.streamingAssistantContent.set("");
-    this.chatInput?.focus();
-  }
+  // resetChat(): void {
+  //   this.chatService.resetChat();
+  //   this.form.reset();
+  //   this.streamingAssistantContent.set("");
+  //   this.chatInput?.focus();
+  // }
 
   // private subscribeToActions(): void {
   //   this.chatService
