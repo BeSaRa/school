@@ -141,14 +141,6 @@ export class ChatService {
     );
   }
 
-  // private actions: WritableSignal<string[]> = signal<string[]>([]);
-  // private latestAction: WritableSignal<string | null> = signal<string | null>(
-  //   null
-  // );
-  // private actionsSubject = new Subject<string[]>();
-  // private latestActionSubject = new Subject<string>();
-  // private eventSource: EventSource | null = null;
-
   resetChat() {
     this.messages.set([]);
     this.status.set(false);
@@ -158,7 +150,6 @@ export class ChatService {
   }
 
   startActionStream(): void {
-    // this.closeActionStream();
     const token = this.getAccessToken();
     const url = `${this.getUrlSegment()}actions`;
     fetch(url, {
@@ -194,10 +185,6 @@ export class ChatService {
                   new Message(action, "tool"),
                 ]);
                 this.messagesSubject.next(this.messages());
-                // this.actions.update((actions) => [...actions, action]);
-                // this.actionsSubject.next(this.actions());
-                // this.latestAction.set(action);
-                // this.latestActionSubject.next(action);
               }
             }
             read();
@@ -207,30 +194,6 @@ export class ChatService {
       })
       .catch((err) => {
         console.error("Streaming fetch error:", err);
-        // this.closeActionStream();
       });
   }
-
-  // getActions(): Observable<string[]> {
-  //   return this.actionsSubject.asObservable();
-  // }
-
-  // getLatestAction(): Observable<string> {
-  //   return this.latestActionSubject.asObservable();
-  // }
-
-  // getCurrentActions(): string[] {
-  //   return this.actions();
-  // }
-
-  // getCurrentLatestAction(): string | null {
-  //   return this.latestAction();
-  // }
-
-  // closeActionStream(): void {
-  //   if (this.eventSource) {
-  //     this.eventSource.close();
-  //     this.eventSource = null;
-  //   }
-  // }
 }
