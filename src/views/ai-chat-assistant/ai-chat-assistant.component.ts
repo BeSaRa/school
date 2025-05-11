@@ -19,7 +19,6 @@ import { CommonModule } from "@angular/common";
 import { ChatService } from "@/services/ai-chat-assistant.service";
 import { ChatMessageComponent } from "@/components/chat-message/chat-message.component";
 import { ChatInputComponent } from "@/components/chat-input/chat-input.component";
-// import { Message } from "@/models/message";
 import { ConversationSidebarComponent } from "@/components/conversation-sidebar/conversation-sidebar.component";
 import { ConversationService } from "@/services/conversation.service";
 import { MarkdownModule } from "ngx-markdown";
@@ -53,7 +52,6 @@ export class AIChatAssistantComponent implements OnInit, AfterViewInit {
   messages = this.chatService.messages;
   streamingAssistantContent = signal("");
   isStreaming = this.chatService.status;
-  // latestAction = signal<string | null>(null);
 
   constructor() {
     this.form = this.fb.group({
@@ -81,8 +79,6 @@ export class AIChatAssistantComponent implements OnInit, AfterViewInit {
     this.subscribeToMessages();
     this.subscribeToStreaming();
     this.chatService.startActionStream();
-
-    // this.subscribeToActions();
   }
 
   ngAfterViewInit(): void {
@@ -137,9 +133,6 @@ export class AIChatAssistantComponent implements OnInit, AfterViewInit {
   }
   onConversationSelected(conversationId: string) {
     this.chatService.conversationId.set(conversationId);
-    // this.chatService.closeActionStream();
-    // this.chatService.startActionStream();
-
     this.conversationService
       .getConversationMessages(conversationId)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -153,26 +146,4 @@ export class AIChatAssistantComponent implements OnInit, AfterViewInit {
         },
       });
   }
-  /**
-   * Resets the chat conversation
-   */
-  // resetChat(): void {
-  //   this.chatService.resetChat();
-  //   this.form.reset();
-  //   this.streamingAssistantContent.set("");
-  //   this.chatInput?.focus();
-  // }
-
-  // private subscribeToActions(): void {
-  //   this.chatService
-  //     .getLatestAction()
-  //     .pipe(takeUntilDestroyed(this.destroyRef))
-  //     .subscribe((action) => {
-  //       this.latestAction.set(action);
-  //     });
-  // this.latestAction.set("![](https://i.imgur.com/iHcKrIW.jpeg)");
-  // console.log(this.latestAction());
-
-  //   this.chatService.startActionStream();
-  // }
 }
