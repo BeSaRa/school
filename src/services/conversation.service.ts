@@ -36,7 +36,7 @@ export class ConversationService {
   getConversationMessages(
     conversationId: string
   ): Observable<{ messages: Message[]; count: number }> {
-    const url = `${this.getUrlSegment()}/${conversationId}`;
+    const url = `${this.getUrlSegment()}${conversationId}`;
     return this.http.get<{ messages: Message[]; count: number }>(url);
   }
 }
