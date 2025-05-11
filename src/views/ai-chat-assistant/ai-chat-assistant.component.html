@@ -14,7 +14,7 @@
       AI Chat Assistant
     </h1>
 
-    <div class="flex-1 overflow-y-auto p-4">
+    <div class="flex-1 overflow-y-auto p-4 relative" #messageContainer>
       @for (message of messages(); track message) {
         <app-chat-message [message]="message" />
       }

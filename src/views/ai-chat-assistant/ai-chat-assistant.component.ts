@@ -7,6 +7,7 @@ import {
   effect,
   ViewChild,
   AfterViewInit,
+  ElementRef,
 } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import {
@@ -22,6 +23,7 @@ import { ChatInputComponent } from "@/components/chat-input/chat-input.component
 import { ConversationSidebarComponent } from "@/components/conversation-sidebar/conversation-sidebar.component";
 import { ConversationService } from "@/services/conversation.service";
 import { MarkdownModule } from "ngx-markdown";
+import { IconService } from "@/services/icon.service";
 
 /**
  * Component that provides the AI chat assistant interface
@@ -47,12 +49,15 @@ export class AIChatAssistantComponent implements OnInit, AfterViewInit {
   readonly conversationService = inject(ConversationService);
 
   @ViewChild(ChatInputComponent) chatInput!: ChatInputComponent;
+  @ViewChild("messageContainer") messageContainer!: ElementRef;
 
   form: FormGroup;
   messages = this.chatService.messages;
   streamingAssistantContent = signal("");
   isStreaming = this.chatService.status;
 
+  scrollInterval: any;
+  scrollSpeed: number = 10;
   constructor() {
     this.form = this.fb.group({
       prompt: [
@@ -71,6 +76,14 @@ export class AIChatAssistantComponent implements OnInit, AfterViewInit {
           control.enable();
           this.chatInput?.focus();
         }
+      }
+      if (isStreaming) {
+        this.scrollInterval = setInterval(() => {
+          const container = this.messageContainer.nativeElement;
+          container.scrollTop += this.scrollSpeed;
+        }, 10);
+      } else {
+        clearInterval(this.scrollInterval);
       }
     });
   }
