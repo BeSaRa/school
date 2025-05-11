@@ -23,7 +23,6 @@ import { ChatInputComponent } from "@/components/chat-input/chat-input.component
 import { ConversationSidebarComponent } from "@/components/conversation-sidebar/conversation-sidebar.component";
 import { ConversationService } from "@/services/conversation.service";
 import { MarkdownModule } from "ngx-markdown";
-import { IconService } from "@/services/icon.service";
 
 /**
  * Component that provides the AI chat assistant interface
