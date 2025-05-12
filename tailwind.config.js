@@ -5,14 +5,19 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        primary: "#8e1837",
+        secondary: "#c23b4e",
+        tertiary: "#221f20",
+        quaternary: "#57585b",
+        quinary: "#d1d2d4",
         chat: {
           user: {
-            bg: "rgb(238, 242, 255)",
-            text: "rgb(30, 58, 138)",
+            bg: "#eef2ff",
+            text: "#1e40af",
           },
           assistant: {
-            bg: "rgb(248, 250, 252)",
-            text: "rgb(15, 23, 42)",
+            bg: "#f8fafc",
+            text: "#0f172a",
           },
           system: {
             bg: "rgb(254, 249, 195)",

@@ -16,7 +16,7 @@ import { LoadingService } from "@/services/loading.service";
         >
           <div class="animate-spin">
             <svg
-              class="w-12 h-12 text-blue-600 dark:text-accent-yellow"
+              class="w-12 h-12 text-primary dark:text-accent-yellow"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
