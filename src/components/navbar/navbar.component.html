@@ -4,17 +4,13 @@
       <!-- Logo/Title Section -->
       <div class="flex items-center space-x-4">
         <div class="flex items-center justify-center">
-          <svg
-            class="h-12 w-12 text-blue-600 dark:text-accent-yellow"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-          >
-            <path
-              d="M12,3L1,9L12,15L21,10.09V17H23V9M5,13.18V17.18L12,21L19,17.18V13.18L12,17L5,13.18Z"
-            />
-          </svg>
+          <img
+            src="assets/qulogo.png"
+            alt="School AI Logo"
+            class="h-12 w-auto"
+          />
         </div>
-        <div>
+        <!-- <div>
           <h2
             class="text-xl font-bold text-gray-900 dark:text-white leading-none"
           >
@@ -23,7 +19,7 @@
           <p class="text-sm text-gray-600 dark:text-gray-300">
             Intelligent School Management
           </p>
-        </div>
+        </div> -->
       </div>
 
       <!-- Navigation Menu -->
@@ -41,7 +37,7 @@
                     <div class="flex items-center min-w-[2.5rem]">
                       <i
                         [class]="item.icon | icon"
-                        class="text-2xl text-gray-600 dark:text-gray-300 transition-all duration-500 ease-out group-hover:text-blue-600 dark:group-hover:text-accent-yellow group-hover:scale-110"
+                        class="text-2xl text-gray-600 dark:text-gray-300 transition-all duration-500 ease-out group-hover:text-primary dark:group-hover:text-accent-yellow group-hover:scale-110"
                       ></i>
                     </div>
                     <span
@@ -61,11 +57,10 @@
                     <a
                       [routerLink]="child.route"
                       class="flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-dark-bg"
-                      [class.bg-blue-50]="isActiveRoute(child.route)"
-                      [class.dark:bg-dark-bg]="isActiveRoute(child.route)"
-                      [class.text-blue-600]="isActiveRoute(child.route)"
-                      [class.dark:text-accent-yellow]="
+                      [ngClass]="
                         isActiveRoute(child.route)
+                          ? 'bg-primary/10 text-primary dark:bg-dark-bg dark:text-accent-yellow'
+                          : ''
                       "
                     >
                       <i [class]="child.icon | icon" class="mr-3"></i>
@@ -84,7 +79,7 @@
                       <i
                         [class]="item.icon | icon"
                         class="text-2xl transition-all duration-500 ease-out"
-                        [class.text-blue-600]="isActiveRoute(item.route)"
+                        [class.text-primary]="isActiveRoute(item.route)"
                         [class.dark:text-accent-yellow]="
                           isActiveRoute(item.route)
                         "
@@ -100,7 +95,7 @@
                       [class.group-hover:max-w-[160px]]="
                         !isActiveRoute(item.route)
                       "
-                      [class.text-blue-600]="isActiveRoute(item.route)"
+                      [class.text-primary]="isActiveRoute(item.route)"
                       [class.dark:text-accent-yellow]="
                         isActiveRoute(item.route)
                       "
@@ -125,7 +120,7 @@
           <i [class]="'LOGOUT' | icon" class="text-xl"></i>
           <span class="font-medium">Logout</span>
         </button>
-        <div class="flex items-center gap-4">
+        <!-- <div class="flex items-center gap-4">
           <button
             (click)="toggleTheme()"
             class="p-2 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-dark-bg transition"
@@ -136,7 +131,7 @@
               class="text-xl"
             ></i>
           </button>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

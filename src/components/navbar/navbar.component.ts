@@ -5,11 +5,12 @@ import { IconService } from "@/services/icon.service";
 import { AppIcons } from "@/constants/icons.constants";
 import { NavigationService } from "../../services/navigation.service";
 import { NavigationItem } from "@/types/navigation.types";
+import { CommonModule } from "@angular/common";
 
 @Component({
   selector: "app-navbar",
   standalone: true,
-  imports: [RouterModule, IconService],
+  imports: [RouterModule, IconService, CommonModule],
   templateUrl: "./navbar.component.html",
   styleUrl: "./navbar.component.scss",
 })
