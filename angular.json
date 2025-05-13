@@ -29,7 +29,11 @@
               "src/resources",
               "src/CONFIGURATIONS.json"
             ],
-            "styles": ["src/styles.scss", "src/styles/patterns.scss"],
+            "styles": [
+              "src/styles.scss",
+              "src/styles/patterns.scss",
+              "node_modules/katex/dist/katex.min.css"
+            ],
             "scripts": [],
             "server": "src/main.server.ts",
             "prerender": false,
@@ -92,7 +96,11 @@
               "src/resources",
               "src/CONFIGURATIONS.json"
             ],
-            "styles": ["src/styles.scss", "src/styles/patterns.scss"],
+            "styles": [
+              "src/styles.scss",
+              "src/styles/patterns.scss",
+              "node_modules/katex/dist/katex.min.css"
+            ],
             "scripts": []
           }
         },
