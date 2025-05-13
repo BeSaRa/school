@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { Observable } from "rxjs";
 import { DialogComponent } from "../components/dialog/dialog.component";
-import { DialogData, DialogResult } from "../models/dialog.model";
+import { DialogData, DialogResult } from "../types/dialog.types";
 
 @Injectable({
   providedIn: "root",

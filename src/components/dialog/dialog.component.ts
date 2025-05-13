@@ -5,9 +5,9 @@ import {
   MatDialogRef,
   MatDialogModule,
 } from "@angular/material/dialog";
-import { DialogData, DialogResult } from "../../models/dialog.model";
 import { IconService } from "@/services/icon.service";
 import { AppIcons } from "@/constants/icons.constants";
+import { DialogData, DialogResult } from "@/types/dialog.types";
 
 @Component({
   selector: "app-dialog",

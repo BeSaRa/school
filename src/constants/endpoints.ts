@@ -4,6 +4,7 @@ export const EndPoints = {
   SCHOOLS: "/schools/",
   AI_CHAT_ASSISTANT: "/chat/",
   CONVERSATION: "/conversations/",
+  USERS: "/users/",
 };
 
 export type EndpointsType = typeof EndPoints;
