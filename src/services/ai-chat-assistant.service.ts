@@ -1,5 +1,4 @@
 import { inject, Injectable, WritableSignal, signal } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
 import {
   catchError,
   defer,
@@ -18,6 +17,7 @@ import { UrlService } from "./url.service";
 import { Message } from "@/models/message";
 import { safeJsonParse } from "@/utils/utils";
 import { ConversationService } from "./conversation.service";
+import { DialogService } from "../app/services/dialog.service";
 
 @Injectable({
   providedIn: "root",
@@ -25,6 +25,7 @@ import { ConversationService } from "./conversation.service";
 export class ChatService {
   private readonly conversationService = inject(ConversationService);
   private readonly urlService = inject(UrlService);
+  private readonly dialogService = inject(DialogService);
 
   messages: WritableSignal<Message[]> = signal<Message[]>([]);
   status: WritableSignal<boolean> = signal<boolean>(false);
@@ -60,6 +61,7 @@ export class ChatService {
       "Content-Type": "application/json",
     };
     if (token) headers["Authorization"] = `Bearer ${token}`;
+
     const body = JSON.stringify({
       prompt: content,
       conversationId: conversationId || this.conversationId(),
@@ -76,7 +78,11 @@ export class ChatService {
     ).pipe(
       switchMap((response) => {
         if (!response.ok || !response.body) {
-          throw new Error("Fetch failed or response has no body");
+          this.dialogService
+            .error("Request Failed", "Unable to connect or empty response.")
+            .subscribe();
+          this.status.set(false);
+          return EMPTY;
         }
 
         const reader = response.body.getReader();
@@ -131,12 +137,24 @@ export class ChatService {
             }
             this.status.set(false);
           }),
-          catchError((err) => {
-            console.error("SSE error:", err);
+          catchError(() => {
+            this.dialogService
+              .error(
+                "Streaming Error",
+                "An error occurred while receiving the response."
+              )
+              .subscribe();
             this.status.set(false);
             return EMPTY;
           })
         );
+      }),
+      catchError(() => {
+        this.dialogService
+          .error("Unexpected Error", "An unexpected error occurred.")
+          .subscribe();
+        this.status.set(false);
+        return EMPTY;
       })
     );
   }
@@ -152,6 +170,7 @@ export class ChatService {
   startActionStream(): void {
     const token = this.getAccessToken();
     const url = `${this.getUrlSegment()}actions`;
+
     fetch(url, {
       method: "GET",
       headers: {
@@ -162,11 +181,19 @@ export class ChatService {
     })
       .then((response) => {
         if (!response.body) {
-          throw new Error("ReadableStream not supported by the browser");
+          this.dialogService
+            .error(
+              "Unsupported Feature",
+              "Streaming not supported by your browser."
+            )
+            .subscribe();
+          return;
         }
+
         const reader = response.body.getReader();
         const decoder = new TextDecoder("utf-8");
         let buffer = "";
+
         const read = () => {
           reader.read().then(({ done, value }) => {
             if (done) {
@@ -174,9 +201,11 @@ export class ChatService {
               // this.closeActionStream();
               return;
             }
+
             buffer += decoder.decode(value, { stream: true });
             let lines = buffer.split("\n");
             buffer = lines.pop() || "";
+
             for (const line of lines) {
               if (line.startsWith("data:")) {
                 const action = line.replace("data:", "").trim();
@@ -187,13 +216,20 @@ export class ChatService {
                 this.messagesSubject.next(this.messages());
               }
             }
+
             read();
           });
         };
+
         read();
       })
-      .catch((err) => {
-        console.error("Streaming fetch error:", err);
+      .catch(() => {
+        this.dialogService
+          .error(
+            "Connection Error",
+            "An error occurred while connecting to the server."
+          )
+          .subscribe();
       });
   }
 }
