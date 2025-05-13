@@ -17,7 +17,7 @@ import { UrlService } from "./url.service";
 import { Message } from "@/models/message";
 import { safeJsonParse } from "@/utils/utils";
 import { ConversationService } from "./conversation.service";
-import { DialogService } from "../app/services/dialog.service";
+import { DialogService } from "./dialog.service";
 
 @Injectable({
   providedIn: "root",

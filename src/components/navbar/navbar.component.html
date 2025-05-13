@@ -11,15 +11,15 @@
           />
         </div>
         <!-- <div>
-          <h2
-            class="text-xl font-bold text-gray-900 dark:text-white leading-none"
-          >
-            School AI
-          </h2>
-          <p class="text-sm text-gray-600 dark:text-gray-300">
-            Intelligent School Management
-          </p>
-        </div> -->
+        <h2
+          class="text-xl font-bold text-gray-900 dark:text-white leading-none"
+        >
+          School AI
+        </h2>
+        <p class="text-sm text-gray-600 dark:text-gray-300">
+          Intelligent School Management
+        </p>
+      </div> -->
       </div>
 
       <!-- Navigation Menu -->
@@ -114,6 +114,20 @@
           </div>
         }
         <button
+          (click)="openProfileDialog()"
+          class="flex items-center px-3 py-1 rounded-2xl bg-gray-100 hover:bg-gray-50 dark:hover:bg-dark-bg"
+        >
+          <div class="flex items-center">
+            <div class="flex items-center">
+              <i
+                [class]="'USER' | icon"
+                class="text-2xl transition-all duration-500 text-gray-700 dark:text-accent-yellow"
+              ></i>
+            </div>
+          </div>
+        </button>
+
+        <button
           (click)="logout()"
           class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-dark-bg hover:bg-gray-200 dark:hover:bg-dark-surface hover:text-gray-600 dark:hover:text-white transition"
         >
@@ -121,17 +135,17 @@
           <span class="font-medium">Logout</span>
         </button>
         <!-- <div class="flex items-center gap-4">
-          <button
-            (click)="toggleTheme()"
-            class="p-2 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-dark-bg transition"
-            aria-label="Toggle theme"
-          >
-            <i
-              [class]="(isDarkMode ? 'SUN' : 'MOON') | icon"
-              class="text-xl"
-            ></i>
-          </button>
-        </div> -->
+        <button
+          (click)="toggleTheme()"
+          class="p-2 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-dark-bg transition"
+          aria-label="Toggle theme"
+        >
+          <i
+            [class]="(isDarkMode ? 'SUN' : 'MOON') | icon"
+            class="text-xl"
+          ></i>
+        </button>
+      </div> -->
       </div>
     </div>
   </div>

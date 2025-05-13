@@ -1,4 +1,4 @@
-export type DialogType = 'confirm' | 'info' | 'success' | 'warning' | 'error';
+export type DialogType = "confirm" | "info" | "success" | "warning" | "error";
 
 export interface DialogData {
   type: DialogType;

@@ -6,19 +6,21 @@ import { AppIcons } from "@/constants/icons.constants";
 import { NavigationService } from "../../services/navigation.service";
 import { NavigationItem } from "@/types/navigation.types";
 import { CommonModule } from "@angular/common";
+import { ProfilePopupComponent } from "../profile-popup/profile-popup.component";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 
 @Component({
   selector: "app-navbar",
   standalone: true,
-  imports: [RouterModule, IconService, CommonModule],
+  imports: [RouterModule, IconService, CommonModule, MatDialogModule],
   templateUrl: "./navbar.component.html",
   styleUrl: "./navbar.component.scss",
 })
 export class NavbarComponent implements OnInit {
-  private readonly iconService = inject(IconService);
   private readonly authService = inject(AuthService);
   private readonly navigationService = inject(NavigationService);
   private readonly router = inject(Router);
+  private readonly dialog = inject(MatDialog);
 
   menuItems: NavigationItem[] = this.navigationService.getMenuItems();
   readonly AppIcons = AppIcons;
@@ -56,5 +58,15 @@ export class NavbarComponent implements OnInit {
       document.documentElement.classList.remove("dark");
       localStorage.setItem("theme", "light");
     }
+  }
+
+  openProfileDialog(): void {
+    this.dialog.open(ProfilePopupComponent, {
+      width: "500px",
+      maxWidth: "90vw",
+      disableClose: true,
+      ariaLabel: "Profile Information",
+      role: "dialog",
+    });
   }
 }

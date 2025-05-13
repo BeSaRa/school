@@ -11,7 +11,7 @@ import { ConversationService } from "@/services/conversation.service";
 import { Conversation, ConversationGroup } from "@/types/conversation.types";
 import { IconService } from "@/services/icon.service";
 import { FormsModule } from "@angular/forms";
-import { DialogService } from "../../app/services/dialog.service";
+import { DialogService } from "../../services/dialog.service";
 import { filter, switchMap } from "rxjs";
 
 @Component({

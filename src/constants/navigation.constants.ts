@@ -8,10 +8,4 @@ export const menuItems: NavigationItem[] = [
     icon: "COMMENT",
     route: "/chat-assistant",
   },
-  {
-    id: 2,
-    label: "Schools",
-    icon: "CLASSES",
-    route: "/schools",
-  },
 ];

@@ -7,11 +7,11 @@ import {
   Validators,
 } from "@angular/forms";
 import { Router } from "@angular/router";
-import { LoginResponse } from "../../models/login.model";
+import { LoginResponse } from "../../types/login.types";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { CommonModule } from "@angular/common";
 import { UrlService } from "@/services/url.service";
-import { DialogService } from "../../app/services/dialog.service";
+import { DialogService } from "../../services/dialog.service";
 
 @Component({
   selector: "app-login",

@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable, tap } from "rxjs";
-import { LoginRequest, LoginResponse } from "../models/login.model";
+import { LoginRequest, LoginResponse } from "../types/login.types";
 import { ECookieService } from "./e-cookie.service";
 import { ConfigService } from "@/services/config.service";
 
