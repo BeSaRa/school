@@ -13,38 +13,11 @@ import { AppIcons } from "@/constants/icons.constants";
   selector: "app-dialog",
   standalone: true,
   imports: [CommonModule, MatDialogModule],
-  template: `
-    <div class="p-6" [ngClass]="getDialogClass()">
-      <div class="flex items-center gap-4 mb-4">
-        <span [class]="getIconClasses()"></span>
-        <h2 class="text-xl font-semibold">{{ data.title }}</h2>
-      </div>
-
-      <p class="mb-6 text-gray-700 dark:text-gray-300">{{ data.message }}</p>
-
-      <div class="flex justify-end gap-3">
-        <button
-          *ngIf="data.type === 'confirm'"
-          (click)="onCancel()"
-          class="px-4 py-2 rounded-lg"
-          [ngClass]="
-            'bg-chat-button-secondary-bg hover:bg-chat-button-secondary-hover text-chat-button-secondary-text'
-          "
-        >
-          {{ data.cancelText || "Cancel" }}
-        </button>
-
-        <button
-          (click)="onConfirm()"
-          class="px-4 py-2 rounded-lg"
-          [ngClass]="
-            'bg-chat-button-primary-bg hover:bg-chat-button-primary-hover text-chat-button-primary-text'
-          "
-        >
-          {{ data.type === "confirm" ? data.confirmText || "Confirm" : "OK" }}
-        </button>
-      </div>
-    </div>
+  templateUrl: "./dialog.component.html",
+  styles: `
+    ::ng-deep .mat-mdc-dialog-surface {
+      border-radius: 1rem !important;
+    }
   `,
 })
 export class DialogComponent {
@@ -55,28 +28,27 @@ export class DialogComponent {
   ) {}
 
   getDialogClass(): string {
-    const baseClasses = "rounded-lg shadow-lg";
     switch (this.data.type) {
       case "success":
-        return `${baseClasses} bg-green-50 dark:bg-green-900`;
+        return `bg-green-50 dark:bg-green-900 border-green-300 dark:border-green-700`;
       case "error":
-        return `${baseClasses} bg-red-50 dark:bg-red-900`;
+        return `bg-red-50 dark:bg-red-900 border-red-300 dark:border-red-700`;
       case "warning":
-        return `${baseClasses} bg-yellow-50 dark:bg-yellow-900`;
+        return `bg-yellow-50 dark:bg-yellow-900 border-yellow-300 dark:border-yellow-700`;
       case "info":
-        return `${baseClasses} bg-blue-50 dark:bg-blue-900`;
+        return `bg-blue-50 dark:bg-blue-900 border-blue-300 dark:border-blue-700`;
       default:
-        return `${baseClasses} bg-gray-50 dark:bg-gray-900`;
+        return `bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700`;
     }
   }
 
   getIconClasses(): string[] {
     const iconMap: Record<string, keyof typeof AppIcons> = {
-      success: "CALENDAR_SUCCESS",
-      error: "CALENDAR_ERROR",
-      warning: "CALENDAR_WARNING",
-      info: "CALENDAR_INFO",
-      confirm: "CALENDAR_QUESTION",
+      success: "SUCCESS",
+      error: "ERROR",
+      warning: "WARNING",
+      info: "INFO",
+      confirm: "CONFIRM",
     };
 
     return this.iconService.getIcon(iconMap[this.data.type]);

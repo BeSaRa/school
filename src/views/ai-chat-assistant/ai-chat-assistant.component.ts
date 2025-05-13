@@ -23,6 +23,7 @@ import { ChatInputComponent } from "@/components/chat-input/chat-input.component
 import { ConversationSidebarComponent } from "@/components/conversation-sidebar/conversation-sidebar.component";
 import { ConversationService } from "@/services/conversation.service";
 import { MarkdownModule } from "ngx-markdown";
+import { DialogService } from "../../app/services/dialog.service";
 
 /**
  * Component that provides the AI chat assistant interface
@@ -45,6 +46,7 @@ export class AIChatAssistantComponent implements OnInit, AfterViewInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly fb = inject(FormBuilder);
   readonly chatService = inject(ChatService);
+  readonly dialogService = inject(DialogService);
   readonly conversationService = inject(ConversationService);
 
   @ViewChild(ChatInputComponent) chatInput!: ChatInputComponent;
@@ -129,16 +131,13 @@ export class AIChatAssistantComponent implements OnInit, AfterViewInit {
     const userMessage = this.form.value.prompt;
     this.form.reset();
     this.streamingAssistantContent.set("");
-
-    try {
-      this.chatService.sendMessage(userMessage).subscribe({
-        error: (error) => {
-          console.error("Error sending message:", error);
-        },
-      });
-    } catch (error) {
-      console.error("Error sending message:", error);
-    }
+    this.chatService.sendMessage(userMessage).subscribe({
+      error: (error) => {
+        this.dialogService
+          .error("An error occurred while sending the message.", error)
+          .subscribe();
+      },
+    });
   }
   onCreateNewChatClicked() {
     this.chatService.resetChat();
@@ -154,7 +153,9 @@ export class AIChatAssistantComponent implements OnInit, AfterViewInit {
           this.chatInput.focus();
         },
         error: (error) => {
-          console.error("Error fetching conversation messages:", error);
+          this.dialogService
+            .error("An error occurred while loading the conversation.", error)
+            .subscribe();
         },
       });
   }

@@ -1,4 +1,9 @@
 export const AppIcons = {
+  SUCCESS: "check",
+  ERROR: "alert-circle-outline",
+  WARNING: "alert-box-outline",
+  INFO: "information-box-outline",
+  CONFIRM: "help",
   DASHBOARD: "view-dashboard",
   MOON: "weather-night",
   SUN: "weather-sunny",

@@ -13,7 +13,8 @@ export class DialogService {
   open(data: DialogData): Observable<DialogResult> {
     const dialogRef = this.dialog.open(DialogComponent, {
       data,
-      width: "400px",
+      width: "600px",
+      maxWidth: "90vw",
       disableClose: true,
       ariaLabel: data.title,
       role: "dialog",

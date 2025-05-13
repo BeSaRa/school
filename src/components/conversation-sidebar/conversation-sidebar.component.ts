@@ -1,9 +1,18 @@
-import { Component, EventEmitter, Output, signal } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  inject,
+  OnInit,
+  Output,
+  signal,
+} from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ConversationService } from "@/services/conversation.service";
 import { Conversation, ConversationGroup } from "@/types/conversation.types";
 import { IconService } from "@/services/icon.service";
 import { FormsModule } from "@angular/forms";
+import { DialogService } from "../../app/services/dialog.service";
+import { filter, switchMap } from "rxjs";
 
 @Component({
   selector: "app-conversation-sidebar",
@@ -12,12 +21,14 @@ import { FormsModule } from "@angular/forms";
   templateUrl: "./conversation-sidebar.component.html",
   styleUrls: ["./conversation-sidebar.component.scss"],
 })
-export class ConversationSidebarComponent {
+export class ConversationSidebarComponent implements OnInit {
   @Output() conversationSelected = new EventEmitter<string>();
   @Output() createNewChat = new EventEmitter<string>();
   conversations = signal<ConversationGroup[]>([]);
+  conversationService = inject(ConversationService);
+  dialogService = inject(DialogService);
 
-  constructor(private conversationService: ConversationService) {
+  ngOnInit(): void {
     this.loadConversations();
   }
 
@@ -27,8 +38,13 @@ export class ConversationSidebarComponent {
         const grouped = this.groupConversations(response.conversations);
         this.conversations.set(grouped);
       },
-      error: (error) => {
-        console.error("Error loading conversations:", error);
+      error: () => {
+        this.dialogService
+          .error(
+            "Error loading conversations",
+            "An error occurred while loading conversations."
+          )
+          .subscribe();
       },
     });
   }
@@ -139,9 +155,13 @@ export class ConversationSidebarComponent {
           this.loadConversations();
           this.cancelEdit();
         },
-        error: (error) => {
-          console.error("Error updating conversation title:", error);
-          // Optionally show an error message to the user
+        error: () => {
+          this.dialogService
+            .error(
+              "Error updating conversation title",
+              "An error occurred while updating the conversation title."
+            )
+            .subscribe();
           this.cancelEdit();
         },
       });
@@ -165,19 +185,35 @@ export class ConversationSidebarComponent {
   onDeleteConversation() {
     if (!this.selectedConversation) return;
 
-    if (confirm("Are you sure you want to delete this conversation?")) {
-      this.conversationService
-        .deleteConversation(this.selectedConversation.id)
-        .subscribe({
-          next: () => {
-            this.loadConversations();
-            this.showContextMenu.set(false);
-          },
-          error: (error) => {
-            console.error("Error deleting conversation:", error);
-          },
-        });
-    }
+    this.dialogService
+      .confirm(
+        "Delete Conversation",
+        "Are you sure you want to delete this conversation?",
+        "Delete",
+        "Cancel"
+      )
+      .pipe(
+        filter((result) => result.confirmed),
+        switchMap(() =>
+          this.conversationService.deleteConversation(
+            this.selectedConversation!.id
+          )
+        )
+      )
+      .subscribe({
+        next: () => {
+          this.loadConversations();
+          this.showContextMenu.set(false);
+        },
+        error: () => {
+          this.dialogService
+            .error(
+              "Error deleting conversation",
+              "An error occurred while deleting the conversation."
+            )
+            .subscribe();
+        },
+      });
   }
 
   closeContextMenu() {
