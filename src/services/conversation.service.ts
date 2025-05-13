@@ -39,4 +39,17 @@ export class ConversationService {
     const url = `${this.getUrlSegment()}${conversationId}`;
     return this.http.get<{ messages: Message[]; count: number }>(url);
   }
+
+  deleteConversation(conversationId: string): Observable<void> {
+    const url = `${this.getUrlSegment()}${conversationId}`;
+    return this.http.delete<void>(url);
+  }
+
+  editConversationTitle(
+    conversationId: string,
+    title: string
+  ): Observable<void> {
+    const url = `${this.getUrlSegment()}${conversationId}`;
+    return this.http.patch<void>(url, { title });
+  }
 }
