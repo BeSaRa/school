@@ -8,6 +8,7 @@ import {
   ViewChild,
   AfterViewInit,
   ElementRef,
+  OnDestroy,
 } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import {
@@ -24,6 +25,9 @@ import { ConversationSidebarComponent } from "@/components/conversation-sidebar/
 import { ConversationService } from "@/services/conversation.service";
 import { MarkdownModule } from "ngx-markdown";
 import { DialogService } from "../../services/dialog.service";
+import { User } from "@/types/user.types";
+import { UserService } from "@/services/user.service";
+import { Subscription } from "rxjs";
 
 /**
  * Component that provides the AI chat assistant interface
@@ -42,23 +46,33 @@ import { DialogService } from "../../services/dialog.service";
   ],
   templateUrl: "./ai-chat-assistant.component.html",
 })
-export class AIChatAssistantComponent implements OnInit, AfterViewInit {
+export class AIChatAssistantComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
+  // Injected services
   private readonly destroyRef = inject(DestroyRef);
   private readonly fb = inject(FormBuilder);
   readonly chatService = inject(ChatService);
   readonly dialogService = inject(DialogService);
   readonly conversationService = inject(ConversationService);
+  readonly userService = inject(UserService);
 
+  // ViewChild references
   @ViewChild(ChatInputComponent) chatInput!: ChatInputComponent;
-  @ViewChild("messageContainer") messageContainer!: ElementRef;
+  @ViewChild("messageContainer") messageContainer!: ElementRef<HTMLDivElement>;
 
+  // Component properties
   form: FormGroup;
   messages = this.chatService.messages;
   streamingAssistantContent = signal("");
   isStreaming = this.chatService.status;
+  currentUser: User | null = null;
 
-  scrollInterval: any;
-  scrollSpeed: number = 10;
+  // Scroll properties
+  private scrollInterval: number | null = null;
+  private readonly scrollSpeed = 10;
+  private userSubscription?: Subscription;
+
   constructor() {
     this.form = this.fb.group({
       prompt: [
@@ -67,38 +81,54 @@ export class AIChatAssistantComponent implements OnInit, AfterViewInit {
       ],
     });
 
+    // Effect to handle streaming state changes
     effect(() => {
-      const isStreaming = this.chatService.status();
-      const control = this.form.get("prompt");
-      if (control) {
-        if (isStreaming) {
-          control.disable();
-        } else {
-          control.enable();
-          this.chatInput?.focus();
-        }
-      }
-      if (isStreaming) {
-        this.scrollInterval = setInterval(() => {
-          const container = this.messageContainer.nativeElement;
-          container.scrollTop += this.scrollSpeed;
-        }, 10);
-      } else {
-        clearInterval(this.scrollInterval);
-      }
+      this.handleStreamingStateChange(this.chatService.status());
     });
   }
 
   ngOnInit(): void {
-    this.subscribeToMessages();
-    this.subscribeToStreaming();
-    this.chatService.startActionStream();
+    this.initializeComponent();
   }
 
   ngAfterViewInit(): void {
-    this.chatInput?.focus();
+    this.focusInput();
   }
 
+  ngOnDestroy(): void {
+    this.cleanupResources();
+  }
+
+  /**
+   * Initializes the component by setting up subscriptions and loading data
+   */
+  private initializeComponent(): void {
+    this.subscribeToMessages();
+    this.subscribeToStreaming();
+    this.loadUserData();
+    this.chatService.startActionStream();
+  }
+
+  /**
+   * Loads the current user data
+   */
+  private loadUserData(): void {
+    // First try to get the current user directly
+    this.currentUser = this.userService.currentUser;
+
+    // If not available, subscribe to the user observable
+    if (!this.currentUser) {
+      this.userSubscription = this.userService.currentUser$.subscribe(
+        (user) => {
+          this.currentUser = user;
+        }
+      );
+    }
+  }
+
+  /**
+   * Subscribes to message updates from the chat service
+   */
   private subscribeToMessages(): void {
     this.chatService
       .getMessages()
@@ -106,6 +136,9 @@ export class AIChatAssistantComponent implements OnInit, AfterViewInit {
       .subscribe();
   }
 
+  /**
+   * Subscribes to streaming content updates from the chat service
+   */
   private subscribeToStreaming(): void {
     this.chatService
       .getStreamingAssistant()
@@ -113,6 +146,65 @@ export class AIChatAssistantComponent implements OnInit, AfterViewInit {
       .subscribe((content) => {
         this.streamingAssistantContent.set(content);
       });
+  }
+
+  /**
+   * Handles changes in the streaming state
+   * @param isStreaming - Whether the chat is currently streaming
+   */
+  private handleStreamingStateChange(isStreaming: boolean): void {
+    const control = this.form.get("prompt");
+
+    if (control) {
+      if (isStreaming) {
+        control.disable();
+        this.startAutoScroll();
+      } else {
+        control.enable();
+        this.stopAutoScroll();
+        this.focusInput();
+      }
+    }
+  }
+
+  /**
+   * Starts auto-scrolling the message container
+   */
+  private startAutoScroll(): void {
+    this.stopAutoScroll(); // Ensure no duplicate intervals
+
+    this.scrollInterval = window.setInterval(() => {
+      const container = this.messageContainer.nativeElement;
+      container.scrollTop += this.scrollSpeed;
+    }, 10);
+  }
+
+  /**
+   * Stops auto-scrolling the message container
+   */
+  private stopAutoScroll(): void {
+    if (this.scrollInterval !== null) {
+      window.clearInterval(this.scrollInterval);
+      this.scrollInterval = null;
+    }
+  }
+
+  /**
+   * Focuses the chat input field
+   */
+  private focusInput(): void {
+    this.chatInput?.focus();
+  }
+
+  /**
+   * Cleans up resources when the component is destroyed
+   */
+  private cleanupResources(): void {
+    this.stopAutoScroll();
+
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
   }
 
   /**
@@ -131,32 +223,59 @@ export class AIChatAssistantComponent implements OnInit, AfterViewInit {
     const userMessage = this.form.value.prompt;
     this.form.reset();
     this.streamingAssistantContent.set("");
+
     this.chatService.sendMessage(userMessage).subscribe({
       error: (error) => {
-        this.dialogService
-          .error("An error occurred while sending the message.", error)
-          .subscribe();
+        this.handleMessageError(error);
       },
     });
   }
-  onCreateNewChatClicked() {
+
+  /**
+   * Handles errors that occur when sending messages
+   * @param error - The error that occurred
+   */
+  private handleMessageError(error: any): void {
+    this.dialogService
+      .error("An error occurred while sending the message.", error)
+      .subscribe();
+  }
+
+  /**
+   * Creates a new chat conversation
+   */
+  onCreateNewChatClicked(): void {
     this.chatService.resetChat();
   }
-  onConversationSelected(conversationId: string) {
+
+  /**
+   * Loads a selected conversation
+   * @param conversationId - The ID of the conversation to load
+   */
+  onConversationSelected(conversationId: string): void {
     this.chatService.conversationId.set(conversationId);
+
     this.conversationService
       .getConversationMessages(conversationId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
           this.chatService.setMessages(response.messages);
-          this.chatInput.focus();
+          this.focusInput();
         },
         error: (error) => {
-          this.dialogService
-            .error("An error occurred while loading the conversation.", error)
-            .subscribe();
+          this.handleConversationLoadError(error);
         },
       });
+  }
+
+  /**
+   * Handles errors that occur when loading conversations
+   * @param error - The error that occurred
+   */
+  private handleConversationLoadError(error: any): void {
+    this.dialogService
+      .error("An error occurred while loading the conversation.", error)
+      .subscribe();
   }
 }

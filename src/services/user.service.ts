@@ -1,9 +1,11 @@
 import { Injectable, inject } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Observable, catchError, throwError } from "rxjs";
+import { Observable, catchError, throwError, BehaviorSubject } from "rxjs";
 import { User } from "../types/user.types";
 import { UrlService } from "./url.service";
 import { DialogService } from "./dialog.service";
+import { isPlatformBrowser } from "@angular/common";
+import { PLATFORM_ID } from "@angular/core";
 
 @Injectable({
   providedIn: "root",
@@ -12,9 +14,32 @@ export class UserService {
   private readonly http = inject(HttpClient);
   private readonly urlService = inject(UrlService);
   private readonly dialogService = inject(DialogService);
+  private readonly platformId = inject(PLATFORM_ID);
+
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
+  public currentUser$ = this.currentUserSubject.asObservable();
+
+  constructor() {
+    if (isPlatformBrowser(this.platformId)) {
+      const storedUser = localStorage.getItem("current_user");
+      if (storedUser) {
+        try {
+          this.currentUserSubject.next(JSON.parse(storedUser));
+        } catch {
+          localStorage.removeItem("current_user");
+        }
+      }
+    }
+  }
+
+  get currentUser(): User | null {
+    return this.currentUserSubject.value;
+  }
+
   getUrlSegment(): string {
     return this.urlService.URLS.USERS;
   }
+
   getCurrentUser(): Observable<User> {
     return this.http.get<User>(`${this.getUrlSegment()}me`).pipe(
       catchError((error) => {
@@ -22,5 +47,19 @@ export class UserService {
         return throwError(() => error);
       })
     );
+  }
+
+  updateCurrentUser(user: User): void {
+    this.currentUserSubject.next(user);
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem("current_user", JSON.stringify(user));
+    }
+  }
+
+  clearCurrentUser(): void {
+    this.currentUserSubject.next(null);
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem("current_user");
+    }
   }
 }
