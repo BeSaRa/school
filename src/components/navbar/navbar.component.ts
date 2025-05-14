@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from "@angular/core";
+import { Component, inject, OnInit, OnDestroy } from "@angular/core";
 import { RouterModule, Router } from "@angular/router";
 import { AuthService } from "../../services/auth.service";
 import { IconService } from "@/services/icon.service";
@@ -8,6 +8,10 @@ import { NavigationItem } from "@/types/navigation.types";
 import { CommonModule } from "@angular/common";
 import { ProfilePopupComponent } from "../profile-popup/profile-popup.component";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
+import { UserService } from "@/services/user.service";
+import { User } from "@/types/user.types";
+import { DialogService } from "@/services/dialog.service";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-navbar",
@@ -16,14 +20,67 @@ import { MatDialog, MatDialogModule } from "@angular/material/dialog";
   templateUrl: "./navbar.component.html",
   styleUrl: "./navbar.component.scss",
 })
-export class NavbarComponent implements OnInit {
-  private readonly authService = inject(AuthService);
-  private readonly navigationService = inject(NavigationService);
-  private readonly router = inject(Router);
-  private readonly dialog = inject(MatDialog);
+export class NavbarComponent implements OnInit, OnDestroy {
+  // Services
+  authService = inject(AuthService);
+  navigationService = inject(NavigationService);
+  dialogService = inject(DialogService);
+  router = inject(Router);
+  dialog = inject(MatDialog);
+  userService = inject(UserService);
 
+  // Component properties
+  currentUser!: User;
   menuItems: NavigationItem[] = this.navigationService.getMenuItems();
   readonly AppIcons = AppIcons;
+  isDarkMode = false;
+
+  // Subscription management
+  private userSubscription?: Subscription;
+
+  ngOnInit() {
+    // Initialize user data
+    this.initializeUserData();
+
+    // Initialize theme
+    this.isDarkMode = document.documentElement.classList.contains("dark");
+    this.applyTheme();
+  }
+
+  ngOnDestroy() {
+    // Clean up subscriptions to prevent memory leaks
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
+  }
+
+  private initializeUserData(): void {
+    // Get current user if available
+    const user = this.userService.currentUser;
+    if (user) {
+      this.currentUser = user;
+    } else {
+      // Subscribe to user changes
+      this.userSubscription = this.userService.currentUser$.subscribe(
+        (user) => {
+          if (user) {
+            this.currentUser = user;
+          } else {
+            this.handleUserNotFound();
+          }
+        }
+      );
+    }
+  }
+
+  private handleUserNotFound(): void {
+    this.dialogService
+      .error(
+        "Error",
+        "You are not logged in. Please log in to view your profile."
+      )
+      .subscribe();
+  }
 
   logout(): void {
     this.authService.logout();
@@ -35,14 +92,15 @@ export class NavbarComponent implements OnInit {
   }
 
   toggleExpand(item: NavigationItem): void {
+    // Close other expanded items
+    this.menuItems.forEach((menuItem) => {
+      if (menuItem.id !== item.id && menuItem.expanded) {
+        menuItem.expanded = false;
+      }
+    });
+
+    // Toggle the clicked item
     item.expanded = !item.expanded;
-  }
-
-  isDarkMode = false;
-
-  ngOnInit() {
-    this.isDarkMode = document.documentElement.classList.contains("dark");
-    this.applyTheme();
   }
 
   toggleTheme(): void {
@@ -68,5 +126,30 @@ export class NavbarComponent implements OnInit {
       ariaLabel: "Profile Information",
       role: "dialog",
     });
+  }
+
+  get iconClass(): string {
+    if (!this.currentUser?.role) {
+      return "USER";
+    }
+
+    switch (this.currentUser.role) {
+      case "teacher":
+        return "TEACHER";
+      case "student":
+        return "STUDENT";
+      case "staff":
+        return "STAFF";
+      case "supervisor":
+        return "SUPERVISOR";
+      case "superuser":
+        return "SUPERUSER";
+      case "school_management":
+        return "SCHOOL_MANAGEMENT";
+      case "moe":
+        return "MOE";
+      default:
+        return "USER";
+    }
   }
 }
