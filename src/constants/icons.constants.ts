@@ -1,5 +1,12 @@
 export const AppIcons = {
   SUCCESS: "check",
+  TEACHER: "account-tie",
+  STUDENT: "account-school",
+  STAFF: "account-group",
+  SUPERVISOR: "account-tie-hat",
+  SUPERUSER: "shield-account",
+  SCHOOL_MANAGEMENT: "office-building",
+  MOE: "DOMAIN",
   ERROR: "alert-circle-outline",
   WARNING: "alert-box-outline",
   INFO: "information-box-outline",
