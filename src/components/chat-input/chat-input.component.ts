@@ -1,11 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-  ViewChild,
-  ElementRef,
-} from "@angular/core";
+import { Component, ViewChild, ElementRef, input, output } from "@angular/core";
 import { FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { CommonModule } from "@angular/common";
 
@@ -16,11 +9,11 @@ import { CommonModule } from "@angular/common";
   templateUrl: "./chat-input.component.html",
 })
 export class ChatInputComponent {
-  @Input() form!: FormGroup;
-  @Input() isStreaming = false;
+  form = input.required<FormGroup>();
+  isStreaming = input(false);
   @ViewChild("promptInput") promptInput!: ElementRef<HTMLInputElement>;
 
-  @Output() send = new EventEmitter<Event>();
+  send = output<Event>();
 
   focus(): void {
     setTimeout(() => {
@@ -28,12 +21,12 @@ export class ChatInputComponent {
     });
   }
 
-  onSubmit(): void {
-    this.send.emit();
+  onSubmit(event: Event): void {
+    this.send.emit(event);
   }
 
   onEnter(event: Event): void {
-    if (!this.isStreaming) {
+    if (!this.isStreaming()) {
       this.send.emit(event);
     }
   }

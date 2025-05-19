@@ -2,18 +2,18 @@
   <div
     class="p-3 rounded-lg max-w-[80%] whitespace-pre-wrap"
     [ngClass]="{
-      'bg-chat-user-bg text-chat-user-text ml-auto': message.role === 'user',
+      'bg-chat-user-bg text-chat-user-text ml-auto': message().role === 'user',
       'bg-chat-assistant-bg text-chat-assistant-text mr-auto':
-        message.role === 'assistant',
+        message().role === 'assistant',
       'bg-chat-tool-bg text-chat-tool-text text-xs mx-auto text-center p-1':
-        message.role === 'tool',
+        message().role === 'tool',
       'bg-chat-system-bg text-chat-system-text mx-auto text-center':
-        message.role === 'system',
+        message().role === 'system',
       'bg-chat-developer-bg text-chat-developer-text mx-auto text-center':
-        message.role === 'developer',
+        message().role === 'developer',
     }"
   >
-    <markdown [data]="renderKaTeX(message.content)" [disableSanitizer]="true">
+    <markdown [data]="renderKaTeX(message().content)" [disableSanitizer]="true">
     </markdown>
   </div>
 </div>

@@ -28,11 +28,11 @@
             @if (editingConversation() === conversation.id) {
               <input
                 [id]="'edit-' + conversation.id"
-                [(ngModel)]="editingTitle"
+                [value]="editingTitle()"
+                (input)="updateEditingTitle($event)"
                 (blur)="submitEdit(conversation.id)"
                 (keydown)="handleKeyDown($event, conversation.id)"
                 class="w-full bg-transparent border-none focus:outline-none px-0"
-                [value]="editingTitle()"
               />
             } @else {
               {{ conversation.title }}

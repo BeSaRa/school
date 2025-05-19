@@ -1,4 +1,4 @@
-import { Component, inject, Input, ViewEncapsulation } from "@angular/core";
+import { Component, inject, input, ViewEncapsulation } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { MarkdownModule } from "ngx-markdown";
 import { Message } from "@/models/message";
@@ -14,7 +14,8 @@ import { DomSanitizer } from "@angular/platform-browser";
 })
 export class ChatMessageComponent {
   domSanitizer = inject(DomSanitizer);
-  @Input() message!: Message;
+  message = input.required<Message>();
+  
   renderKaTeX(content: string): string {
     const inlineRegex = /\$(?!\$)([^$]+?)\$/g;
     const blockRegex = /\$\$([^$]+)\$\$/g;

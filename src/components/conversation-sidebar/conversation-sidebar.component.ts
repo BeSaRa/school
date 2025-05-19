@@ -1,10 +1,10 @@
 import {
   Component,
-  EventEmitter,
+  output,
   inject,
   OnInit,
-  Output,
   signal,
+  model,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ConversationService } from "@/services/conversation.service";
@@ -22,11 +22,18 @@ import { filter, switchMap } from "rxjs";
   styleUrls: ["./conversation-sidebar.component.scss"],
 })
 export class ConversationSidebarComponent implements OnInit {
-  @Output() conversationSelected = new EventEmitter<string>();
-  @Output() createNewChat = new EventEmitter<string>();
+  conversationSelected = output<string>();
+  createNewChat = output<void>();
   conversations = signal<ConversationGroup[]>([]);
   conversationService = inject(ConversationService);
   dialogService = inject(DialogService);
+  editingTitle = model<string>("");
+
+  editingConversation = signal<string | null>(null);
+  showContextMenu = signal<boolean>(false);
+  contextMenuPosition = signal<{ x: number; y: number }>({ x: 0, y: 0 });
+
+  selectedConversation: Conversation | null = null;
 
   ngOnInit(): void {
     this.loadConversations();
@@ -106,17 +113,11 @@ export class ConversationSidebarComponent implements OnInit {
     console.log("Conversation clicked:", conversation.id);
     this.conversationSelected.emit(conversation.id);
   }
+
   onNewChatClick() {
     console.log("New chat clicked");
     this.createNewChat.emit();
   }
-
-  selectedConversation: Conversation | null = null;
-  showContextMenu = signal<boolean>(false);
-  contextMenuPosition = signal<{ x: number; y: number }>({ x: 0, y: 0 });
-
-  editingConversation = signal<string | null>(null);
-  editingTitle = signal<string>("");
 
   onContextMenu(event: MouseEvent, conversation: Conversation) {
     event.preventDefault();
@@ -180,6 +181,11 @@ export class ConversationSidebarComponent implements OnInit {
       event.preventDefault();
       this.cancelEdit();
     }
+  }
+
+  updateEditingTitle(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.editingTitle.set(value);
   }
 
   onDeleteConversation() {
