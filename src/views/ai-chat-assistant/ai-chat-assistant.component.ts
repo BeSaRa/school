@@ -25,10 +25,10 @@ import { ConversationSidebarComponent } from "@/components/conversation-sidebar/
 import { ConversationService } from "@/services/conversation.service";
 import { MarkdownModule } from "ngx-markdown";
 import { DialogService } from "../../services/dialog.service";
-import { User } from "@/types/user.types";
 import { UserService } from "@/services/user.service";
 import { Subscription } from "rxjs";
 import { IconService } from "@/services/icon.service";
+import { User } from "@/models/user";
 
 /**
  * Component that provides the AI chat assistant interface

@@ -3,9 +3,9 @@ import { CommonModule } from "@angular/common";
 import { UserService } from "../../services/user.service";
 import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { IconService } from "@/services/icon.service";
-import { User } from "@/types/user.types";
 import { DialogService } from "@/services/dialog.service";
 import { Subscription } from "rxjs";
+import { User } from "@/models/user";
 
 @Component({
   selector: "app-profile-popup",

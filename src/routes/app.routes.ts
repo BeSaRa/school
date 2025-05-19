@@ -1,13 +1,14 @@
 import { Routes } from "@angular/router";
+import { AppRoutes } from "@/constants/routes.constants";
 
 export const routes: Routes = [
   {
     path: "",
     pathMatch: "full",
-    redirectTo: "login",
+    redirectTo: AppRoutes.LOGIN,
   },
   {
-    path: "login",
+    path: AppRoutes.LOGIN,
     loadComponent: () =>
       import("../views/login/login.component").then((m) => m.LoginComponent),
   },
@@ -19,30 +20,37 @@ export const routes: Routes = [
       {
         path: "",
         pathMatch: "full",
-        redirectTo: "chat-assistant",
+        redirectTo: AppRoutes.CHAT_ASSISTANT,
       },
       {
-        path: "chat-assistant",
+        path: AppRoutes.CHAT_ASSISTANT,
         loadComponent: () =>
           import("../views/ai-chat-assistant/ai-chat-assistant.component").then(
             (m) => m.AIChatAssistantComponent
           ),
       },
       {
-        path: "schools",
+        path: AppRoutes.SCHOOLS,
         loadComponent: () =>
           import("../views/schools/schools.component").then(
             (m) => m.SchoolsComponent
           ),
       },
+      {
+        path: AppRoutes.USERS,
+        loadComponent: () =>
+          import("../views/users/users.component").then(
+            (m) => m.UsersComponent
+          ),
+      },
     ],
   },
   {
-    path: "404",
+    path: AppRoutes.NOT_FOUND,
     loadComponent: () =>
       import("../views/not-found/not-found.component").then(
         (m) => m.NotFoundComponent
       ),
   },
-  { path: "**", redirectTo: "404" },
+  { path: "**", redirectTo: AppRoutes.NOT_FOUND },
 ];
