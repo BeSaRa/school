@@ -1,18 +1,22 @@
 import { Injectable, inject } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
 import { Observable, catchError, throwError, BehaviorSubject } from "rxjs";
-import { User } from "../types/user.types";
-import { UrlService } from "./url.service";
 import { DialogService } from "./dialog.service";
 import { isPlatformBrowser } from "@angular/common";
 import { PLATFORM_ID } from "@angular/core";
+import { CastResponseContainer } from "cast-response";
+import { BaseCrudService } from "@/abstracts/base-crud-service";
+import { User } from "@/models/user";
 
+@CastResponseContainer({
+  $default: {
+    model: () => User,
+  },
+})
 @Injectable({
   providedIn: "root",
 })
-export class UserService {
-  private readonly http = inject(HttpClient);
-  private readonly urlService = inject(UrlService);
+export class UserService extends BaseCrudService<User> {
+  override serviceName: string = "UserService";
   private readonly dialogService = inject(DialogService);
   private readonly platformId = inject(PLATFORM_ID);
 
@@ -20,6 +24,7 @@ export class UserService {
   public currentUser$ = this.currentUserSubject.asObservable();
 
   constructor() {
+    super();
     if (isPlatformBrowser(this.platformId)) {
       const storedUser = localStorage.getItem("current_user");
       if (storedUser) {
