@@ -13,6 +13,7 @@
         message.role === 'developer',
     }"
   >
-    <markdown [data]="renderKaTeX(message.content)"></markdown>
+    <markdown [data]="renderKaTeX(message.content)" [disableSanitizer]="true">
+    </markdown>
   </div>
 </div>

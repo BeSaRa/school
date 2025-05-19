@@ -1,8 +1,9 @@
-import { Component, Input, ViewEncapsulation } from "@angular/core";
+import { Component, inject, Input, ViewEncapsulation } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { MarkdownModule } from "ngx-markdown";
 import { Message } from "@/models/message";
 import katex from "katex";
+import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
   selector: "app-chat-message",
@@ -12,23 +13,21 @@ import katex from "katex";
   encapsulation: ViewEncapsulation.None,
 })
 export class ChatMessageComponent {
+  domSanitizer = inject(DomSanitizer);
   @Input() message!: Message;
-
   renderKaTeX(content: string): string {
-    const inlineRegex = /\$([^$]+)\$/g;
+    const inlineRegex = /\$(?!\$)([^$]+?)\$/g;
     const blockRegex = /\$\$([^$]+)\$\$/g;
 
     let html = content.replace(blockRegex, (_, expr) =>
       katex.renderToString(expr, {
-        displayMode: true,
-        output: "htmlAndMathml",
+        throwOnError: false,
       })
     );
 
     html = html.replace(inlineRegex, (_, expr) =>
       katex.renderToString(expr, {
-        displayMode: true,
-        output: "htmlAndMathml",
+        throwOnError: false,
       })
     );
 
