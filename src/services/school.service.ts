@@ -13,7 +13,7 @@ import { CastResponseContainer } from "cast-response";
   providedIn: "root",
 })
 export class SchoolService extends BaseCrudService<School> {
-  override serviceName: string = "schoolService";
+  override serviceName: string = "SchoolService";
   override getUrlSegment(): string {
     return this.urlService.URLS.SCHOOLS;
   }
