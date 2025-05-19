@@ -28,7 +28,7 @@ markdown {
   }
 
   pre {
-    @apply text-chat-user-text dark:text-dark-text p-4 rounded-lg overflow-x-auto bg-chat-user-bg dark:bg-dark-surface font-mono;
+    @apply text-chat-user-text dark:text-dark-text p-4 rounded-lg bg-chat-user-bg dark:bg-dark-surface font-mono max-w-full overflow-x-auto break-words;
   }
 
   code {

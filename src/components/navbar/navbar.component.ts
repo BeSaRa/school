@@ -5,7 +5,6 @@ import { IconService } from "@/services/icon.service";
 import { AppIcons } from "@/constants/icons.constants";
 import { NavigationService } from "../../services/navigation.service";
 import { NavigationItem } from "@/types/navigation.types";
-import { CommonModule } from "@angular/common";
 import { ProfilePopupComponent } from "../profile-popup/profile-popup.component";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { UserService } from "@/services/user.service";
@@ -16,7 +15,7 @@ import { Subscription } from "rxjs";
 @Component({
   selector: "app-navbar",
   standalone: true,
-  imports: [RouterModule, IconService, CommonModule, MatDialogModule],
+  imports: [RouterModule, IconService, MatDialogModule],
   templateUrl: "./navbar.component.html",
   styleUrl: "./navbar.component.scss",
 })
@@ -34,6 +33,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   menuItems: NavigationItem[] = this.navigationService.getMenuItems();
   readonly AppIcons = AppIcons;
   isDarkMode = false;
+  isMobileMenuOpen = false;
 
   // Subscription management
   private userSubscription?: Subscription;
@@ -151,5 +151,13 @@ export class NavbarComponent implements OnInit, OnDestroy {
       default:
         return "USER";
     }
+  }
+
+  toggleMobileMenu(): void {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
+
+  closeMobileMenu(): void {
+    this.isMobileMenuOpen = false;
   }
 }

@@ -1,19 +1,48 @@
-<nav class="bg-white dark:bg-dark-surface shadow-lg">
+<nav class="bg-white dark:bg-dark-surface shadow-lg relative">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex justify-between items-center h-20">
+    <div class="flex justify-between items-center h-16">
       <!-- Logo/Title Section -->
-      <div class="flex items-center space-x-4">
+      <div class="flex items-center">
         <div class="flex items-center justify-center">
           <img
             src="assets/qulogo.png"
             alt="School AI Logo"
-            class="h-12 w-auto"
+            class="h-10 w-auto"
           />
         </div>
       </div>
 
-      <!-- Navigation Menu -->
-      <div class="flex items-center space-x-2 md:space-x-4">
+      <!-- Mobile menu button -->
+      <div class="flex md:hidden">
+        <button
+          type="button"
+          class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-dark-bg focus:outline-none"
+          aria-controls="mobile-menu"
+          aria-expanded="false"
+          (click)="toggleMobileMenu()"
+        >
+          <span class="sr-only">Open main menu</span>
+          <!-- Icon when menu is closed -->
+          @if (!isMobileMenuOpen) {
+            <i
+              [class]="'MENU' | icon"
+              class="block h-6 w-6"
+              aria-hidden="true"
+            ></i>
+          }
+          <!-- Icon when menu is open -->
+          @if (isMobileMenuOpen) {
+            <i
+              [class]="'CANCEL' | icon"
+              class="block h-6 w-6"
+              aria-hidden="true"
+            ></i>
+          }
+        </button>
+      </div>
+
+      <!-- Desktop Navigation Menu -->
+      <div class="hidden md:flex items-center space-x-2 md:space-x-4">
         <!-- Menu Items -->
         @for (item of menuItems; track item.id) {
           <div class="relative group">
@@ -51,30 +80,33 @@
               </div>
 
               <!-- Dropdown Menu -->
-              <div
-                *ngIf="item.expanded"
-                class="absolute top-full right-0 mt-2 w-48 bg-white dark:bg-dark-surface rounded-md shadow-lg z-10 transition-all duration-200 origin-top-right"
-                role="menu"
-              >
-                @for (child of item.children; track child.id) {
-                  <a
-                    [routerLink]="child.route"
-                    class="flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-dark-bg"
-                    [class.bg-primary-50]="isActiveRoute(child.route)"
-                    [class.text-primary]="isActiveRoute(child.route)"
-                    [class.dark:bg-dark-bg]="isActiveRoute(child.route)"
-                    [class.dark:text-accent-yellow]="isActiveRoute(child.route)"
-                    role="menuitem"
-                  >
-                    <i
-                      [class]="child.icon | icon"
-                      class="mr-3"
-                      aria-hidden="true"
-                    ></i>
-                    <span>{{ child.label }}</span>
-                  </a>
-                }
-              </div>
+              @if (item.expanded) {
+                <div
+                  class="absolute top-full right-0 mt-2 w-48 bg-white dark:bg-dark-surface rounded-md shadow-lg transition-all duration-200 origin-top-right"
+                  role="menu"
+                >
+                  @for (child of item.children; track child.id) {
+                    <a
+                      [routerLink]="child.route"
+                      class="flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-dark-bg"
+                      [class.bg-primary-50]="isActiveRoute(child.route)"
+                      [class.text-primary]="isActiveRoute(child.route)"
+                      [class.dark:bg-dark-bg]="isActiveRoute(child.route)"
+                      [class.dark:text-accent-yellow]="
+                        isActiveRoute(child.route)
+                      "
+                      role="menuitem"
+                    >
+                      <i
+                        [class]="child.icon | icon"
+                        class="mr-3"
+                        aria-hidden="true"
+                      ></i>
+                      <span>{{ child.label }}</span>
+                    </a>
+                  }
+                </div>
+              }
             } @else {
               <!-- Single item -->
               <a
@@ -135,19 +167,6 @@
           </div>
         </button>
 
-        <!-- Theme Toggle Button -->
-        <!-- <button
-          (click)="toggleTheme()"
-          class="hidden md:flex items-center p-2 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-dark-bg transition"
-          aria-label="Toggle theme"
-        >
-          <i
-            [class]="(isDarkMode ? 'SUN' : 'MOON') | icon"
-            class="text-xl"
-            aria-hidden="true"
-          ></i>
-        </button> -->
-
         <!-- Logout Button -->
         <button
           (click)="logout()"
@@ -155,7 +174,123 @@
           aria-label="Logout"
         >
           <i [class]="'LOGOUT' | icon" class="text-xl" aria-hidden="true"></i>
-          <span class="font-medium hidden md:inline">Logout</span>
+          <span class="font-medium">Logout</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile menu, show/hide based on menu state -->
+  <div
+    class="md:hidden relative bg-white dark:bg-dark-surface"
+    id="mobile-menu"
+    [class.hidden]="!isMobileMenuOpen"
+  >
+    <div
+      class="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-gray-200 dark:border-gray-700"
+    >
+      @for (item of menuItems; track item.id) {
+        @if (item.children) {
+          <!-- Mobile parent item with dropdown -->
+          <div class="relative">
+            <div
+              class="flex items-center justify-between px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-dark-bg"
+              (click)="toggleExpand(item)"
+              [attr.aria-expanded]="item.expanded"
+              role="button"
+              tabindex="0"
+            >
+              <div class="flex items-center">
+                <i
+                  [class]="item.icon | icon"
+                  class="mr-3 text-xl"
+                  aria-hidden="true"
+                ></i>
+                <span>{{ item.label }}</span>
+              </div>
+              <i
+                [class]="'CHEVRON_DOWN' | icon"
+                class="ml-1 transition-transform duration-300"
+                [class.transform]="item.expanded"
+                [class.rotate-180]="item.expanded"
+                aria-hidden="true"
+              ></i>
+            </div>
+
+            <!-- Mobile dropdown menu -->
+            @if (item.expanded) {
+              <div class="mt-1 pl-6 space-y-1">
+                @for (child of item.children; track child.id) {
+                  <a
+                    [routerLink]="child.route"
+                    class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-dark-bg"
+                    [class.bg-primary-50]="isActiveRoute(child.route)"
+                    [class.text-primary]="isActiveRoute(child.route)"
+                    [class.dark:bg-dark-bg]="isActiveRoute(child.route)"
+                    [class.dark:text-accent-yellow]="isActiveRoute(child.route)"
+                    (click)="closeMobileMenu()"
+                  >
+                    <div class="flex items-center">
+                      <i
+                        [class]="child.icon | icon"
+                        class="mr-3 text-lg"
+                        aria-hidden="true"
+                      ></i>
+                      <span>{{ child.label }}</span>
+                    </div>
+                  </a>
+                }
+              </div>
+            }
+          </div>
+        } @else {
+          <!-- Mobile single item -->
+          <a
+            [routerLink]="item.route"
+            class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-dark-bg"
+            [class.bg-primary-50]="isActiveRoute(item.route)"
+            [class.text-primary]="isActiveRoute(item.route)"
+            [class.dark:bg-dark-bg]="isActiveRoute(item.route)"
+            [class.dark:text-accent-yellow]="isActiveRoute(item.route)"
+            (click)="closeMobileMenu()"
+          >
+            <div class="flex items-center">
+              <i
+                [class]="item.icon | icon"
+                class="mr-3 text-xl"
+                aria-hidden="true"
+              ></i>
+              <span>{{ item.label }}</span>
+            </div>
+          </a>
+        }
+      }
+    </div>
+    <div class="pt-4 pb-3 border-t border-gray-200 dark:border-gray-700">
+      <div class="flex items-center justify-between px-4">
+        <div class="flex items-center">
+          <button
+            (click)="openProfileDialog(); closeMobileMenu()"
+            class="flex items-center px-3 py-1 rounded-2xl bg-gray-100 hover:bg-gray-200 dark:bg-dark-bg dark:hover:bg-dark-surface transition-colors duration-200"
+            aria-label="Open profile"
+          >
+            <div class="flex items-center">
+              <i
+                [class]="iconClass | icon"
+                class="text-2xl transition-all duration-300 text-gray-700 dark:text-accent-yellow"
+                aria-hidden="true"
+              ></i>
+              <span class="ml-2 text-gray-700 dark:text-gray-200">Profile</span>
+            </div>
+          </button>
+        </div>
+        <button
+          (click)="logout()"
+          class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-dark-bg hover:bg-gray-200 dark:hover:bg-dark-surface hover:text-gray-600 dark:hover:text-white transition"
+          aria-label="Logout"
+        >
+          <i [class]="'LOGOUT' | icon" class="text-xl" aria-hidden="true"></i>
+          <span class="font-medium">Logout</span>
         </button>
       </div>
     </div>

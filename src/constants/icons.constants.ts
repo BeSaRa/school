@@ -59,6 +59,7 @@ export const AppIcons = {
   LOCATION: "map-marker",
   LINK: "link",
   ATTACHMENT: "attachment",
+  MENU: "menu",
   IMAGE: "image",
   FILE: "file",
   FOLDER: "folder",
