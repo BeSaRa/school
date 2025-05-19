@@ -28,6 +28,7 @@ import { DialogService } from "../../services/dialog.service";
 import { User } from "@/types/user.types";
 import { UserService } from "@/services/user.service";
 import { Subscription } from "rxjs";
+import { IconService } from "@/services/icon.service";
 
 /**
  * Component that provides the AI chat assistant interface
@@ -43,6 +44,7 @@ import { Subscription } from "rxjs";
     ChatInputComponent,
     ConversationSidebarComponent,
     MarkdownModule,
+    IconService,
   ],
   templateUrl: "./ai-chat-assistant.component.html",
 })
@@ -67,6 +69,7 @@ export class AIChatAssistantComponent
   streamingAssistantContent = signal("");
   isStreaming = this.chatService.status;
   currentUser: User | null = null;
+  showSidebar = signal(false);
 
   // Scroll properties
   private scrollInterval: number | null = null;
@@ -245,6 +248,7 @@ export class AIChatAssistantComponent
    * Creates a new chat conversation
    */
   onCreateNewChatClicked(): void {
+    this.showSidebar.set(false);
     this.chatService.resetChat();
   }
 
@@ -253,6 +257,7 @@ export class AIChatAssistantComponent
    * @param conversationId - The ID of the conversation to load
    */
   onConversationSelected(conversationId: string): void {
+    this.showSidebar.set(false);
     this.chatService.conversationId.set(conversationId);
 
     this.conversationService
@@ -277,5 +282,12 @@ export class AIChatAssistantComponent
     this.dialogService
       .error("An error occurred while loading the conversation.", error)
       .subscribe();
+  }
+
+  /**
+   * Toggles the sidebar visibility on mobile devices
+   */
+  toggleSidebar(): void {
+    this.showSidebar.update((value) => !value);
   }
 }

@@ -4,42 +4,43 @@
 >
   <!-- Header -->
   <div
-    class="flex items-start justify-between px-6 py-4 border-b border-transparent border-b-gray-200 dark:border-b-gray-700 rounded-t-2xl"
+    class="flex items-start justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-transparent border-b-gray-200 dark:border-b-gray-700 rounded-t-2xl"
   >
     <div>
-      <h2 class="text-xl font-bold text-gray-900 dark:text-white">
+      <h2 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">
         {{ data.title }}
       </h2>
     </div>
     <span
       [class]="getIconClasses()"
-      class="text-2xl text-gray-600 dark:text-gray-300"
+      class="text-xl sm:text-2xl text-gray-600 dark:text-gray-300"
     ></span>
   </div>
 
   <!-- Body -->
-  <div class="px-6 py-4 border-b">
+  <div class="px-4 sm:px-6 py-3 sm:py-4 border-b">
     <p class="text-gray-700 dark:text-gray-300 text-sm">{{ data.message }}</p>
   </div>
 
   <!-- Footer -->
-  <div class="flex justify-end gap-3 px-6 py-4 rounded-b-2xl">
-    <button
-      *ngIf="data.type === 'confirm'"
-      (click)="onCancel()"
-      class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-medium transition-colors duration-200"
-      [ngClass]="
-        'bg-chat-button-secondary-bg hover:bg-chat-button-secondary-hover text-chat-button-secondary-text'
-      "
-    >
-      {{ data.cancelText || "Cancel" }}
-    </button>
+  <div class="flex justify-end gap-2 sm:gap-3 px-4 sm:px-6 py-3 sm:py-4 rounded-b-2xl">
+    @if (data.type === 'confirm') {
+      <button
+        (click)="onCancel()"
+        class="px-3 sm:px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-medium transition-colors duration-200"
+        [ngClass]="
+          'bg-chat-button-secondary-bg hover:bg-chat-button-secondary-hover text-chat-button-secondary-text'
+        "
+      >
+        {{ data.cancelText || "Cancel" }}
+      </button>
+    }
 
     <button
       (click)="onConfirm()"
-      class="px-4 py-2 rounded-lg"
+      class="px-4 sm:px-6 py-2 rounded-lg"
       [ngClass]="
-        'px-6 py-2 bg-primary dark:bg-primary text-white rounded-lg hover:bg-secondary dark:hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-accent-yellow transition-colors duration-200'
+        'bg-primary dark:bg-primary text-white rounded-lg hover:bg-secondary dark:hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-accent-yellow transition-colors duration-200'
       "
     >
       {{ data.type === "confirm" ? data.confirmText || "Confirm" : "OK" }}
