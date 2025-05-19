@@ -21,54 +21,56 @@
     (createNewChat)="onCreateNewChatClicked()"
   ></app-conversation-sidebar>
 
-  <!-- Main Chat Area -->
-  <div class="flex-1 flex flex-col h-full bg-white dark:bg-dark-surface">
-    <!-- Header -->
-    <header
-      class="chat-header text-lg sm:text-xl font-bold p-3 sm:p-4 text-center border-b border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white"
-    >
-      @if (currentUser) {
-        <span class="user-agent-title">
-          {{
-            (currentUser.role === "professor" ? "Prof. " : "") +
-              currentUser.fullName
-          }}'s Agent
-        </span>
-      } @else {
-        <span class="default-title">AI Chat Assistant</span>
-      }
-    </header>
+  @if (!showSidebar()) {
+    <!-- Main Chat Area -->
+    <div class="flex-1 flex flex-col h-full bg-white dark:bg-dark-surface">
+      <!-- Header -->
+      <header
+        class="chat-header text-lg sm:text-xl font-bold p-3 sm:p-4 text-center border-b border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white"
+      >
+        @if (currentUser) {
+          <span class="user-agent-title">
+            {{
+              (currentUser.role === "professor" ? "Prof. " : "") +
+                currentUser.fullName
+            }}'s Agent
+          </span>
+        } @else {
+          <span class="default-title">AI Chat Assistant</span>
+        }
+      </header>
 
-    <!-- Messages Container -->
-    <div
-      class="messages-container flex-1 overflow-y-auto p-3 sm:p-4 relative"
-      #messageContainer
-    >
-      <!-- Regular Messages -->
-      @for (message of messages(); track message) {
-        <app-chat-message [message]="message" />
-      }
+      <!-- Messages Container -->
+      <div
+        class="messages-container flex-1 overflow-y-auto p-3 sm:p-4 relative"
+        #messageContainer
+      >
+        <!-- Regular Messages -->
+        @for (message of messages(); track message) {
+          <app-chat-message [message]="message" />
+        }
 
-      <!-- Streaming Message -->
-      @if (streamingAssistantContent() && chatService.status()) {
-        <app-chat-message
-          [message]="{
-            role: 'assistant',
-            content: streamingAssistantContent(),
-          }"
+        <!-- Streaming Message -->
+        @if (streamingAssistantContent() && chatService.status()) {
+          <app-chat-message
+            [message]="{
+              role: 'assistant',
+              content: streamingAssistantContent(),
+            }"
+          />
+        }
+      </div>
+
+      <!-- Input Area -->
+      <footer
+        class="chat-input-container p-3 sm:p-4 border-t border-gray-200 dark:border-gray-700"
+      >
+        <app-chat-input
+          [form]="form"
+          [isStreaming]="chatService.status()"
+          (send)="handleSendMessage($event)"
         />
-      }
+      </footer>
     </div>
-
-    <!-- Input Area -->
-    <footer
-      class="chat-input-container p-3 sm:p-4 border-t border-gray-200 dark:border-gray-700"
-    >
-      <app-chat-input
-        [form]="form"
-        [isStreaming]="chatService.status()"
-        (send)="handleSendMessage($event)"
-      />
-    </footer>
-  </div>
+  }
 </div>
