@@ -8,9 +8,10 @@ import { NavigationItem } from "@/types/navigation.types";
 import { ProfilePopupComponent } from "../profile-popup/profile-popup.component";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { UserService } from "@/services/user.service";
-import { User } from "@/types/user.types";
 import { DialogService } from "@/services/dialog.service";
 import { Subscription } from "rxjs";
+import { User } from "@/models/user";
+import { AppRoutes } from "@/constants/routes.constants";
 
 @Component({
   selector: "app-navbar",
@@ -84,7 +85,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   logout(): void {
     this.authService.logout();
-    this.router.navigate(["/login"]);
+    this.router.navigate([AppRoutes.LOGIN.withSlash()]);
   }
 
   isActiveRoute(route: string): boolean {
