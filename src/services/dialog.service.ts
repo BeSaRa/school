@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { Observable } from "rxjs";
 import { DialogComponent } from "../components/dialog/dialog.component";
@@ -8,7 +8,7 @@ import { DialogData, DialogResult } from "../types/dialog.types";
   providedIn: "root",
 })
 export class DialogService {
-  constructor(private dialog: MatDialog) {}
+  dialog = inject(MatDialog);
 
   open(data: DialogData): Observable<DialogResult> {
     const dialogRef = this.dialog.open(DialogComponent, {

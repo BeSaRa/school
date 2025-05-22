@@ -23,7 +23,6 @@ import { ChatMessageComponent } from "@/components/chat-message/chat-message.com
 import { ChatInputComponent } from "@/components/chat-input/chat-input.component";
 import { ConversationSidebarComponent } from "@/components/conversation-sidebar/conversation-sidebar.component";
 import { ConversationService } from "@/services/conversation.service";
-import { MarkdownModule } from "ngx-markdown";
 import { DialogService } from "../../services/dialog.service";
 import { UserService } from "@/services/user.service";
 import { Subscription } from "rxjs";
@@ -43,7 +42,6 @@ import { User } from "@/models/user";
     ChatMessageComponent,
     ChatInputComponent,
     ConversationSidebarComponent,
-    MarkdownModule,
     IconService,
   ],
   templateUrl: "./ai-chat-assistant.component.html",
