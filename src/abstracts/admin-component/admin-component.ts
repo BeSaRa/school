@@ -174,7 +174,6 @@ export class AdminComponent<T extends BaseCrudModel<T, any>>
         })
       )
       .subscribe((response: any) => {
-        console.log(response);
         let items: T[] = [];
         if (response && typeof response === "object") {
           const arrayProps = Object.keys(response).filter(

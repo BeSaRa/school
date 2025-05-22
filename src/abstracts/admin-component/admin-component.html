@@ -76,7 +76,7 @@
         <tr class="hover:bg-gray-50">
           @for (column of config().columns; track column.key) {
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-            {{ formatCellValue(item[column.key], column, item) }}
+            <span [innerHTML]="formatCellValue(item[column.key], column, item)"></span>
           </td>
           }
           <td
