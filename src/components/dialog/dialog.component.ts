@@ -1,4 +1,4 @@
-import { Component, Inject } from "@angular/core";
+import { Component, inject, Inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import {
   MAT_DIALOG_DATA,
@@ -21,11 +21,9 @@ import { DialogData, DialogResult } from "@/types/dialog.types";
   `,
 })
 export class DialogComponent {
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    private dialogRef: MatDialogRef<DialogComponent>,
-    private iconService: IconService
-  ) {}
+  data = inject<DialogData>(MAT_DIALOG_DATA);
+  dialogRef = inject(MatDialogRef<DialogComponent>);
+  iconService = inject(IconService);
 
   getDialogClass(): string {
     switch (this.data.type) {
