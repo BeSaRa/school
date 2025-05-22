@@ -1,0 +1,192 @@
+<div class="p-6 bg-white rounded-lg shadow-sm">
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-900">{{ config().title }}</h1>
+    <button
+      type="button"
+      (click)="openCreateModal()"
+      class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium transition-colors"
+    >
+      Add {{ config().title.slice(0, -1) }}
+    </button>
+  </div>
+
+  <!-- Search and Filters -->
+  <div class="flex flex-col md:flex-row gap-4 mb-6">
+    <div class="flex-1">
+      <input
+        type="text"
+        placeholder="Search..."
+        [value]="searchTerm()"
+        (input)="onSearch($event)"
+        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+    </div>
+    <div class="flex gap-2">
+      <select
+        [value]="sortField()"
+        (change)="onSortChange($event)"
+        class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <option value="">Sort by...</option>
+        @for (column of sortableColumns(); track column.key) {
+        <option [value]="column.key">{{ column.label }}</option>
+        }
+      </select>
+      <button
+        type="button"
+        (click)="toggleSortDirection()"
+        class="px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+      >
+        {{ sortDirection() === "asc" ? "↑" : "↓" }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="overflow-x-auto bg-white rounded-lg border border-gray-200">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          @for (column of config().columns; track column.key) {
+          <th
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+          >
+            {{ column.label }}
+          </th>
+          }
+          <th
+            class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+          >
+            Actions
+          </th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        @if (paginatedItems().length === 0) {
+        <tr>
+          <td
+            [attr.colspan]="config().columns.length + 1"
+            class="px-6 py-4 text-center text-gray-500"
+          >
+            No items found
+          </td>
+        </tr>
+        } @else { @for (item of paginatedItems(); track getItemId(item)) {
+        <tr class="hover:bg-gray-50">
+          @for (column of config().columns; track column.key) {
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+            {{ formatCellValue(item[column.key], column, item) }}
+          </td>
+          }
+          <td
+            class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+          >
+            <button
+              type="button"
+              (click)="openEditModal(item)"
+              class="text-blue-600 hover:text-blue-900 mr-3 transition-colors"
+            >
+              Edit
+            </button>
+            <button
+              type="button"
+              (click)="deleteItem(item)"
+              class="text-red-600 hover:text-red-900 transition-colors"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+        } }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  @if (totalPages() > 1) {
+  <div class="flex items-center justify-between mt-6">
+    <div class="text-sm text-gray-700">
+      Showing {{ (currentPage() - 1) * itemsPerPage() + 1 }} to {{
+      getMin(currentPage() * itemsPerPage(), filteredItems().length) }} of {{
+      filteredItems().length }} results
+    </div>
+    <div class="flex gap-2">
+      <button
+        type="button"
+        [disabled]="currentPage() === 1"
+        (click)="setPage(currentPage() - 1)"
+        class="px-3 py-2 border border-gray-300 rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+      >
+        Previous
+      </button>
+      @for (page of visiblePages(); track page) {
+      <button
+        type="button"
+        [class]="page === currentPage() ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'"
+        (click)="setPage(page)"
+        class="px-3 py-2 border border-gray-300 rounded-md transition-colors"
+      >
+        {{ page }}
+      </button>
+      }
+      <button
+        type="button"
+        [disabled]="currentPage() === totalPages()"
+        (click)="setPage(currentPage() + 1)"
+        class="px-3 py-2 border border-gray-300 rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+  }
+</div>
+
+<!-- Modal -->
+@if (showModal()) {
+<div
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+  (click)="closeModal()"
+>
+  <div
+    class="bg-white rounded-lg p-6 w-full max-w-md mx-4"
+    (click)="$event.stopPropagation()"
+  >
+    <h2 class="text-lg font-bold mb-4">
+      {{ editingItem() ? "Edit" : "Create" }} {{ config().title.slice(0, -1) }}
+    </h2>
+
+    <form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
+      <ng-content select="[slot=form-fields]"></ng-content>
+
+      @if (formErrors().length > 0) {
+      <div class="bg-red-50 border border-red-200 rounded-md p-3 mb-4">
+        <div class="text-red-800 text-sm">
+          @for (error of formErrors(); track error) {
+          <div>{{ error }}</div>
+          }
+        </div>
+      </div>
+      }
+
+      <div class="flex justify-end gap-3 mt-6">
+        <button
+          type="button"
+          (click)="closeModal()"
+          class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          [disabled]="itemForm.invalid"
+          class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        >
+          {{ editingItem() ? "Update" : "Create" }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+}
