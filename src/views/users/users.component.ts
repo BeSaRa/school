@@ -46,7 +46,7 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
         label: "Role",
         sortable: true,
         type: "custom",
-        // customTemplate: (value: string) => this.formatRole(value),
+        customTemplate: (value: string) => this.formatRole(value),
       },
       {
         key: "isActive",
