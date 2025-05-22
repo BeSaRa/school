@@ -1,21 +1,20 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable, tap } from "rxjs";
 import { LoginRequest, LoginResponse } from "../types/login.types";
 import { ECookieService } from "./e-cookie.service";
 import { ConfigService } from "@/services/config.service";
+import { ChatService } from "./ai-chat-assistant.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class AuthService {
   private token: string | undefined;
-
-  constructor(
-    private http: HttpClient,
-    private eCookieService: ECookieService,
-    private config: ConfigService
-  ) {}
+  chatService = inject(ChatService);
+  http = inject(HttpClient);
+  eCookieService = inject(ECookieService);
+  config = inject(ConfigService);
 
   login(credentials: LoginRequest): Observable<LoginResponse> {
     return this.http
@@ -29,6 +28,7 @@ export class AuthService {
 
   logout(): void {
     this.setToken(undefined);
+    this.chatService.resetChat();
   }
 
   isAuthenticated(): boolean {
