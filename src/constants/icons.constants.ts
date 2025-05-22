@@ -1,6 +1,7 @@
 export const AppIcons = {
   SUCCESS: "check",
   TEACHER: "account-tie",
+  SCHOOL: "school",
   STUDENT: "account-school",
   STAFF: "account-group",
   SUPERVISOR: "account-tie-hat",
