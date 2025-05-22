@@ -15,7 +15,7 @@ import { BaseCrudModel } from "@/abstracts/base-crud-model";
 import { DialogService } from "@/services/dialog.service";
 
 export interface TableColumn<T = any> {
-  key: keyof T;
+  key: string;
   label: string;
   sortable?: boolean;
   type?: "text" | "boolean" | "date" | "custom";
@@ -25,8 +25,8 @@ export interface TableColumn<T = any> {
 export interface AdminComponentConfig<T> {
   title: string;
   columns: TableColumn<T>[];
-  searchFields?: (keyof T)[];
-  defaultSort?: keyof T;
+  searchFields?: string[];
+  defaultSort?: string;
   itemsPerPage?: number;
 }
 
@@ -43,7 +43,7 @@ export class AdminComponent<T extends BaseCrudModel<T, any>>
     title: "",
     columns: [],
     searchFields: [],
-    defaultSort: "" as keyof T,
+    defaultSort: "",
     itemsPerPage: 10,
   });
 
@@ -54,7 +54,7 @@ export class AdminComponent<T extends BaseCrudModel<T, any>>
   // Signals
   protected items = signal<T[]>([]);
   protected searchTerm = signal("");
-  protected sortField = signal<keyof T | "">("");
+  protected sortField = signal<string | "">("");
   protected sortDirection = signal<"asc" | "desc">("asc");
   protected currentPage = signal(1);
   protected showModal = signal(false);
@@ -72,43 +72,39 @@ export class AdminComponent<T extends BaseCrudModel<T, any>>
   protected itemsPerPage = computed(() => this.config().itemsPerPage || 10);
 
   protected filteredItems = computed(() => {
-    // Ensure we always have an array, even if items() returns null or undefined
-    let filtered = this.items() || [];
+    let filtered = [...this.items()];
     const search = this.searchTerm().toLowerCase();
 
     if (search && this.config().searchFields) {
-      filtered = filtered.filter((item) =>
-        this.config().searchFields!.some((field) => {
-          const value = item[field];
+      filtered = filtered.filter((item) => {
+        return this.config().searchFields!.some((field) => {
+          const value = this.getNestedValue(item, field);
           return value?.toString().toLowerCase().includes(search);
-        })
-      );
+        });
+      });
     }
 
     // Sort
     const sortField = this.sortField();
-    if (sortField && Array.isArray(filtered) && filtered.length > 0) {
-      const direction = this.sortDirection();
-      try {
-        // Create a new array to avoid modifying the original
-        filtered = [...filtered].sort((a, b) => {
-          if (!a || !b) return 0;
-          const aVal = a[sortField];
-          const bVal = b[sortField];
+    if (sortField) {
+      filtered = filtered.sort((a, b) => {
+        const aVal = this.getNestedValue(a, sortField);
+        const bVal = this.getNestedValue(b, sortField);
 
-          if (aVal < bVal) return direction === "asc" ? -1 : 1;
-          if (aVal > bVal) return direction === "asc" ? 1 : -1;
-          return 0;
-        });
-      } catch (error) {
-        console.error("Error sorting items:", error);
-        // Return the unsorted array if sorting fails
-        return filtered;
-      }
+        if (aVal < bVal) return this.sortDirection() === "asc" ? -1 : 1;
+        if (aVal > bVal) return this.sortDirection() === "asc" ? 1 : -1;
+        return 0;
+      });
     }
 
     return filtered;
   });
+
+  protected getNestedValue(item: any, path: string): any {
+    return path.split(".").reduce((acc, key) => {
+      return acc && acc[key] !== undefined ? acc[key] : undefined;
+    }, item);
+  }
 
   protected totalPages = computed(() => {
     const filtered = this.filteredItems();
@@ -226,7 +222,7 @@ export class AdminComponent<T extends BaseCrudModel<T, any>>
 
   protected onSortChange(event: Event): void {
     const target = event.target as HTMLSelectElement;
-    this.sortField.set(target.value as keyof T);
+    this.sortField.set(String(target.value));
   }
 
   protected toggleSortDirection(): void {
@@ -313,6 +309,10 @@ export class AdminComponent<T extends BaseCrudModel<T, any>>
       });
   }
 
+  protected getCellValue(item: T, field: string): any {
+    return this.getNestedValue(item, field);
+  }
+
   protected formatCellValue(
     value: any,
     column: TableColumn<T>,
@@ -322,13 +322,15 @@ export class AdminComponent<T extends BaseCrudModel<T, any>>
       return column.customTemplate(value, item);
     }
 
+    const actualValue = this.getNestedValue(item, column.key);
+
     switch (column.type) {
       case "boolean":
-        return value ? "Yes" : "No";
+        return actualValue ? "Yes" : "No";
       case "date":
-        return value ? new Date(value).toLocaleDateString() : "";
+        return actualValue ? new Date(actualValue).toLocaleDateString() : "";
       default:
-        return value?.toString() || "";
+        return actualValue?.toString() || "";
     }
   }
 
