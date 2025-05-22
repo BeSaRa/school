@@ -6,6 +6,7 @@ import { LoginResponse } from "@/types/login.types";
 import { UrlService } from "./url.service";
 import { UserService } from "./user.service";
 import { DialogService } from "./dialog.service";
+import { AppRoutes } from "@/constants/routes.constants";
 
 @Injectable({
   providedIn: "root",
@@ -42,11 +43,11 @@ export class LoginService {
           // Get current user and navigate to dashboard
           return this.userService.getCurrentUser().pipe(
             tap((user) => this.userService.updateCurrentUser(user)),
-            tap(() => this.router.navigate(["/chat-assistant"])),
+            tap(() => this.router.navigateByUrl(AppRoutes.CHAT_ASSISTANT)),
             map(() => undefined) // Convert Observable<User> to Observable<void>
           );
         }),
-        catchError(this.handleLoginError.bind(this)) // Bind 'this' to maintain context
+        catchError(this.handleLoginError.bind(this))
       );
   }
 
