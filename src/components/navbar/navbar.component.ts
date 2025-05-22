@@ -85,7 +85,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   logout(): void {
     this.authService.logout();
-    this.router.navigate([AppRoutes.LOGIN.withSlash()]);
+    this.router.navigateByUrl(`/${AppRoutes.LOGIN}`);
   }
 
   isActiveRoute(route: string): boolean {
