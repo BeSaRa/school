@@ -14,20 +14,41 @@ import { BaseCrudService } from "@/abstracts/base-crud-service";
 import { BaseCrudModel } from "@/abstracts/base-crud-model";
 import { DialogService } from "@/services/dialog.service";
 
+export type FilterType = "text" | "select" | "date" | "boolean" | "number";
+export type SortDirection = "asc" | "desc" | null;
+
 export interface TableColumn<T = any> {
   key: string;
   label: string;
   sortable?: boolean;
-  type?: "text" | "boolean" | "date" | "custom";
+  filterable?: boolean;
+  type?: "text" | "boolean" | "date" | "custom" | "number";
+  filterType?: FilterType;
+  filterOptions?: Array<{ value: any; label: string }>;
   customTemplate?: (value: any, item: T) => string;
+  width?: string;
+  filterFalseLabel?: string;
+  filterTrueLabel?: string;
+}
+
+export interface ColumnFilter {
+  field: string;
+  value: any;
+  type: FilterType;
+}
+
+export interface ColumnSort {
+  field: string;
+  direction: SortDirection;
 }
 
 export interface AdminComponentConfig<T> {
   title: string;
   columns: TableColumn<T>[];
-  searchFields?: string[];
-  defaultSort?: string;
+  defaultSort?: ColumnSort;
   itemsPerPage?: number;
+  enableGlobalSearch?: boolean;
+  globalSearchFields?: string[];
 }
 
 @Component({
@@ -42,9 +63,9 @@ export class AdminComponent<T extends BaseCrudModel<T, any>>
   @Input({ required: true }) config = signal<AdminComponentConfig<T>>({
     title: "",
     columns: [],
-    searchFields: [],
-    defaultSort: "",
     itemsPerPage: 10,
+    enableGlobalSearch: false,
+    globalSearchFields: [],
   });
 
   protected service: BaseCrudService<T> = inject(BaseCrudService);
@@ -53,13 +74,14 @@ export class AdminComponent<T extends BaseCrudModel<T, any>>
 
   // Signals
   protected items = signal<T[]>([]);
-  protected searchTerm = signal("");
-  protected sortField = signal<string | "">("");
-  protected sortDirection = signal<"asc" | "desc">("asc");
+  protected globalSearchTerm = signal("");
+  protected columnFilters = signal<Map<string, ColumnFilter>>(new Map());
+  protected columnSorts = signal<Map<string, ColumnSort>>(new Map());
   protected currentPage = signal(1);
   protected showModal = signal(false);
   protected editingItem = signal<T | null>(null);
   protected formErrors = signal<string[]>([]);
+  protected showFilters = signal(false);
 
   // Form
   public itemForm: FormGroup = this.fb.group({});
@@ -69,30 +91,67 @@ export class AdminComponent<T extends BaseCrudModel<T, any>>
     this.config().columns.filter((col) => col.sortable !== false)
   );
 
+  protected filterableColumns = computed(() =>
+    this.config().columns.filter((col) => col.filterable !== false)
+  );
+
   protected itemsPerPage = computed(() => this.config().itemsPerPage || 10);
+
+  protected hasActiveFilters = computed(() => {
+    return (
+      this.columnFilters().size > 0 ||
+      (this.config().enableGlobalSearch && this.globalSearchTerm().length > 0)
+    );
+  });
+
+  protected hasActiveSorts = computed(() => {
+    return Array.from(this.columnSorts().values()).some(
+      (sort) => sort.direction !== null
+    );
+  });
 
   protected filteredItems = computed(() => {
     let filtered = [...this.items()];
-    const search = this.searchTerm().toLowerCase();
 
-    if (search && this.config().searchFields) {
+    // Apply global search if enabled
+    if (this.config().enableGlobalSearch && this.globalSearchTerm()) {
+      const searchTerm = this.globalSearchTerm().toLowerCase();
+      const searchFields = this.config().globalSearchFields || [];
+
       filtered = filtered.filter((item) => {
-        return this.config().searchFields!.some((field) => {
+        return searchFields.some((field) => {
           const value = this.getNestedValue(item, field);
-          return value?.toString().toLowerCase().includes(search);
+          return value?.toString().toLowerCase().includes(searchTerm);
         });
       });
     }
 
-    // Sort
-    const sortField = this.sortField();
-    if (sortField) {
-      filtered = filtered.sort((a, b) => {
-        const aVal = this.getNestedValue(a, sortField);
-        const bVal = this.getNestedValue(b, sortField);
+    // Apply column filters
+    for (const [fieldKey, filter] of this.columnFilters()) {
+      filtered = this.applyColumnFilter(filtered, filter);
+    }
 
-        if (aVal < bVal) return this.sortDirection() === "asc" ? -1 : 1;
-        if (aVal > bVal) return this.sortDirection() === "asc" ? 1 : -1;
+    // Apply sorting
+    const activeSorts = Array.from(this.columnSorts().values())
+      .filter((sort) => sort.direction !== null)
+      .sort((a, b) => {
+        // Maintain sort order - first applied sorts take precedence
+        const aIndex = Array.from(this.columnSorts().keys()).indexOf(a.field);
+        const bIndex = Array.from(this.columnSorts().keys()).indexOf(b.field);
+        return aIndex - bIndex;
+      });
+
+    if (activeSorts.length > 0) {
+      filtered = filtered.sort((a, b) => {
+        for (const sort of activeSorts) {
+          const aVal = this.getNestedValue(a, sort.field);
+          const bVal = this.getNestedValue(b, sort.field);
+
+          const comparison = this.compareValues(aVal, bVal);
+          if (comparison !== 0) {
+            return sort.direction === "asc" ? comparison : -comparison;
+          }
+        }
         return 0;
       });
     }
@@ -100,22 +159,14 @@ export class AdminComponent<T extends BaseCrudModel<T, any>>
     return filtered;
   });
 
-  protected getNestedValue(item: any, path: string): any {
-    return path.split(".").reduce((acc, key) => {
-      return acc && acc[key] !== undefined ? acc[key] : undefined;
-    }, item);
-  }
-
   protected totalPages = computed(() => {
     const filtered = this.filteredItems();
-    // Ensure we're checking if filtered is an array and has a length
     const length = Array.isArray(filtered) ? filtered.length : 0;
     return Math.ceil(length / this.itemsPerPage());
   });
 
   protected paginatedItems = computed(() => {
     const filtered = this.filteredItems();
-    // Add explicit check to ensure filtered is an array
     if (!Array.isArray(filtered)) {
       return [];
     }
@@ -141,8 +192,14 @@ export class AdminComponent<T extends BaseCrudModel<T, any>>
 
   private destroy$ = new Subject<void>();
 
+  get activeSortCount(): number {
+    return Array.from(this.columnSorts().values()).filter(
+      (s) => s.direction !== null
+    ).length;
+  }
+
   ngOnInit(): void {
-    this.initializeSort();
+    this.initializeDefaultSort();
     this.loadData();
     this.initializeForm();
   }
@@ -152,10 +209,12 @@ export class AdminComponent<T extends BaseCrudModel<T, any>>
     this.destroy$.complete();
   }
 
-  private initializeSort(): void {
+  private initializeDefaultSort(): void {
     const defaultSort = this.config().defaultSort;
     if (defaultSort) {
-      this.sortField.set(defaultSort);
+      const sorts = new Map(this.columnSorts());
+      sorts.set(defaultSort.field, defaultSort);
+      this.columnSorts.set(sorts);
     }
   }
 
@@ -189,50 +248,187 @@ export class AdminComponent<T extends BaseCrudModel<T, any>>
       });
   }
 
+  private applyColumnFilter(items: T[], filter: ColumnFilter): T[] {
+    if (!filter.value || filter.value === "") {
+      return items;
+    }
+
+    return items.filter((item) => {
+      const fieldValue = this.getNestedValue(item, filter.field);
+
+      switch (filter.type) {
+        case "text":
+          return fieldValue
+            ?.toString()
+            .toLowerCase()
+            .includes(filter.value.toLowerCase());
+        case "select":
+          return fieldValue === filter.value;
+        case "boolean":
+          return fieldValue === (filter.value === "true");
+        case "number":
+          return fieldValue === Number(filter.value);
+        case "date":
+          // Simple date comparison - you might want to enhance this
+          const itemDate = new Date(fieldValue).toDateString();
+          const filterDate = new Date(filter.value).toDateString();
+          return itemDate === filterDate;
+        default:
+          return fieldValue
+            ?.toString()
+            .toLowerCase()
+            .includes(filter.value.toLowerCase());
+      }
+    });
+  }
+
+  private compareValues(a: any, b: any): number {
+    if (a == null && b == null) return 0;
+    if (a == null) return -1;
+    if (b == null) return 1;
+
+    // Handle dates
+    if (a instanceof Date && b instanceof Date) {
+      return a.getTime() - b.getTime();
+    }
+
+    // Handle numbers
+    if (typeof a === "number" && typeof b === "number") {
+      return a - b;
+    }
+
+    // Handle strings (default)
+    const aStr = a.toString().toLowerCase();
+    const bStr = b.toString().toLowerCase();
+    return aStr.localeCompare(bStr);
+  }
+
+  protected getNestedValue(item: any, path: string): any {
+    return path.split(".").reduce((acc, key) => {
+      return acc && acc[key] !== undefined ? acc[key] : undefined;
+    }, item);
+  }
+
   protected getMin(a: number, b: number): number {
     return a < b ? a : b;
   }
 
-  // Abstract methods to be implemented by child components
-  protected initializeForm(): void {
-    // Default empty implementation
-    this.itemForm = this.fb.group({});
+  // Filter methods
+  protected onColumnFilter(column: TableColumn<T>, value: any): void {
+    console.log(column, value);
+
+    const filters = new Map(this.columnFilters());
+
+    if (!value || value === "") {
+      filters.delete(column.key);
+    } else {
+      const filterType =
+        column.filterType || this.getDefaultFilterType(column.type);
+      filters.set(column.key, {
+        field: column.key,
+        value: value,
+        type: filterType,
+      });
+    }
+
+    this.columnFilters.set(filters);
+    this.setPage(1); // Reset to first page when filtering
   }
 
-  protected getFormData(): Partial<T> {
-    // Default implementation returns empty object
-    return {};
+  protected getColumnFilterValue(columnKey: string): any {
+    return this.columnFilters().get(columnKey)?.value || "";
   }
 
-  protected populateForm(item: T): void {
-    // Default empty implementation
+  protected clearColumnFilter(columnKey: string): void {
+    const filters = new Map(this.columnFilters());
+    filters.delete(columnKey);
+    this.columnFilters.set(filters);
   }
 
-  protected getItemId(item: T): any {
-    // Default implementation tries to get id property
-    return (item as any).id;
-  }
-
-  // Event handlers
-  protected onSearch(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    this.searchTerm.set(target.value);
+  protected clearAllFilters(): void {
+    this.columnFilters.set(new Map());
+    this.globalSearchTerm.set("");
     this.setPage(1);
   }
 
-  protected onSortChange(event: Event): void {
-    const target = event.target as HTMLSelectElement;
-    this.sortField.set(String(target.value));
+  // Sort methods
+  protected onColumnSort(column: TableColumn<T>): void {
+    if (!column.sortable) return;
+
+    const sorts = new Map(this.columnSorts());
+    const currentSort = sorts.get(column.key);
+
+    let newDirection: SortDirection;
+    if (!currentSort || currentSort.direction === null) {
+      newDirection = "asc";
+    } else if (currentSort.direction === "asc") {
+      newDirection = "desc";
+    } else {
+      newDirection = null;
+    }
+
+    if (newDirection === null) {
+      sorts.delete(column.key);
+    } else {
+      sorts.set(column.key, {
+        field: column.key,
+        direction: newDirection,
+      });
+    }
+
+    this.columnSorts.set(sorts);
   }
 
-  protected toggleSortDirection(): void {
-    this.sortDirection.set(this.sortDirection() === "asc" ? "desc" : "asc");
+  protected getColumnSortDirection(columnKey: string): SortDirection {
+    return this.columnSorts().get(columnKey)?.direction || null;
   }
 
+  protected getSortIcon(columnKey: string): string {
+    const direction = this.getColumnSortDirection(columnKey);
+    switch (direction) {
+      case "asc":
+        return "↑";
+      case "desc":
+        return "↓";
+      default:
+        return "↕";
+    }
+  }
+
+  protected clearAllSorts(): void {
+    this.columnSorts.set(new Map());
+  }
+
+  getDefaultFilterType(columnType?: string): FilterType {
+    switch (columnType) {
+      case "boolean":
+        return "boolean";
+      case "date":
+        return "date";
+      case "number":
+        return "number";
+      default:
+        return "text";
+    }
+  }
+
+  // Global search methods
+  protected onGlobalSearch(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    this.globalSearchTerm.set(target.value);
+    this.setPage(1);
+  }
+
+  protected toggleFilters(): void {
+    this.showFilters.set(!this.showFilters());
+  }
+
+  // Pagination
   protected setPage(page: number): void {
     this.currentPage.set(page);
   }
 
+  // Modal and CRUD operations
   protected openCreateModal(): void {
     this.editingItem.set(null);
     this.itemForm.reset();
@@ -309,6 +505,7 @@ export class AdminComponent<T extends BaseCrudModel<T, any>>
       });
   }
 
+  // Cell formatting
   protected getCellValue(item: T, field: string): any {
     return this.getNestedValue(item, field);
   }
@@ -326,12 +523,33 @@ export class AdminComponent<T extends BaseCrudModel<T, any>>
 
     switch (column.type) {
       case "boolean":
-        return actualValue ? "Yes" : "No";
+        return actualValue
+          ? column.filterTrueLabel || "Yes"
+          : column.filterFalseLabel || "No";
       case "date":
         return actualValue ? new Date(actualValue).toLocaleDateString() : "";
+      case "number":
+        return actualValue?.toLocaleString() || "";
       default:
         return actualValue?.toString() || "";
     }
+  }
+
+  // Abstract methods to be implemented by child components
+  protected initializeForm(): void {
+    this.itemForm = this.fb.group({});
+  }
+
+  protected getFormData(): Partial<T> {
+    return {};
+  }
+
+  protected populateForm(item: T): void {
+    // Default empty implementation
+  }
+
+  protected getItemId(item: T): any {
+    return (item as any).id;
   }
 
   private setFormErrors(): void {
@@ -363,7 +581,6 @@ export class AdminComponent<T extends BaseCrudModel<T, any>>
   }
 
   private getFieldLabel(fieldName: string): string {
-    // Convert camelCase to Title Case
     return fieldName
       .replace(/([A-Z])/g, " $1")
       .replace(/^./, (str) => str.toUpperCase());
