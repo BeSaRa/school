@@ -28,37 +28,57 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
   // Convert userConfig to a signal
   protected userConfig = signal<AdminComponentConfig<User>>({
     title: "Users",
+    enableGlobalSearch: true,
+    globalSearchFields: ["fullName", "email"],
+    itemsPerPage: 15,
     columns: [
       {
         key: "email",
         label: "Email",
         sortable: true,
+        filterable: true,
         type: "text",
+        filterType: "text",
       },
       {
         key: "fullName",
         label: "Full Name",
         sortable: true,
+        filterable: true,
         type: "text",
+        filterType: "text",
       },
       {
         key: "role",
         label: "Role",
         sortable: true,
+        filterable: true,
         type: "custom",
+        filterType: "select",
+        filterOptions: [
+          { value: "student", label: "Student" },
+          { value: "supervisor", label: "Supervisor" },
+          { value: "teacher", label: "Teacher" },
+          { value: "superuser", label: "Superuser" },
+        ],
         customTemplate: (value: string) => this.formatRole(value),
       },
       {
         key: "isActive",
         label: "Status",
         sortable: true,
-        type: "custom",
+        filterable: true,
+        type: "boolean",
+        filterType: "boolean",
+        filterTrueLabel: "Active",
+        filterFalseLabel: "DeActive",
+        filterOptions: [
+          { value: true, label: "Active" },
+          { value: false, label: "deActive" },
+        ],
         customTemplate: (value: boolean) => this.formatStatus(value),
       },
     ],
-    searchFields: ["email", "fullName", "role"],
-    defaultSort: "fullName",
-    itemsPerPage: 15,
   });
 
   override ngOnInit(): void {
