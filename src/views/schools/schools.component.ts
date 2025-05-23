@@ -26,40 +26,53 @@ export class SchoolsComponent extends AdminComponent<School> {
 
   protected schoolConfig = signal<AdminComponentConfig<School>>({
     title: "Schools",
+    enableGlobalSearch: true,
+    globalSearchFields: ["fullName", "email"],
+    itemsPerPage: 15,
     columns: [
-      { key: "name", label: "Name", sortable: true },
+      {
+        key: "name",
+        label: "Name",
+        sortable: true,
+        filterable: true,
+        type: "text",
+        filterType: "text",
+      },
       {
         key: "educationLevel",
         label: "Education Level",
         sortable: true,
+        filterable: true,
         type: "custom",
+        filterType: "select",
+        filterOptions: [{ value: "low", label: "Low" }],
         customTemplate: (value) => this.formatEducationLevel(value),
       },
       {
         key: "schoolType.category",
         label: "Category",
         sortable: true,
+        filterable: true,
+        type: "text",
+        filterType: "text",
       },
       {
         key: "location.city",
         label: "City",
         sortable: true,
+        filterable: true,
+        type: "text",
+        filterType: "text",
       },
       {
         key: "contact.email",
         label: "Email",
         sortable: true,
+        filterable: true,
+        type: "text",
+        filterType: "text",
       },
     ],
-    searchFields: [
-      "name",
-      "educationLevel",
-      "schoolType.category",
-      "location.city",
-      "contact.email",
-    ],
-    defaultSort: "name",
-    itemsPerPage: 15,
   });
 
   override ngOnInit() {
