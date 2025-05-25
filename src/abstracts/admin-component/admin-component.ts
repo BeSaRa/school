@@ -4,7 +4,6 @@ import {
   OnInit,
   OnDestroy,
   inject,
-  input,
   signal,
   computed,
   DestroyRef,
@@ -213,9 +212,55 @@ export abstract class AdminComponent<T extends BaseCrudModel<T, any>>
   protected getNestedValue(item: any, path: string): any {
     return path.split(".").reduce((acc, key) => acc?.[key], item);
   }
+  protected getColumns(): TableColumn<T>[] {
+    return this.config().columns;
+  }
+  protected setPage(page: number): void {
+    this.currentPage.set(page);
+  }
+
+  protected onColumnSort({
+    field,
+    direction,
+  }: {
+    field: string;
+    direction: "asc" | "desc";
+  }): void {
+    const currentSorts = new Map(this.columnSorts());
+
+    if (currentSorts.has(field)) {
+      const currentSort = currentSorts.get(field)!;
+      if (currentSort.direction === direction) {
+        currentSorts.delete(field);
+      } else {
+        currentSorts.set(field, { field, direction });
+      }
+    } else {
+      currentSorts.set(field, { field, direction });
+    }
+
+    this.columnSorts.set(currentSorts);
+    this.currentPage.set(1);
+  }
+  updateFilter({ field, value }: { field: string; value: any }): void {
+    const currentFilters = new Map(this.columnFilters());
+
+    if (value !== null && value !== undefined && value !== "") {
+      const column = this.config().columns.find((c) => c.key === field);
+      currentFilters.set(field, {
+        field,
+        value,
+        type: column?.filterType as FilterType,
+      });
+    } else {
+      currentFilters.delete(field);
+    }
+
+    this.columnFilters.set(currentFilters);
+    this.currentPage.set(1);
+  }
 
   protected abstract initializeForm(): void;
   protected abstract getFormData(): Partial<T>;
   protected abstract populateForm(item: T): void;
-  protected abstract getColumns(): TableColumn<T>[];
 }

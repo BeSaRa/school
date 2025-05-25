@@ -1,12 +1,8 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { User } from "@/models/user";
 import { UserService } from "@/services/user.service";
-import {
-  AdminComponent,
-  FilterType,
-  TableColumn,
-} from "@/abstracts/admin-component/admin-component";
+import { AdminComponent } from "@/abstracts/admin-component/admin-component";
 import { BaseCrudService } from "@/abstracts/base-crud-service";
 import { AdminTableComponent } from "@/abstracts/admin-component/components/admin-table/admin-table.component";
 
@@ -22,13 +18,14 @@ import { AdminTableComponent } from "@/abstracts/admin-component/components/admi
   ],
   templateUrl: "./users.component.html",
 })
-export class UsersComponent extends AdminComponent<User> {
+export class UsersComponent extends AdminComponent<User> implements OnInit {
   protected itemForm!: FormGroup;
 
   override ngOnInit(): void {
     this.config.set({
       title: "Users",
       itemsPerPage: 10,
+      responseKey: "users",
       columns: [
         {
           key: "email",
@@ -73,7 +70,6 @@ export class UsersComponent extends AdminComponent<User> {
           customTemplate: (value: boolean) => this.formatStatus(value),
         },
       ],
-      responseKey: "users",
     });
     super.ngOnInit();
   }
@@ -110,56 +106,6 @@ export class UsersComponent extends AdminComponent<User> {
       role: user.role,
       isActive: user.isActive,
     });
-  }
-
-  protected getColumns(): TableColumn<User>[] {
-    return this.config().columns;
-  }
-
-  setPage(page: number): void {
-    this.currentPage.set(page);
-  }
-
-  updateFilter({ field, value }: { field: string; value: any }): void {
-    const currentFilters = new Map(this.columnFilters());
-
-    if (value !== null && value !== undefined && value !== "") {
-      const column = this.config().columns.find((c) => c.key === field);
-      currentFilters.set(field, {
-        field,
-        value,
-        type: column?.filterType as FilterType,
-      });
-    } else {
-      currentFilters.delete(field);
-    }
-
-    this.columnFilters.set(currentFilters);
-    this.currentPage.set(1);
-  }
-
-  onColumnSort({
-    field,
-    direction,
-  }: {
-    field: string;
-    direction: "asc" | "desc";
-  }): void {
-    const currentSorts = new Map(this.columnSorts());
-
-    if (currentSorts.has(field)) {
-      const currentSort = currentSorts.get(field)!;
-      if (currentSort.direction === direction) {
-        currentSorts.delete(field);
-      } else {
-        currentSorts.set(field, { field, direction });
-      }
-    } else {
-      currentSorts.set(field, { field, direction });
-    }
-
-    this.columnSorts.set(currentSorts);
-    this.currentPage.set(1);
   }
 
   private formatRole(role: string): string {

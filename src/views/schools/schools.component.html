@@ -1,90 +1,15 @@
-<!-- <app-admin [config]="schoolConfig">
-  <div slot="form-fields" [formGroup]="itemForm">
-    <section class="mb-6">
-      <h2 class="text-xl font-medium mb-2">School Information</h2>
-
-      <div class="mb-4">
-        <label for="name" class="block text-sm font-medium"
-          >School Name <span class="text-red-500">*</span></label
-        >
-        <input
-          id="name"
-          type="text"
-          formControlName="name"
-          class="w-full px-3 py-2 border rounded-md"
-        />
-      </div>
-
-      <div class="mb-4">
-        <label for="educationLevel" class="block text-sm font-medium"
-          >Education Level <span class="text-red-500">*</span></label
-        >
-        <select
-          id="educationLevel"
-          formControlName="educationLevel"
-          class="w-full px-3 py-2 border rounded-md"
-        >
-          <option value="">Select Level</option>
-          <option value="all">All Levels</option>
-          <option value="primary">Primary</option>
-          <option value="secondary">Secondary</option>
-        </select>
-      </div>
-    </section>
-
-    <section formGroupName="schoolType" class="mb-6 bg-gray-50 p-4 rounded-md">
-      <h3 class="text-lg font-medium mb-2">School Type</h3>
-
-      <div class="mb-4">
-        <label for="category" class="block text-sm font-medium"
-          >Category <span class="text-red-500">*</span></label
-        >
-        <select
-          id="category"
-          formControlName="category"
-          class="w-full px-3 py-2 border rounded-md"
-        >
-          <option value="">Select Category</option>
-          <option value="public">Public</option>
-          <option value="private">Private</option>
-        </select>
-      </div>
-    </section>
-
-    <section formGroupName="location" class="mb-6 bg-gray-50 p-4 rounded-md">
-      <h3 class="text-lg font-medium mb-2">Location</h3>
-
-      <div class="mb-4">
-        <label for="country" class="block text-sm font-medium"
-          >Country <span class="text-red-500">*</span></label
-        >
-        <input
-          id="country"
-          type="text"
-          formControlName="country"
-          class="w-full px-3 py-2 border rounded-md"
-        />
-      </div>
-
-      <div formGroupName="coordinate" class="mb-4 p-2 bg-white rounded-md">
-        <h4 class="text-base font-medium mb-2">Coordinates</h4>
-        <div class="flex gap-2">
-          <input
-            id="latitude"
-            type="number"
-            formControlName="latitude"
-            placeholder="Latitude"
-            class="flex-1 px-3 py-2 border rounded-md"
-          />
-          <input
-            id="longitude"
-            type="number"
-            formControlName="longitude"
-            placeholder="Longitude"
-            class="flex-1 px-3 py-2 border rounded-md"
-          />
-        </div>
-      </div>
-    </section>
-  </div>
-</app-admin> -->
+<app-admin-table
+        [data]="paginatedItems()"
+        [columns]="getColumns()"
+        [pagination]="{
+            currentPage: currentPage(),
+            totalPages: totalPages(),
+            itemsPerPage: itemsPerPage(),
+          }"
+        [hasColumnFilters]="true"
+        [columnFilters]="columnFilters()"
+        (pageChange)="setPage($event)"
+        (sortChange)="onColumnSort($event)"
+        (filterChange)="updateFilter($event)"
+        modelTitle="Schools"
+></app-admin-table>
