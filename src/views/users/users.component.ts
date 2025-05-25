@@ -1,18 +1,21 @@
-import { Component, inject, OnInit, signal } from "@angular/core";
+// users.component.ts
+import { Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { ReactiveFormsModule, Validators } from "@angular/forms";
 import { User } from "@/models/user";
 import { UserService } from "@/services/user.service";
 import {
   AdminComponent,
-  AdminComponentConfig,
+  FilterType,
+  TableColumn,
 } from "@/abstracts/admin-component/admin-component";
 import { BaseCrudService } from "@/abstracts/base-crud-service";
+import { FormBuilder, Validators, FormGroup } from "@angular/forms";
+import { AdminTableComponent } from "@/abstracts/admin-component/components/admin-table/admin-table.component";
 
 @Component({
-  selector: "app-user",
+  selector: "app-users",
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, AdminComponent],
+  imports: [CommonModule, AdminTableComponent],
   providers: [
     {
       provide: BaseCrudService,
@@ -20,73 +23,65 @@ import { BaseCrudService } from "@/abstracts/base-crud-service";
     },
   ],
   templateUrl: "./users.component.html",
-  styleUrl: "./users.component.scss",
 })
-export class UsersComponent extends AdminComponent<User> implements OnInit {
-  override service = inject(UserService);
-
-  // Convert userConfig to a signal
-  protected userConfig = signal<AdminComponentConfig<User>>({
-    title: "Users",
-    enableGlobalSearch: true,
-    globalSearchFields: ["fullName", "email"],
-    itemsPerPage: 15,
-    columns: [
-      {
-        key: "email",
-        label: "Email",
-        sortable: true,
-        filterable: true,
-        type: "text",
-        filterType: "text",
-      },
-      {
-        key: "fullName",
-        label: "Full Name",
-        sortable: true,
-        filterable: true,
-        type: "text",
-        filterType: "text",
-      },
-      {
-        key: "role",
-        label: "Role",
-        sortable: true,
-        filterable: true,
-        type: "custom",
-        filterType: "select",
-        filterOptions: [
-          { value: "student", label: "Student" },
-          { value: "supervisor", label: "Supervisor" },
-          { value: "teacher", label: "Teacher" },
-          { value: "superuser", label: "Superuser" },
-        ],
-        customTemplate: (value: string) => this.formatRole(value),
-      },
-      {
-        key: "isActive",
-        label: "Status",
-        sortable: true,
-        filterable: true,
-        type: "boolean",
-        filterType: "boolean",
-        filterTrueLabel: "Active",
-        filterFalseLabel: "DeActive",
-        filterOptions: [
-          { value: true, label: "Active" },
-          { value: false, label: "deActive" },
-        ],
-        customTemplate: (value: boolean) => this.formatStatus(value),
-      },
-    ],
-  });
+export class UsersComponent extends AdminComponent<User> {
+  protected itemForm!: FormGroup;
 
   override ngOnInit(): void {
-    this.config.set(this.userConfig());
+    this.config.set({
+      title: "Users",
+      itemsPerPage: 10,
+      columns: [
+        {
+          key: "email",
+          label: "Email",
+          sortable: true,
+          filterable: true,
+          type: "text",
+          filterType: "text",
+        },
+        {
+          key: "fullName",
+          label: "Full Name",
+          sortable: true,
+          filterable: true,
+          type: "text",
+          filterType: "text",
+        },
+        {
+          key: "role",
+          label: "Role",
+          sortable: true,
+          filterable: true,
+          type: "custom",
+          filterType: "select",
+          filterOptions: [
+            { value: "student", label: "Student" },
+            { value: "supervisor", label: "Supervisor" },
+            { value: "teacher", label: "Teacher" },
+            { value: "superuser", label: "Superuser" },
+          ],
+          customTemplate: (value: string) => this.formatRole(value),
+        },
+        {
+          key: "isActive",
+          label: "Status",
+          sortable: true,
+          filterable: true,
+          type: "boolean",
+          filterType: "boolean",
+          filterTrueLabel: "Active",
+          filterFalseLabel: "Inactive",
+          customTemplate: (value: boolean) => this.formatStatus(value),
+        },
+      ],
+      responseKey: "users",
+    });
     super.ngOnInit();
   }
 
-  override initializeForm(): void {
+  // Implement abstract methods
+  protected initializeForm(): void {
     this.itemForm = this.fb.group({
       email: ["", [Validators.required, Validators.email]],
       fullName: [
@@ -102,7 +97,7 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
     });
   }
 
-  override getFormData(): Partial<User> {
+  protected getFormData(): Partial<User> {
     return {
       email: this.itemForm.get("email")?.value,
       fullName: this.itemForm.get("fullName")?.value,
@@ -111,7 +106,7 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
     };
   }
 
-  override populateForm(user: User): void {
+  protected populateForm(user: User): void {
     this.itemForm.patchValue({
       email: user.email,
       fullName: user.fullName,
@@ -120,57 +115,58 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
     });
   }
 
-  override getItemId(user: User): any {
-    return user.id;
+  protected getColumns(): TableColumn<User>[] {
+    return this.config().columns;
   }
 
-  protected getFieldClasses(fieldName: string): string {
-    const control = this.itemForm.get(fieldName);
-    const baseClasses =
-      "w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 transition-colors";
-
-    if (control?.invalid && control?.touched) {
-      return `${baseClasses} border-red-300 focus:ring-red-500 focus:border-red-500`;
+  setPage(page: number): void {
+    this.currentPage.set(page);
+  }
+  updateFilter({ field, value }: { field: string; value: any }): void {
+    const currentFilters = new Map(this.columnFilters());
+    if (value !== null && value !== undefined && value !== "") {
+      const column = this.config().columns.find((c) => c.key === field);
+      currentFilters.set(field, {
+        field,
+        value,
+        type: column?.filterType as FilterType,
+      });
+    } else {
+      currentFilters.delete(field);
     }
+    this.columnFilters.set(currentFilters);
+    this.currentPage.set(1);
+  }
 
-    return `${baseClasses} border-gray-300 focus:ring-blue-500 focus:border-blue-500`;
+  onColumnSort({
+    field,
+    direction,
+  }: {
+    field: string;
+    direction: "asc" | "desc";
+  }): void {
+    const currentSorts = new Map(this.columnSorts());
+    if (currentSorts.has(field)) {
+      const currentSort = currentSorts.get(field)!;
+      if (currentSort.direction === direction) {
+        currentSorts.delete(field);
+      } else {
+        currentSorts.set(field, { field, direction });
+      }
+    } else {
+      currentSorts.set(field, { field, direction });
+    }
+    this.columnSorts.set(currentSorts);
+    this.currentPage.set(1); // Reset to first page on sort
   }
 
   private formatRole(role: string): string {
-    if (!role) return "";
-
-    const roleMap: Record<string, { label: string; color: string }> = {
-      admin: { label: "Admin", color: "bg-red-100 text-red-800" },
-      manager: { label: "Manager", color: "bg-blue-100 text-blue-800" },
-      user: { label: "User", color: "bg-green-100 text-green-800" },
-      viewer: { label: "Viewer", color: "bg-gray-100 text-gray-800" },
-    };
-
-    const roleInfo = roleMap[role.toLowerCase()] || {
-      label: role,
-      color: "bg-gray-100 text-gray-800",
-    };
-
-    return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${roleInfo.color}">
-              ${roleInfo.label}
-            </span>`;
+    return `<span class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded">${role}</span>`;
   }
 
   private formatStatus(isActive: boolean): string {
-    if (isActive) {
-      return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                <svg class="w-1.5 h-1.5 mr-1" fill="currentColor" viewBox="0 0 8 8">
-                  <circle cx="4" cy="4" r="3"/>
-                </svg>
-                Active
-              </span>`;
-    } else {
-      return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                <svg class="w-1.5 h-1.5 mr-1" fill="currentColor" viewBox="0 0 8 8">
-                  <circle cx="4" cy="4" r="3"/>
-                </svg>
-                Inactive
-              </span>`;
-    }
+    return isActive
+      ? `<span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded">Active</span>`
+      : `<span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded">Inactive</span>`;
   }
 }
