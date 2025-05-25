@@ -142,6 +142,10 @@ export const AppIcons = {
   CALENDAR_TABLE: "calendar-table",
   CALENDAR_CHART: "calendar-chart-bar",
   CALENDAR_CALCULATOR: "calendar-calculator",
+  CHEVRON_LEFT: "chevron-left",
+  CHEVRON_RIGHT: "chevron-right",
+  CHEVRON_DOUBLE_LEFT: "chevron-double-left",
+  CHEVRON_DOUBLE_RIGHT: "chevron-double-right",
 } as const;
 
 export type AppIconsType = typeof AppIcons;
