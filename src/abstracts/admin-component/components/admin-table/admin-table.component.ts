@@ -1,16 +1,8 @@
-// admin-table.component.ts
-import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  inject,
-  signal,
-  computed,
-} from "@angular/core";
+import { Component, input, output, computed, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ColumnFilter } from "../../admin-component";
+import { IconService } from "../../../../services/icon.service";
 
 export interface TableColumn<T = any> {
   key: string;
@@ -35,28 +27,33 @@ export interface PaginationInfo {
 @Component({
   selector: "app-admin-table",
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, IconService],
   templateUrl: "./admin-table.component.html",
 })
 export class AdminTableComponent<T> {
-  @Input() data: T[] = [];
-  @Input() columns: TableColumn<T>[] = [];
-  @Input() pagination: PaginationInfo = {
+  // Inputs using new input() syntax
+  data = input<T[]>([]);
+  columns = input<TableColumn<T>[]>([]);
+  pagination = input<PaginationInfo>({
     currentPage: 1,
     totalPages: 1,
     itemsPerPage: 10,
-  };
-  @Input() searchableFields: string[] = [];
-  @Output() pageChange = new EventEmitter<number>();
-  @Output() sortChange = new EventEmitter<{
-    field: string;
-    direction: "asc" | "desc";
-  }>();
+  });
+  searchableFields = input<string[]>([]);
+  hasColumnFilters = input<boolean>(false);
+  columnFilters = input<Map<string, ColumnFilter>>(new Map());
+  modelTitle = input<string>("");
 
-  @Input() hasColumnFilters: boolean = false;
-  @Input() columnFilters: Map<string, ColumnFilter> = new Map();
+  // Outputs using new output() syntax
+  pageChange = output<number>();
+  sortChange = output<{ field: string; direction: "asc" | "desc" }>();
+  filterChange = output<{ field: string; value: any }>();
+
+  // Local state
   protected searchTerm = signal<string>("");
-  @Output() filterChange = new EventEmitter<{ field: string; value: any }>();
+
+  // Computed values
+  protected hasActiveFilters = computed(() => this.searchTerm().length > 0);
 
   protected onFilterChange(event: Event, column: TableColumn<T>): void {
     let value: any = null;
@@ -78,9 +75,6 @@ export class AdminTableComponent<T> {
       }
     }
     this.filterChange.emit({ field: column.key, value });
-  }
-  protected get hasActiveFilters(): boolean {
-    return this.searchTerm().length > 0;
   }
 
   protected onPageChange(page: number): void {
@@ -109,8 +103,8 @@ export class AdminTableComponent<T> {
   }
 
   protected getVisiblePages(): number[] {
-    const current = this.pagination.currentPage;
-    const total = this.pagination.totalPages;
+    const current = this.pagination().currentPage;
+    const total = this.pagination().totalPages;
     const pages: number[] = [];
 
     const start = Math.max(1, current - 2);

@@ -4,13 +4,15 @@ import {
   OnInit,
   OnDestroy,
   inject,
-  Input,
+  input,
   signal,
   computed,
+  DestroyRef,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule, FormBuilder, FormGroup } from "@angular/forms";
-import { Subject, takeUntil, catchError, EMPTY } from "rxjs";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { catchError, EMPTY } from "rxjs";
 import { BaseCrudService } from "@/abstracts/base-crud-service";
 import { BaseCrudModel } from "@/abstracts/base-crud-model";
 import { DialogService } from "@/services/dialog.service";
@@ -60,16 +62,19 @@ export interface AdminComponentConfig<T> {
 export abstract class AdminComponent<T extends BaseCrudModel<T, any>>
   implements OnInit, OnDestroy
 {
-  @Input({ required: true }) config = signal<AdminComponentConfig<T>>({
+  // Input using the new input() syntax
+  config = signal<AdminComponentConfig<T>>({
     title: "",
     columns: [],
     itemsPerPage: 10,
     responseKey: "items", // Default response key
   });
 
-  protected service: BaseCrudService<T> = inject(BaseCrudService);
+  // Injected services
+  protected service = inject(BaseCrudService<T>);
   protected dialogService = inject(DialogService);
   protected fb = inject(FormBuilder);
+  protected destroyRef = inject(DestroyRef);
 
   // Signals
   protected items = signal<T[]>([]);
@@ -118,8 +123,6 @@ export abstract class AdminComponent<T extends BaseCrudModel<T, any>>
     return filtered.slice(start, end);
   });
 
-  private destroy$ = new Subject<void>();
-
   ngOnInit(): void {
     this.initializeDefaultSort();
     this.loadData();
@@ -127,8 +130,7 @@ export abstract class AdminComponent<T extends BaseCrudModel<T, any>>
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+    // No need to manually handle destruction with takeUntilDestroyed
   }
 
   protected initializeDefaultSort(): void {
@@ -144,7 +146,7 @@ export abstract class AdminComponent<T extends BaseCrudModel<T, any>>
     this.service
       .load()
       .pipe(
-        takeUntil(this.destroy$),
+        takeUntilDestroyed(this.destroyRef),
         catchError((error) => {
           console.error("Error loading data:", error);
           return EMPTY;

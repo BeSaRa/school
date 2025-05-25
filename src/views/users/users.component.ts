@@ -1,6 +1,5 @@
-// users.component.ts
 import { Component } from "@angular/core";
-import { CommonModule } from "@angular/common";
+import { FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { User } from "@/models/user";
 import { UserService } from "@/services/user.service";
 import {
@@ -9,13 +8,12 @@ import {
   TableColumn,
 } from "@/abstracts/admin-component/admin-component";
 import { BaseCrudService } from "@/abstracts/base-crud-service";
-import { FormBuilder, Validators, FormGroup } from "@angular/forms";
 import { AdminTableComponent } from "@/abstracts/admin-component/components/admin-table/admin-table.component";
 
 @Component({
   selector: "app-users",
   standalone: true,
-  imports: [CommonModule, AdminTableComponent],
+  imports: [AdminTableComponent, ReactiveFormsModule],
   providers: [
     {
       provide: BaseCrudService,
@@ -80,7 +78,6 @@ export class UsersComponent extends AdminComponent<User> {
     super.ngOnInit();
   }
 
-  // Implement abstract methods
   protected initializeForm(): void {
     this.itemForm = this.fb.group({
       email: ["", [Validators.required, Validators.email]],
@@ -122,8 +119,10 @@ export class UsersComponent extends AdminComponent<User> {
   setPage(page: number): void {
     this.currentPage.set(page);
   }
+
   updateFilter({ field, value }: { field: string; value: any }): void {
     const currentFilters = new Map(this.columnFilters());
+
     if (value !== null && value !== undefined && value !== "") {
       const column = this.config().columns.find((c) => c.key === field);
       currentFilters.set(field, {
@@ -134,6 +133,7 @@ export class UsersComponent extends AdminComponent<User> {
     } else {
       currentFilters.delete(field);
     }
+
     this.columnFilters.set(currentFilters);
     this.currentPage.set(1);
   }
@@ -146,6 +146,7 @@ export class UsersComponent extends AdminComponent<User> {
     direction: "asc" | "desc";
   }): void {
     const currentSorts = new Map(this.columnSorts());
+
     if (currentSorts.has(field)) {
       const currentSort = currentSorts.get(field)!;
       if (currentSort.direction === direction) {
@@ -156,8 +157,9 @@ export class UsersComponent extends AdminComponent<User> {
     } else {
       currentSorts.set(field, { field, direction });
     }
+
     this.columnSorts.set(currentSorts);
-    this.currentPage.set(1); // Reset to first page on sort
+    this.currentPage.set(1);
   }
 
   private formatRole(role: string): string {

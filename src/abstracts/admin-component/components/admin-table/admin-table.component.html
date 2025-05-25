@@ -1,12 +1,20 @@
-<!-- In admin-table.component.html -->
-<div class="p-6 bg-white rounded-lg shadow-sm">
-  <div class="overflow-x-auto bg-white rounded-lg border border-gray-200">
-    <table class="min-w-full divide-y divide-gray-200">
-      <thead class="bg-gray-50">
+<div
+  class="p-6 bg-white rounded-lg shadow-sm dark:bg-dark-surface dark:text-dark-text"
+>
+  @if (modelTitle()) {
+    <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-dark-text">
+      {{ modelTitle() }}
+    </h2>
+  }
+  <div
+    class="overflow-x-auto bg-white rounded-lg border border-gray-200 dark:bg-dark-surface dark:border-dark-muted"
+  >
+    <table class="min-w-full divide-y divide-gray-200 dark:divide-dark-muted">
+      <thead class="bg-gray-50 dark:bg-dark-bg">
         <tr>
-          @for (column of columns; track column.key) {
+          @for (column of columns(); track column.key) {
             <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-dark-text"
               [style.width]="column.width || 'auto'"
             >
               <div class="flex items-center gap-2">
@@ -16,66 +24,114 @@
                   <button
                     type="button"
                     (click)="onSortChange(column.key, 'asc')"
-                    class="text-gray-400 hover:text-gray-600 transition-colors"
+                    class="text-gray-400 hover:text-secondary transition-colors dark:text-dark-muted dark:hover:text-quinary"
                   >
-                    ↕
+                    <i [class]="'SORT' | icon"></i>
                   </button>
                 }
               </div>
             </th>
           }
           <th
-            class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+            class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-dark-text"
           >
             Actions
           </th>
         </tr>
-        <!-- In admin-table.component.html -->
-        @if (hasColumnFilters) {
-          <tr class="bg-gray-50">
-            @for (column of columns; track column.key) {
+        <!-- Filter row -->
+        @if (hasColumnFilters()) {
+          <tr
+            class="bg-gray-50 dark:bg-dark-bg border-t border-gray-200 dark:border-dark-muted"
+          >
+            @for (column of columns(); track column.key) {
               <th class="px-6 py-2">
                 @if (column.filterable) {
                   @if (column.filterType === "text") {
-                    <input
-                      type="text"
-                      (input)="onFilterChange($event, column)"
-                      [value]="columnFilters.get(column.key)?.value || ''"
-                      class="w-full p-1 border-none focus:ring-0 text-sm"
-                      placeholder="Filter..."
-                    />
+                    <div class="relative rounded-md shadow-sm">
+                      <div
+                        class="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none"
+                      >
+                        <i
+                          [class]="'SEARCH' | icon"
+                          class="text-gray-400 dark:text-dark-muted"
+                        ></i>
+                      </div>
+                      <input
+                        type="text"
+                        (input)="onFilterChange($event, column)"
+                        [value]="columnFilters().get(column.key)?.value || ''"
+                        class="w-full pl-8 pr-3 py-1.5 border border-gray-300 dark:border-dark-muted rounded-md text-sm focus:ring-2 focus:ring-tertiary focus:border-tertiary dark:bg-dark-bg dark:text-dark-text"
+                        placeholder="Filter..."
+                      />
+                    </div>
                   }
                   @if (column.filterType === "select") {
-                    <select
-                      (change)="onFilterChange($event, column)"
-                      [value]="columnFilters.get(column.key)?.value || ''"
-                      class="w-full p-1 border-none focus:ring-0 text-sm"
-                    >
-                      <option value="">All</option>
-                      @for (
-                        option of column.filterOptions;
-                        track option.value
-                      ) {
-                        <option [value]="option.value">
-                          {{ option.label }}
-                        </option>
-                      }
-                    </select>
+                    <div class="relative rounded-md shadow-sm">
+                      <div
+                        class="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none"
+                      >
+                        <i
+                          [class]="'FILTER' | icon"
+                          class="text-gray-400 dark:text-dark-muted"
+                        ></i>
+                      </div>
+                      <select
+                        (change)="onFilterChange($event, column)"
+                        [value]="columnFilters().get(column.key)?.value || ''"
+                        class="w-full pl-8 pr-3 py-1.5 border border-gray-300 dark:border-dark-muted rounded-md text-sm focus:ring-2 focus:ring-tertiary focus:border-tertiary dark:bg-dark-bg dark:text-dark-text appearance-none"
+                      >
+                        <option value="">All</option>
+                        @for (
+                          option of column.filterOptions;
+                          track option.value
+                        ) {
+                          <option [value]="option.value">
+                            {{ option.label }}
+                          </option>
+                        }
+                      </select>
+                      <div
+                        class="absolute inset-y-0 right-0 pr-2 flex items-center pointer-events-none"
+                      >
+                        <i
+                          [class]="'CHEVRON_DOWN' | icon"
+                          class="text-gray-400 dark:text-dark-muted"
+                        ></i>
+                      </div>
+                    </div>
                   }
                   @if (column.filterType === "boolean") {
-                    <select
-                      (change)="onFilterChange($event, column)"
-                      [value]="columnFilters.get(column.key)?.value ?? ''"
-                      class="w-full p-1 border-none focus:ring-0 text-sm"
-                    >
-                      <option value="">All</option>
-                      <option value="true">
-                        {{ column.filterTrueLabel || "YES" }}
-                      </option>
-                      <option value="false">
-                        {{ column.filterFalseLabel || "NO" }}
-                      </option>
-                    </select>
+                    <div class="relative rounded-md shadow-sm">
+                      <div
+                        class="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none"
+                      >
+                        <i
+                          [class]="'FILTER' | icon"
+                          class="text-gray-400 dark:text-dark-muted"
+                        ></i>
+                      </div>
+                      <select
+                        (change)="onFilterChange($event, column)"
+                        [value]="columnFilters().get(column.key)?.value ?? ''"
+                        class="w-full pl-8 pr-3 py-1.5 border border-gray-300 dark:border-dark-muted rounded-md text-sm focus:ring-2 focus:ring-tertiary focus:border-tertiary dark:bg-dark-bg dark:text-dark-text appearance-none"
+                      >
+                        <option value="">All</option>
+                        <option value="true">
+                          {{ column.filterTrueLabel || "YES" }}
+                        </option>
+                        <option value="false">
+                          {{ column.filterFalseLabel || "NO" }}
+                        </option>
+                      </select>
+                      <div
+                        class="absolute inset-y-0 right-0 pr-2 flex items-center pointer-events-none"
+                      >
+                        <i
+                          [class]="'CHEVRON_DOWN' | icon"
+                          class="text-gray-400 dark:text-dark-muted"
+                        ></i>
+                      </div>
+                    </div>
                   }
                 }
               </th>
@@ -84,38 +140,33 @@
           </tr>
         }
       </thead>
-      <tbody class="bg-white divide-y divide-gray-200">
-        @if (data.length === 0) {
+      <tbody
+        class="bg-white divide-y divide-gray-200 dark:bg-dark-surface dark:divide-dark-muted"
+      >
+        @if (data().length === 0) {
           <tr>
             <td
-              [attr.colspan]="columns.length + 1"
-              class="px-6 py-8 text-center text-gray-500"
+              [attr.colspan]="columns().length + 1"
+              class="px-6 py-8 text-center text-gray-500 dark:text-dark-muted"
             >
               <div class="space-y-2">
-                <svg
-                  class="w-12 h-12 mx-auto text-gray-300"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                  />
-                </svg>
+                <i
+                  [class]="'FILE' | icon"
+                  class="text-6xl mx-auto text-gray-300 dark:text-dark-muted"
+                ></i>
                 <p class="text-lg font-medium">No items found</p>
                 <p class="text-sm">Get started by creating your first item.</p>
               </div>
             </td>
           </tr>
         } @else {
-          @for (item of data; track item) {
-            <tr class="hover:bg-gray-50 transition-colors">
-              @for (column of columns; track column.key) {
+          @for (item of data(); track item) {
+            <tr
+              class="hover:bg-gray-50 dark:hover:bg-dark-bg transition-colors"
+            >
+              @for (column of columns(); track column.key) {
                 <td
-                  class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
+                  class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-dark-text"
                   [style.width]="column.width || 'auto'"
                 >
                   <span
@@ -134,42 +185,18 @@
               >
                 <button
                   type="button"
-                  class="text-blue-600 hover:text-blue-900 transition-colors inline-flex items-center gap-1"
+                  class="text-tertiary hover:text-quaternary transition-colors inline-flex items-center gap-1 dark:text-quinary dark:hover:text-white"
                   title="Edit item"
                 >
-                  <svg
-                    class="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                    />
-                  </svg>
+                  <i [class]="'EDIT' | icon"></i>
                   Edit
                 </button>
                 <button
                   type="button"
-                  class="text-red-600 hover:text-red-900 transition-colors inline-flex items-center gap-1"
+                  class="text-red-600 hover:text-red-900 transition-colors inline-flex items-center gap-1 dark:text-red-400 dark:hover:text-red-300"
                   title="Delete item"
                 >
-                  <svg
-                    class="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                    />
-                  </svg>
+                  <i [class]="'DELETE' | icon"></i>
                   Delete
                 </button>
               </td>
@@ -181,37 +208,40 @@
   </div>
 
   <!-- Pagination -->
-  @if (pagination.totalPages > 1) {
+  @if (pagination().totalPages > 1) {
     <div class="flex items-center justify-between mt-6">
-      <div class="text-sm text-gray-700">
-        Page {{ pagination.currentPage }} of {{ pagination.totalPages }}
+      <div class="text-sm text-gray-700 dark:text-dark-text">
+        Page {{ pagination().currentPage }} of {{ pagination().totalPages }}
       </div>
       <div class="flex gap-2">
         <button
           type="button"
-          [disabled]="pagination.currentPage === 1"
+          [disabled]="pagination().currentPage === 1"
           (click)="onPageChange(1)"
-          class="px-3 py-2 border border-gray-300 rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors text-sm"
+          class="px-3 py-2 border border-gray-300 dark:border-dark-muted rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-dark-bg transition-colors text-sm dark:text-dark-text"
           title="First page"
         >
-          ««
+          <i
+            [class]="'CHEVRON_DOUBLE_LEFT' | icon"
+            class="transform rotate-90"
+          ></i>
         </button>
         <button
           type="button"
-          [disabled]="pagination.currentPage === 1"
-          (click)="onPageChange(pagination.currentPage - 1)"
-          class="px-3 py-2 border border-gray-300 rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors text-sm"
+          [disabled]="pagination().currentPage === 1"
+          (click)="onPageChange(pagination().currentPage - 1)"
+          class="px-3 py-2 border border-gray-300 dark:border-dark-muted rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-dark-bg transition-colors text-sm dark:text-dark-text"
           title="Previous page"
         >
-          ‹
+          <i [class]="'CHEVRON_LEFT' | icon"></i>
         </button>
         @for (page of getVisiblePages(); track page) {
           <button
             type="button"
             [class]="
-              page === pagination.currentPage
-                ? 'bg-blue-600 text-white border-blue-600'
-                : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300'
+              page === pagination().currentPage
+                ? 'bg-tertiary text-white border-tertiary dark:bg-tertiary dark:border-tertiary'
+                : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300 dark:bg-dark-surface dark:text-dark-text dark:hover:bg-dark-bg dark:border-dark-muted'
             "
             (click)="onPageChange(page)"
             class="px-3 py-2 border rounded-md transition-colors text-sm min-w-[2.5rem]"
@@ -221,21 +251,24 @@
         }
         <button
           type="button"
-          [disabled]="pagination.currentPage === pagination.totalPages"
-          (click)="onPageChange(pagination.currentPage + 1)"
-          class="px-3 py-2 border border-gray-300 rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors text-sm"
+          [disabled]="pagination().currentPage === pagination().totalPages"
+          (click)="onPageChange(pagination().currentPage + 1)"
+          class="px-3 py-2 border border-gray-300 dark:border-dark-muted rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-dark-bg transition-colors text-sm dark:text-dark-text"
           title="Next page"
         >
-          ›
+          <i [class]="'CHEVRON_RIGHT' | icon"></i>
         </button>
         <button
           type="button"
-          [disabled]="pagination.currentPage === pagination.totalPages"
-          (click)="onPageChange(pagination.totalPages)"
-          class="px-3 py-2 border border-gray-300 rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors text-sm"
+          [disabled]="pagination().currentPage === pagination().totalPages"
+          (click)="onPageChange(pagination().totalPages)"
+          class="px-3 py-2 border border-gray-300 dark:border-dark-muted rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-dark-bg transition-colors text-sm dark:text-dark-text"
           title="Last page"
         >
-          »»
+          <i
+            [class]="'CHEVRON_DOUBLE_RIGHT' | icon"
+            class="transform rotate-90"
+          ></i>
         </button>
       </div>
     </div>
