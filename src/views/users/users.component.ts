@@ -1,15 +1,29 @@
-import { Component, OnInit } from "@angular/core";
-import { FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { User } from "@/models/user";
-import { UserService } from "@/services/user.service";
-import { AdminComponent } from "@/abstracts/admin-component/admin-component";
-import { BaseCrudService } from "@/abstracts/base-crud-service";
-import { AdminTableComponent } from "@/abstracts/admin-component/components/admin-table/admin-table.component";
+import { Component, OnInit, inject } from "@angular/core";
+import { ReactiveFormsModule, Validators } from "@angular/forms";
+import { User } from "../../models/user";
+import { UserService } from "../../services/user.service";
+import { AdminComponent } from "../../abstracts/admin-component/admin-component";
+import { BaseCrudService } from "../../abstracts/base-crud-service";
+import { MatDialog } from "@angular/material/dialog";
+import { AdminDialogComponent } from "../../abstracts/admin-component/components/admin-dialog/admin-dialog.component";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
+import { CommonModule } from "@angular/common";
+import { AdminTableComponent } from "../../abstracts/admin-component/components/admin-table/admin-table.component";
+import { filter, switchMap } from "rxjs";
+import { IconService } from "../../services/icon.service";
 
 @Component({
   selector: "app-users",
   standalone: true,
-  imports: [AdminTableComponent, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatIconModule,
+    AdminTableComponent,
+    IconService,
+  ],
   providers: [
     {
       provide: BaseCrudService,
@@ -19,9 +33,11 @@ import { AdminTableComponent } from "@/abstracts/admin-component/components/admi
   templateUrl: "./users.component.html",
 })
 export class UsersComponent extends AdminComponent<User> implements OnInit {
-  protected itemForm!: FormGroup;
+  private dialog = inject(MatDialog);
+  protected userService = inject(UserService);
 
-  override ngOnInit(): void {
+  constructor() {
+    super();
     this.config.set({
       title: "Users",
       itemsPerPage: 10,
@@ -71,50 +87,108 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
         },
       ],
     });
-    super.ngOnInit();
-  }
-
-  protected initializeForm(): void {
-    this.itemForm = this.fb.group({
-      email: ["", [Validators.required, Validators.email]],
-      fullName: [
-        "",
-        [
-          Validators.required,
-          Validators.minLength(2),
-          Validators.maxLength(100),
-        ],
-      ],
-      role: ["", [Validators.required]],
-      isActive: [true],
-    });
-  }
-
-  protected getFormData(): Partial<User> {
-    return {
-      email: this.itemForm.get("email")?.value,
-      fullName: this.itemForm.get("fullName")?.value,
-      role: this.itemForm.get("role")?.value,
-      isActive: this.itemForm.get("isActive")?.value,
-    };
-  }
-
-  protected populateForm(user: User): void {
-    this.itemForm.patchValue({
-      email: user.email,
-      fullName: user.fullName,
-      role: user.role,
-      isActive: user.isActive,
-    });
   }
 
   private formatRole(role: string): string {
-    return `<span class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded">${role}</span>`;
+    return role ? role.charAt(0).toUpperCase() + role.slice(1) : "";
   }
 
   private formatStatus(isActive: boolean): string {
-    return isActive
-      ? `<span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded">Active</span>`
-      : `<span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded">Inactive</span>`;
+    const status = isActive ? "Active" : "Inactive";
+    const statusClass = isActive
+      ? "bg-green-100 text-green-800"
+      : "bg-red-100 text-red-800";
+
+    return `<span class="text-xs font-medium px-2.5 py-0.5 rounded ${statusClass}">${status}</span>`;
+  }
+
+  protected deleteItem(user: User): void {
+    if (!user?.id) return;
+
+    this.dialogService
+      .confirm(
+        "Delete User",
+        `Are you sure you want to delete ${user.fullName}?`
+      )
+      .pipe(
+        filter((result) => result?.confirmed === true),
+        switchMap(() => this.userService.delete(user.id))
+      )
+      .subscribe({
+        next: () => this.loadData(),
+        error: (err) => {
+          this.dialogService.error("Delete failed", err.message);
+          console.error("Delete failed", err);
+        },
+      });
+  }
+
+  protected openAddDialog(): void {
+    this.openDialog();
+  }
+
+  protected openEditDialog(user: User): void {
+    this.openDialog(user);
+  }
+
+  private openDialog(user?: User): void {
+    const dialogRef = this.dialog.open(AdminDialogComponent, {
+      width: "800px",
+      disableClose: true,
+      data: {
+        model: user,
+        modelName: "User",
+        modelConstructor: User,
+        formFields: [
+          {
+            key: "email",
+            label: "Email",
+            type: "email",
+            required: true,
+            placeholder: "Enter email address",
+            validators: [Validators.email],
+          },
+          {
+            key: "fullName",
+            label: "Full Name",
+            type: "text",
+            required: true,
+            placeholder: "Enter full name",
+            validators: [Validators.minLength(2), Validators.maxLength(100)],
+          },
+          {
+            key: "password",
+            label: "Password",
+            type: "password",
+            required: true,
+            placeholder: "Enter password",
+            validators: [Validators.minLength(8), Validators.maxLength(100)],
+          },
+          {
+            key: "role",
+            label: "Role",
+            type: "select",
+            required: true,
+            options: [
+              { value: "student", label: "Student" },
+              { value: "supervisor", label: "Supervisor" },
+              { value: "teacher", label: "Teacher" },
+              { value: "superuser", label: "Superuser" },
+            ],
+          },
+          {
+            key: "isActive",
+            label: "Active",
+            type: "boolean",
+          },
+        ],
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.loadData();
+      }
+    });
   }
 }

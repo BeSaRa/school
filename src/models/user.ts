@@ -9,6 +9,7 @@ const { send, receive } = new UserInterceptor();
 export class User extends BaseCrudModel<User, UserService> {
   override $$__service_name__$$: string = "UserService";
   email!: string;
+  password!: string;
   fullName!: string;
   isActive!: boolean;
   role!: string;
