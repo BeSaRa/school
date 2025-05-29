@@ -1,4 +1,12 @@
-import { Component, input, output, computed, signal } from "@angular/core";
+import {
+  Component,
+  input,
+  output,
+  computed,
+  signal,
+  ContentChild,
+  TemplateRef,
+} from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ColumnFilter } from "../../admin-component";
@@ -42,7 +50,9 @@ export class AdminTableComponent<T> {
   searchableFields = input<string[]>([]);
   hasColumnFilters = input<boolean>(false);
   columnFilters = input<Map<string, ColumnFilter>>(new Map());
-  modelTitle = input<string>("");
+
+  @ContentChild("actions", { read: TemplateRef })
+  actionsTemplate!: TemplateRef<any>;
 
   // Outputs using new output() syntax
   pageChange = output<number>();
@@ -57,7 +67,6 @@ export class AdminTableComponent<T> {
 
   protected onFilterChange(event: Event, column: TableColumn<T>): void {
     let value: any = null;
-
     if (event.target instanceof HTMLInputElement) {
       value = event.target.value;
     } else if (event.target instanceof HTMLSelectElement) {
@@ -106,14 +115,12 @@ export class AdminTableComponent<T> {
     const current = this.pagination().currentPage;
     const total = this.pagination().totalPages;
     const pages: number[] = [];
-
     const start = Math.max(1, current - 2);
     const end = Math.min(total, current + 2);
 
     for (let i = start; i <= end; i++) {
       pages.push(i);
     }
-
     return pages;
   }
 

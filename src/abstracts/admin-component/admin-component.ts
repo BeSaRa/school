@@ -61,18 +61,16 @@ export interface AdminComponentConfig<T> {
 export abstract class AdminComponent<T extends BaseCrudModel<T, any>>
   implements OnInit, OnDestroy
 {
-  // Input using the new input() syntax
   config = signal<AdminComponentConfig<T>>({
     title: "",
     columns: [],
     itemsPerPage: 10,
-    responseKey: "items", // Default response key
+    responseKey: "items",
   });
 
   // Injected services
   protected service = inject(BaseCrudService<T>);
   protected dialogService = inject(DialogService);
-  protected fb = inject(FormBuilder);
   protected destroyRef = inject(DestroyRef);
 
   // Signals
@@ -125,7 +123,6 @@ export abstract class AdminComponent<T extends BaseCrudModel<T, any>>
   ngOnInit(): void {
     this.initializeDefaultSort();
     this.loadData();
-    this.initializeForm();
   }
 
   ngOnDestroy(): void {
@@ -259,8 +256,4 @@ export abstract class AdminComponent<T extends BaseCrudModel<T, any>>
     this.columnFilters.set(currentFilters);
     this.currentPage.set(1);
   }
-
-  protected abstract initializeForm(): void;
-  protected abstract getFormData(): Partial<T>;
-  protected abstract populateForm(item: T): void;
 }
