@@ -1,0 +1,25 @@
+<div class="p-6">
+  <h2 class="text-2xl font-bold mb-4">Face Repositories</h2>
+  @if (repos().length) {
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      @for (repo of repos(); track $index) {
+        <div
+          class="bg-white p-4 rounded-2xl shadow hover:scale-105 transition-transform"
+        >
+          <img
+            [src]="repo.photo"
+            [alt]="repo.name"
+            class="w-full h-48 object-cover rounded-xl mb-2"
+            onerror="this.src='assets/fallback.jpg'"
+          />
+          <div class="text-center">
+            <p class="font-semibold">{{ repo.name }}</p>
+            <p class="text-sm text-gray-500">{{ repo.type }}</p>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <p class="text-gray-600">No face repository data available.</p>
+  }
+</div>

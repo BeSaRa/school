@@ -1,5 +1,6 @@
 export const AppIcons = {
   SUCCESS: "check",
+  PHOTO_EDIT: "account-box-edit-outline",
   TEACHER: "account-tie",
   SCHOOL: "school",
   STUDENT: "account-school",

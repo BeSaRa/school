@@ -20,4 +20,10 @@ export const menuItems: NavigationItem[] = [
     icon: "SCHOOL",
     route: AppRoutes.SCHOOLS,
   },
+  {
+    id: 4,
+    label: "RLHF",
+    icon: "PHOTO_EDIT",
+    route: AppRoutes.FACE_REPOSITORY,
+  },
 ];

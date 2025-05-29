@@ -43,6 +43,13 @@ export const routes: Routes = [
             (m) => m.UsersComponent
           ),
       },
+      {
+        path: AppRoutes.FACE_REPOSITORY,
+        loadComponent: () =>
+          import("../views/face-repo/face-repo.component").then(
+            (m) => m.FaceRepoComponent
+          ),
+      },
     ],
   },
   {
