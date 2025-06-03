@@ -68,6 +68,9 @@ export interface LangKeysContract {
   signing_in: string;
   logo_alt: string;
   loading: string;
+  face_repo: string;
+  schools: string;
+  ai_assistant: string;
 }
 
 export type SupportedLanguage = "en" | "ar";
