@@ -2,8 +2,8 @@
   <div
     class="p-2 sm:p-3 rounded-lg w-fit max-w-full break-words overflow-x-auto whitespace-pre-wrap"
     [ngClass]="{
-      'bg-chat-user-bg text-chat-user-text ml-auto': message().role === 'user',
-      'bg-chat-assistant-bg text-chat-assistant-text mr-auto':
+      'bg-chat-user-bg text-chat-user-text ms-auto': message().role === 'user',
+      'bg-chat-assistant-bg text-chat-assistant-text me-auto':
         message().role === 'assistant',
       'bg-chat-tool-bg text-chat-tool-text text-xs mx-auto text-center p-1':
         message().role === 'tool',

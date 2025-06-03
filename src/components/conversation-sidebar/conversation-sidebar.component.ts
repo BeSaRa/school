@@ -1,3 +1,4 @@
+// Add LocalService to the imports
 import {
   Component,
   output,
@@ -13,6 +14,7 @@ import { IconService } from "@/services/icon.service";
 import { FormsModule } from "@angular/forms";
 import { DialogService } from "../../services/dialog.service";
 import { filter, switchMap } from "rxjs";
+import { LocalService } from "@/services/local.service";
 
 @Component({
   selector: "app-conversation-sidebar",
@@ -27,6 +29,7 @@ export class ConversationSidebarComponent implements OnInit {
   conversations = signal<ConversationGroup[]>([]);
   conversationService = inject(ConversationService);
   dialogService = inject(DialogService);
+  localService = inject(LocalService);
   editingTitle = model<string>("");
 
   editingConversation = signal<string | null>(null);
@@ -73,13 +76,13 @@ export class ConversationSidebarComponent implements OnInit {
     yearAgo.setFullYear(yearAgo.getFullYear() - 1);
 
     const groups: ConversationGroup[] = [
-      { title: "Today", conversations: [] },
-      { title: "Yesterday", conversations: [] },
-      { title: "Last 3 Days", conversations: [] },
-      { title: "Last Week", conversations: [] },
-      { title: "Last Month", conversations: [] },
-      { title: "Last Year", conversations: [] },
-      { title: "Older", conversations: [] },
+      { title: this.localService.locals().today, conversations: [] },
+      { title: this.localService.locals().yesterday, conversations: [] },
+      { title: this.localService.locals().last_3_days, conversations: [] },
+      { title: this.localService.locals().last_week, conversations: [] },
+      { title: this.localService.locals().last_month, conversations: [] },
+      { title: this.localService.locals().last_year, conversations: [] },
+      { title: this.localService.locals().older, conversations: [] },
     ];
 
     conversations.forEach((conversation) => {

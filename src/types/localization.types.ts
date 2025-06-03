@@ -71,6 +71,20 @@ export interface LangKeysContract {
   face_repo: string;
   schools: string;
   ai_assistant: string;
+  conversations: string;
+  new_chat: string;
+  hide_conversations: string;
+  show_conversations: string;
+  type_your_message: string;
+  agent: string;
+  today: string;
+  yesterday: string;
+  last_3_days: string;
+  last_week: string;
+  last_month: string;
+  last_year: string;
+  older: string;
+  prof: string;
 }
 
 export type SupportedLanguage = "en" | "ar";

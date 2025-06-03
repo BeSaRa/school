@@ -28,11 +28,8 @@ import { UserService } from "@/services/user.service";
 import { Subscription } from "rxjs";
 import { IconService } from "@/services/icon.service";
 import { User } from "@/models/user";
+import { LocalService } from "@/services/local.service";
 
-/**
- * Component that provides the AI chat assistant interface
- * Handles user interactions and displays the chat conversation
- */
 @Component({
   selector: "app-ai-chat-assistant",
   standalone: true,
@@ -56,6 +53,7 @@ export class AIChatAssistantComponent
   readonly dialogService = inject(DialogService);
   readonly conversationService = inject(ConversationService);
   readonly userService = inject(UserService);
+  readonly localService = inject(LocalService);
 
   // ViewChild references
   @ViewChild(ChatInputComponent) chatInput!: ChatInputComponent;
