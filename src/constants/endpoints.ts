@@ -5,6 +5,7 @@ export const EndPoints = {
   AI_CHAT_ASSISTANT: "/chat/",
   CONVERSATION: "/conversations/",
   USERS: "/users/",
+  FACE_REPO: "/face-repository/",
 };
 
 export type EndpointsType = typeof EndPoints;

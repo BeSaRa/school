@@ -7,6 +7,7 @@ export const AppRoutes = {
   CHAT_ASSISTANT: "chat-assistant",
   USERS: "users",
   SCHOOLS: "schools",
+  FACE_REPOSITORY: "face-repository",
 
   // Error routes
   NOT_FOUND: "404",

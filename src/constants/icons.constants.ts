@@ -1,4 +1,5 @@
 export const AppIcons = {
+  FACE_REPOSITORY: "account-box-edit-outline",
   SUCCESS: "check",
   TEACHER: "account-tie",
   SCHOOL: "school",
