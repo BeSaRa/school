@@ -1,12 +1,15 @@
 <div class="flex flex-col h-full p-6">
   <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-semibold text-gray-900">Users</h1>
+    <h1 class="text-2xl font-semibold text-gray-900">
+      {{ localService.locals().users }}
+    </h1>
     <button
       (click)="openAddDialog()"
-      class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tertiary"
+      class="items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tertiary"
     >
-      <i [class]="'PLUS' | icon"></i>
-      Add User
+      <p>
+        {{ localService.locals().add_new }}
+      </p>
     </button>
   </div>
 
@@ -24,22 +27,21 @@
       (pageChange)="setPage($event)"
       (sortChange)="onColumnSort($event)"
       (filterChange)="updateFilter($event)"
-      modelTitle="Users"
     >
       <ng-template #actions let-item>
         <button
           (click)="$event.stopPropagation(); openEditDialog(item)"
-          class="text-blue-600 hover:text-blue-900 mr-4"
-          title="Edit"
+          class="text-blue-600 hover:text-blue-900 me-4"
+          [title]="localService.locals().edit"
         >
-          Edit
+          {{ localService.locals().edit }}
         </button>
         <button
           (click)="$event.stopPropagation(); deleteItem(item)"
           class="text-red-600 hover:text-red-900"
-          title="Delete"
+          [title]="localService.locals().delete"
         >
-          Delete
+          {{ localService.locals().delete }}
         </button>
       </ng-template>
     </app-admin-table>

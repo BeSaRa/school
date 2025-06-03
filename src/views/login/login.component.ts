@@ -10,6 +10,7 @@ import { CommonModule } from "@angular/common";
 import { DialogService } from "../../services/dialog.service";
 import { LoginService } from "../../services/login.service";
 import { finalize } from "rxjs";
+import { LocalService } from "@/services/local.service";
 
 @Component({
   selector: "app-login",
@@ -22,6 +23,7 @@ export class LoginComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly dialogService = inject(DialogService);
   private readonly loginService = inject(LoginService);
+  localService = inject(LocalService);
 
   // Component state
   loginForm!: FormGroup;

@@ -1,6 +1,7 @@
 import { Component, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { LoadingService } from "@/services/loading.service";
+import { LocalService } from "@/services/local.service";
 
 @Component({
   selector: "app-loading",
@@ -12,7 +13,7 @@ import { LoadingService } from "@/services/loading.service";
         class="fixed inset-0 bg-black/20 dark:bg-black/40 backdrop-blur-sm z-[9999] flex items-center justify-center"
       >
         <div
-          class="bg-white dark:bg-dark-surface px-12 py-8 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 flex items-center gap-6"
+          class="flex flex-row rtl:flex-row-reverse bg-white dark:bg-dark-surface px-12 py-8 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 flex items-center gap-6"
         >
           <div class="animate-spin">
             <svg
@@ -36,9 +37,9 @@ import { LoadingService } from "@/services/loading.service";
               ></path>
             </svg>
           </div>
-          <span class="text-xl font-medium text-gray-700 dark:text-gray-200"
-            >Loading...</span
-          >
+          <span class="text-xl font-medium text-gray-700 dark:text-gray-200">{{
+            localService.locals().loading
+          }}</span>
         </div>
       </div>
     }
@@ -46,4 +47,5 @@ import { LoadingService } from "@/services/loading.service";
 })
 export class LoadingComponent {
   loadingService = inject(LoadingService);
+  localService = inject(LocalService);
 }

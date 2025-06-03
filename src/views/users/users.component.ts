@@ -11,7 +11,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { CommonModule } from "@angular/common";
 import { AdminTableComponent } from "../../abstracts/admin-component/components/admin-table/admin-table.component";
 import { filter, switchMap } from "rxjs";
-import { IconService } from "../../services/icon.service";
+import { LangKeysContract } from "@/types/localization.types";
 
 @Component({
   selector: "app-users",
@@ -22,7 +22,6 @@ import { IconService } from "../../services/icon.service";
     MatButtonModule,
     MatIconModule,
     AdminTableComponent,
-    IconService,
   ],
   providers: [
     {
@@ -39,13 +38,12 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
   constructor() {
     super();
     this.config.set({
-      title: "Users",
       itemsPerPage: 10,
       responseKey: "users",
       columns: [
         {
           key: "email",
-          label: "Email",
+          label: "column_email",
           sortable: true,
           filterable: true,
           type: "text",
@@ -53,7 +51,7 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
         },
         {
           key: "fullName",
-          label: "Full Name",
+          label: "column_full_name",
           sortable: true,
           filterable: true,
           type: "text",
@@ -61,40 +59,43 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
         },
         {
           key: "role",
-          label: "Role",
+          label: "column_role",
           sortable: true,
           filterable: true,
           type: "custom",
           filterType: "select",
           filterOptions: [
-            { value: "student", label: "Student" },
-            { value: "supervisor", label: "Supervisor" },
-            { value: "teacher", label: "Teacher" },
-            { value: "superuser", label: "Superuser" },
+            { value: "student", label: "role_student" },
+            { value: "supervisor", label: "role_supervisor" },
+            { value: "teacher", label: "role_teacher" },
+            { value: "superuser", label: "role_superuser" },
           ],
-          customTemplate: (value: string) => this.formatRole(value),
+          customTemplate: (value: string) =>
+            this.formatRole(`role_${value}` as keyof LangKeysContract),
         },
         {
           key: "isActive",
-          label: "Status",
+          label: "column_status",
           sortable: true,
           filterable: true,
           type: "boolean",
           filterType: "boolean",
-          filterTrueLabel: "Active",
-          filterFalseLabel: "Inactive",
+          filterTrueLabel: "status_active",
+          filterFalseLabel: "status_inactive",
           customTemplate: (value: boolean) => this.formatStatus(value),
         },
       ],
     });
   }
 
-  private formatRole(role: string): string {
-    return role ? role.charAt(0).toUpperCase() + role.slice(1) : "";
+  private formatRole(label: keyof LangKeysContract): string {
+    return label ? this.localService.locals()[label] : "";
   }
 
   private formatStatus(isActive: boolean): string {
-    const status = isActive ? "Active" : "Inactive";
+    const status = isActive
+      ? this.localService.locals().status_active
+      : this.localService.locals().status_inactive;
     const statusClass = isActive
       ? "bg-green-100 text-green-800"
       : "bg-red-100 text-red-800";

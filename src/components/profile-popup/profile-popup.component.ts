@@ -6,6 +6,8 @@ import { IconService } from "@/services/icon.service";
 import { DialogService } from "@/services/dialog.service";
 import { Subscription } from "rxjs";
 import { User } from "@/models/user";
+import { LocalService } from "@/services/local.service";
+import { LangKeysContract } from "@/types/localization.types";
 
 @Component({
   selector: "app-profile-popup",
@@ -17,6 +19,7 @@ export class ProfilePopupComponent implements OnInit, OnDestroy {
   // Injected services
   private readonly userService = inject(UserService);
   private readonly dialogService = inject(DialogService);
+  readonly localService = inject(LocalService);
   readonly dialogRef = inject(MatDialogRef<ProfilePopupComponent>);
 
   // Component properties
@@ -105,16 +108,7 @@ export class ProfilePopupComponent implements OnInit, OnDestroy {
   /**
    * Returns the appropriate role display name
    */
-  getRoleDisplayName(): string {
-    if (!this.currentUser?.role) return "User";
-
-    // Convert snake_case or lowercase to Title Case
-    const role = this.currentUser.role
-      .replace(/_/g, " ")
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(" ");
-
-    return role;
+  getRoleLocal(role: string) {
+    return this.localService.locals()[`role_${role}` as keyof LangKeysContract];
   }
 }

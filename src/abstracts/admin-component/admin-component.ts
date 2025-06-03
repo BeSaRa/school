@@ -15,23 +15,13 @@ import { catchError, EMPTY } from "rxjs";
 import { BaseCrudService } from "@/abstracts/base-crud-service";
 import { BaseCrudModel } from "@/abstracts/base-crud-model";
 import { DialogService } from "@/services/dialog.service";
+import {
+  FilterType,
+  TableColumn,
+} from "./components/admin-table/admin-table.component";
+import { LocalService } from "@/services/local.service";
 
-export type FilterType = "text" | "select" | "date" | "boolean" | "number";
 export type SortDirection = "asc" | "desc" | null;
-
-export interface TableColumn<T = any> {
-  key: string;
-  label: string;
-  sortable?: boolean;
-  filterable?: boolean;
-  type?: "text" | "boolean" | "date" | "custom" | "number";
-  filterType?: FilterType;
-  filterOptions?: Array<{ value: any; label: string }>;
-  customTemplate?: (value: any, item: T) => string;
-  width?: string;
-  filterFalseLabel?: string;
-  filterTrueLabel?: string;
-}
 
 export interface ColumnFilter {
   field: string;
@@ -45,7 +35,6 @@ export interface ColumnSort {
 }
 
 export interface AdminComponentConfig<T> {
-  title: string;
   columns: TableColumn<T>[];
   defaultSort?: ColumnSort;
   itemsPerPage?: number;
@@ -62,7 +51,6 @@ export abstract class AdminComponent<T extends BaseCrudModel<T, any>>
   implements OnInit, OnDestroy
 {
   config = signal<AdminComponentConfig<T>>({
-    title: "",
     columns: [],
     itemsPerPage: 10,
     responseKey: "items",
@@ -72,6 +60,7 @@ export abstract class AdminComponent<T extends BaseCrudModel<T, any>>
   protected service = inject(BaseCrudService<T>);
   protected dialogService = inject(DialogService);
   protected destroyRef = inject(DestroyRef);
+  protected localService = inject(LocalService);
 
   // Signals
   protected items = signal<T[]>([]);
