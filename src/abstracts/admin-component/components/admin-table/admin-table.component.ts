@@ -6,24 +6,35 @@ import {
   signal,
   ContentChild,
   TemplateRef,
+  inject,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ColumnFilter } from "../../admin-component";
 import { IconService } from "../../../../services/icon.service";
+import { LocalService } from "@/services/local.service";
+import { LangKeysContract } from "@/types/localization.types";
+
+export type FilterType =
+  | "text"
+  | "select"
+  | "date"
+  | "boolean"
+  | "number"
+  | "custom";
 
 export interface TableColumn<T = any> {
   key: string;
-  label: string;
+  label: keyof LangKeysContract;
   sortable?: boolean;
   filterable?: boolean;
-  type?: "text" | "boolean" | "date" | "custom" | "number";
-  filterType?: "text" | "select" | "date" | "boolean" | "number";
-  filterOptions?: Array<{ value: any; label: string }>;
+  type?: FilterType;
+  filterType?: FilterType;
+  filterOptions?: Array<{ value: any; label: keyof LangKeysContract }>;
   customTemplate?: (value: any, item: T) => string;
   width?: string;
-  filterFalseLabel?: string;
-  filterTrueLabel?: string;
+  filterFalseLabel?: keyof LangKeysContract;
+  filterTrueLabel?: keyof LangKeysContract;
 }
 
 export interface PaginationInfo {
@@ -39,6 +50,7 @@ export interface PaginationInfo {
   templateUrl: "./admin-table.component.html",
 })
 export class AdminTableComponent<T> {
+  localService = inject(LocalService);
   // Inputs using new input() syntax
   data = input<T[]>([]);
   columns = input<TableColumn<T>[]>([]);

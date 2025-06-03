@@ -13,7 +13,7 @@
               [style.width]="column.width || 'auto'"
             >
               <div class="flex items-center gap-2">
-                <span>{{ column.label }}</span>
+                <span>{{ localService.locals()[column.label] }}</span>
 
                 @if (column.sortable) {
                   <button
@@ -30,7 +30,7 @@
           <th
             class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-dark-text"
           >
-            Actions
+            {{ localService.locals().action }}
           </th>
         </tr>
         <!-- Filter row -->
@@ -56,7 +56,7 @@
                         (input)="onFilterChange($event, column)"
                         [value]="columnFilters().get(column.key)?.value || ''"
                         class="w-full pl-8 pr-3 py-1.5 border border-gray-300 dark:border-dark-muted rounded-md text-sm focus:ring-2 focus:ring-tertiary focus:border-tertiary dark:bg-dark-bg dark:text-dark-text"
-                        placeholder="Filter..."
+                        [placeholder]="localService.locals().filter_placeholder"
                       />
                     </div>
                   }
@@ -75,13 +75,15 @@
                         [value]="columnFilters().get(column.key)?.value || ''"
                         class="w-full pl-8 pr-3 py-1.5 border border-gray-300 dark:border-dark-muted rounded-md text-sm focus:ring-2 focus:ring-tertiary focus:border-tertiary dark:bg-dark-bg dark:text-dark-text appearance-none"
                       >
-                        <option value="">All</option>
+                        <option value="">
+                          {{ localService.locals().filter_all }}
+                        </option>
                         @for (
                           option of column.filterOptions;
                           track option.value
                         ) {
                           <option [value]="option.value">
-                            {{ option.label }}
+                            {{ localService.locals()[option.label] }}
                           </option>
                         }
                       </select>
@@ -110,12 +112,22 @@
                         [value]="columnFilters().get(column.key)?.value ?? ''"
                         class="w-full pl-8 pr-3 py-1.5 border border-gray-300 dark:border-dark-muted rounded-md text-sm focus:ring-2 focus:ring-tertiary focus:border-tertiary dark:bg-dark-bg dark:text-dark-text appearance-none"
                       >
-                        <option value="">All</option>
+                        <option value="">
+                          {{ localService.locals().filter_all }}
+                        </option>
                         <option value="true">
-                          {{ column.filterTrueLabel || "YES" }}
+                          {{
+                            localService.locals()[
+                              column.filterTrueLabel ?? "filter_yes"
+                            ]
+                          }}
                         </option>
                         <option value="false">
-                          {{ column.filterFalseLabel || "NO" }}
+                          {{
+                            localService.locals()[
+                              column.filterFalseLabel ?? "filter_no"
+                            ]
+                          }}
                         </option>
                       </select>
                       <div
@@ -149,8 +161,10 @@
                   [class]="'FILE' | icon"
                   class="text-6xl mx-auto text-gray-300 dark:text-dark-muted"
                 ></i>
-                <p class="text-lg font-medium">No items found</p>
-                <p class="text-sm">Get started by creating your first item.</p>
+                <p class="text-lg font-medium">
+                  {{ localService.locals().no_items_found }}
+                </p>
+                <p class="text-sm">{{ localService.locals().get_started }}</p>
               </div>
             </td>
           </tr>
@@ -186,23 +200,6 @@
                       context: { $implicit: item }
                     "
                   ></ng-container>
-                } @else {
-                  <button
-                    type="button"
-                    class="text-tertiary hover:text-quaternary transition-colors inline-flex items-center gap-1 dark:text-quinary dark:hover:text-white"
-                    title="Edit item"
-                  >
-                    <i [class]="'EDIT' | icon"></i>
-                    Edit
-                  </button>
-                  <button
-                    type="button"
-                    class="text-red-600 hover:text-red-900 transition-colors inline-flex items-center gap-1 dark:text-red-400 dark:hover:text-red-300"
-                    title="Delete item"
-                  >
-                    <i [class]="'DELETE' | icon"></i>
-                    Delete
-                  </button>
                 }
               </td>
             </tr>
@@ -216,15 +213,17 @@
   @if (pagination().totalPages > 1) {
     <div class="flex items-center justify-between mt-6">
       <div class="text-sm text-gray-700 dark:text-dark-text">
-        Page {{ pagination().currentPage }} of {{ pagination().totalPages }}
+        {{ localService.locals().page }} {{ pagination().currentPage }}
+        {{ localService.locals().of }}
+        {{ pagination().totalPages }}
       </div>
-      <div class="flex gap-2">
+      <div class="flex rtl:flex-row-reverse gap-2">
         <button
           type="button"
           [disabled]="pagination().currentPage === 1"
           (click)="onPageChange(1)"
           class="px-3 py-2 border border-gray-300 dark:border-dark-muted rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-dark-bg transition-colors text-sm dark:text-dark-text"
-          title="First page"
+          [title]="localService.locals().first_page"
         >
           <i
             [class]="'CHEVRON_DOUBLE_LEFT' | icon"
@@ -236,7 +235,7 @@
           [disabled]="pagination().currentPage === 1"
           (click)="onPageChange(pagination().currentPage - 1)"
           class="px-3 py-2 border border-gray-300 dark:border-dark-muted rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-dark-bg transition-colors text-sm dark:text-dark-text"
-          title="Previous page"
+          [title]="localService.locals().previous_page"
         >
           <i [class]="'CHEVRON_LEFT' | icon"></i>
         </button>
@@ -259,7 +258,7 @@
           [disabled]="pagination().currentPage === pagination().totalPages"
           (click)="onPageChange(pagination().currentPage + 1)"
           class="px-3 py-2 border border-gray-300 dark:border-dark-muted rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-dark-bg transition-colors text-sm dark:text-dark-text"
-          title="Next page"
+          [title]="localService.locals().next_page"
         >
           <i [class]="'CHEVRON_RIGHT' | icon"></i>
         </button>
@@ -268,7 +267,7 @@
           [disabled]="pagination().currentPage === pagination().totalPages"
           (click)="onPageChange(pagination().totalPages)"
           class="px-3 py-2 border border-gray-300 dark:border-dark-muted rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-dark-bg transition-colors text-sm dark:text-dark-text"
-          title="Last page"
+          [title]="localService.locals().last_page"
         >
           <i
             [class]="'CHEVRON_DOUBLE_RIGHT' | icon"

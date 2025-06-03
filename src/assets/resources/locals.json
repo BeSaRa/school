@@ -1,3 +1,108 @@
 {
-  "send": { "ar": "إرسال", "en": "Send" }
+  "send": { "ar": "إرسال", "en": "Send" },
+  "users": { "ar": "المستخدمين", "en": "Users" },
+  "action": { "ar": "العمليات", "en": "Action" },
+  "filter_placeholder": { "ar": "تصفية...", "en": "Filter..." },
+  "filter_all": { "ar": "الكل", "en": "All" },
+  "filter_yes": { "ar": "نعم", "en": "YES" },
+  "filter_no": { "ar": "لا", "en": "NO" },
+  "no_items_found": { "ar": "لم يتم العثور على عناصر", "en": "No items found" },
+  "get_started": {
+    "ar": "ابدأ بإنشاء العنصر الأول الخاص بك.",
+    "en": "Get started by creating your first item."
+  },
+  "edit_item": { "ar": "تعديل العنصر", "en": "Edit item" },
+  "edit": { "ar": "تعديل", "en": "Edit" },
+  "delete": { "ar": "حذف", "en": "Delete" },
+  "page": { "ar": "صفحة", "en": "Page" },
+  "of": { "ar": "من", "en": "of" },
+  "first_page": { "ar": "الصفحة الأولى", "en": "First page" },
+  "previous_page": { "ar": "الصفحة السابقة", "en": "Previous page" },
+  "next_page": { "ar": "الصفحة التالية", "en": "Next page" },
+  "last_page": { "ar": "الصفحة الأخيرة", "en": "Last page" },
+  "edit_title": { "ar": "تعديل", "en": "Edit" },
+  "add_new": { "ar": "إضافة جديد", "en": "Add New" },
+  "is_required": { "ar": "مطلوب.", "en": "is required." },
+  "cancel": { "ar": "إلغاء", "en": "Cancel" },
+  "update": { "ar": "تحديث", "en": "Update" },
+  "create": { "ar": "إنشاء", "en": "Create" },
+  "column_email": { "ar": "البريد الإلكتروني", "en": "Email" },
+  "column_full_name": { "ar": "الاسم الكامل", "en": "Full Name" },
+  "column_role": { "ar": "الدور", "en": "Role" },
+  "column_status": { "ar": "الحالة", "en": "Status" },
+  "column_name": { "ar": "اسم المدرسة", "en": "School Name" },
+  "column_education_level": {
+    "ar": "المرحلة التعليمية",
+    "en": "Education Level"
+  },
+  "column_category": { "ar": "الفئة", "en": "Category" },
+  "column_city": { "ar": "المدينة", "en": "City" },
+  "status_active": { "ar": "نشط", "en": "Active" },
+  "status_inactive": { "ar": "غير نشط", "en": "Inactive" },
+  "role_student": { "ar": "طالب", "en": "Student" },
+  "role_supervisor": { "ar": "مشرف", "en": "Supervisor" },
+  "role_teacher": { "ar": "معلم", "en": "Teacher" },
+  "role_superuser": { "ar": "مستخدم فائق", "en": "Superuser" },
+  "education_level_low": { "ar": "تعليم أساسي", "en": "Basic Education" },
+  "education_level_higher": { "ar": "تعليم عالي", "en": "Higher Education" },
+  "education_level_secondary": {
+    "ar": "تعليم ثانوي",
+    "en": "Secondary Education"
+  },
+  "education_level_primary": {
+    "ar": "تعليم ابتدائي",
+    "en": "Primary Education"
+  },
+  "no_face_repos_found": {
+    "en": "No face repositories found.",
+    "ar": "لم يتم العثور على مستودعات للوجوه."
+  },
+  "class_title": { "en": "Class #{{number}}", "ar": "الصف رقم #{{number}}" },
+  "students": { "en": "Students", "ar": "الطلاب" },
+  "no_students_found": {
+    "en": "No students found.",
+    "ar": "لم يتم العثور على طلاب."
+  },
+  "teachers": { "en": "Teachers", "ar": "المعلمين" },
+  "no_teachers_found": {
+    "en": "No teachers found.",
+    "ar": "لم يتم العثور على معلمين."
+  },
+  "id": { "en": "ID", "ar": "المعرف" },
+  "full_image_view": { "en": "Full Image View", "ar": "عرض الصورة بالكامل" },
+  "close": { "en": "Close", "ar": "إغلاق" },
+  "profile": { "en": "Profile", "ar": "الملف الشخصي" },
+  "role": { "en": "Role", "ar": "الدور" },
+  "status": { "en": "Status", "ar": "الحالة" },
+  "active": { "en": "Active", "ar": "نشط" },
+  "inactive": { "en": "Inactive", "ar": "غير نشط" },
+  "username": { "en": "Username", "ar": "اسم المستخدم" },
+  "enter_username": { "en": "Enter your username", "ar": "أدخل اسم المستخدم" },
+  "username_required": {
+    "en": "Username is required",
+    "ar": "اسم المستخدم مطلوب"
+  },
+  "username_min": {
+    "en": "Username must be at least 3 characters",
+    "ar": "يجب ألا يقل الاسم عن 3 أحرف"
+  },
+
+  "password": { "en": "Password", "ar": "كلمة المرور" },
+  "enter_password": { "en": "Enter your password", "ar": "أدخل كلمة المرور" },
+  "password_required": {
+    "en": "Password is required",
+    "ar": "كلمة المرور مطلوبة"
+  },
+  "password_min": {
+    "en": "Password must be at least 6 characters",
+    "ar": "يجب ألا تقل كلمة المرور عن 6 أحرف"
+  },
+
+  "forgot_password": {
+    "en": "Forgot your password?",
+    "ar": "هل نسيت كلمة المرور؟"
+  },
+  "sign_in": { "en": "Sign in", "ar": "تسجيل الدخول" },
+  "signing_in": { "en": "Signing in...", "ar": "جاري تسجيل الدخول..." },
+  "loading": { "en": "Loading...", "ar": "يتم التحميل..." }
 }

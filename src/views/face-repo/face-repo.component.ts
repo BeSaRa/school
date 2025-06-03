@@ -1,4 +1,5 @@
 import { FaceRepoService } from "@/services/face-repo.service";
+import { LocalService } from "@/services/local.service";
 import { FaceRepoResponse } from "@/types/face-repo.types";
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnInit } from "@angular/core";
@@ -12,7 +13,7 @@ import { map, Observable } from "rxjs";
 export class FaceRepoComponent implements OnInit {
   private readonly faceRepoService = inject(FaceRepoService);
   classes$!: Observable<FaceRepoResponse["classes"]>;
-
+  localService = inject(LocalService);
   ngOnInit(): void {
     this.classes$ = this.faceRepoService
       .loadFaceRepos()

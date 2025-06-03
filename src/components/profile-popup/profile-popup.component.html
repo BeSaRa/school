@@ -5,8 +5,10 @@
   <div
     class="flex justify-between items-center p-3 sm:p-4 border-b border-gray-300 dark:border-gray-700"
   >
-    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100">
-      Profile
+    <h2
+      class="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100"
+    >
+      {{ localService.locals().profile }}
     </h2>
     <button
       (click)="dialogRef.close()"
@@ -23,12 +25,16 @@
         <div
           class="w-14 h-14 sm:w-16 sm:h-16 bg-indigo-100 dark:bg-indigo-800 rounded-full flex items-center justify-center"
         >
-          <span class="text-xl sm:text-2xl text-indigo-600 dark:text-indigo-300">
+          <span
+            class="text-xl sm:text-2xl text-indigo-600 dark:text-indigo-300"
+          >
             {{ currentUser.fullName.charAt(0) }}
           </span>
         </div>
         <div>
-          <h3 class="text-xl sm:text-2xl font-semibold text-gray-800 dark:text-gray-100">
+          <h3
+            class="text-xl sm:text-2xl font-semibold text-gray-800 dark:text-gray-100"
+          >
             {{ currentUser.fullName }}
           </h3>
           <p class="text-sm text-gray-600 dark:text-gray-400">
@@ -39,17 +45,22 @@
 
       <div class="text-sm text-gray-700 dark:text-gray-300">
         <p class="flex items-center gap-2 sm:gap-4 mb-2">
-          <span class="font-medium">Role: </span>{{ currentUser.role }}
+          <span class="font-medium">{{ localService.locals().role }}: </span
+          >{{ getRoleLocal(currentUser.role) }}
         </p>
         <p class="flex items-center gap-2 sm:gap-4">
-          <span class="font-medium">Status: </span>
+          <span class="font-medium">{{ localService.locals().status }}: </span>
           <span class="flex items-center gap-2">
             <span
               class="w-2 h-2 rounded-full"
               [class.bg-green-500]="currentUser.isActive"
               [class.bg-red-500]="!currentUser.isActive"
             ></span>
-            {{ currentUser.isActive ? "Active" : "Inactive" }}
+            {{
+              currentUser.isActive
+                ? localService.locals().active
+                : localService.locals().inactive
+            }}
           </span>
         </p>
       </div>
@@ -64,7 +75,7 @@
       (click)="dialogRef.close()"
       class="px-4 sm:px-6 py-2 bg-primary dark:bg-primary text-white rounded-lg hover:bg-secondary dark:hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-accent-yellow transition-colors duration-200"
     >
-      Close
+      {{ localService.locals().close }}
     </button>
   </div>
 </div>

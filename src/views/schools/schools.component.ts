@@ -5,6 +5,7 @@ import { FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { AdminComponent } from "@/abstracts/admin-component/admin-component";
 import { School } from "@/models/school";
 import { AdminTableComponent } from "@/abstracts/admin-component/components/admin-table/admin-table.component";
+import { LangKeysContract } from "@/types/localization.types";
 
 @Component({
   selector: "app-schools",
@@ -23,13 +24,12 @@ export class SchoolsComponent extends AdminComponent<School> implements OnInit {
 
   override ngOnInit() {
     this.config.set({
-      title: "Schools",
       itemsPerPage: 10,
       responseKey: "schools",
       columns: [
         {
           key: "name",
-          label: "Name",
+          label: "column_name",
           sortable: true,
           filterable: true,
           type: "text",
@@ -37,17 +37,25 @@ export class SchoolsComponent extends AdminComponent<School> implements OnInit {
         },
         {
           key: "educationLevel",
-          label: "Education Level",
+          label: "column_education_level",
           sortable: true,
           filterable: true,
           type: "custom",
           filterType: "select",
-          filterOptions: [{ value: "low", label: "Low" }],
-          customTemplate: (value) => this.formatEducationLevel(value),
+          filterOptions: [
+            { value: "low", label: "education_level_low" },
+            { value: "higher", label: "education_level_higher" },
+            { value: "secondary", label: "education_level_secondary" },
+            { value: "primary", label: "education_level_primary" },
+          ],
+          customTemplate: (value: string) =>
+            this.formatEducationLevel(
+              `education_level_${value}` as keyof LangKeysContract
+            ),
         },
         {
           key: "schoolType.category",
-          label: "Category",
+          label: "column_category",
           sortable: true,
           filterable: true,
           type: "text",
@@ -55,7 +63,7 @@ export class SchoolsComponent extends AdminComponent<School> implements OnInit {
         },
         {
           key: "location.city",
-          label: "City",
+          label: "column_city",
           sortable: true,
           filterable: true,
           type: "text",
@@ -63,7 +71,7 @@ export class SchoolsComponent extends AdminComponent<School> implements OnInit {
         },
         {
           key: "contact.email",
-          label: "Email",
+          label: "column_email",
           sortable: true,
           filterable: true,
           type: "text",
@@ -73,12 +81,7 @@ export class SchoolsComponent extends AdminComponent<School> implements OnInit {
     });
     super.ngOnInit();
   }
-  private formatEducationLevel(level: string): string {
-    const labels = {
-      all: "All Levels",
-      primary: "Primary School",
-      secondary: "Secondary School",
-    } as const;
-    return labels[level as keyof typeof labels] || level;
+  private formatEducationLevel(level: keyof LangKeysContract): string {
+    return level ? this.localService.locals()[level] : "";
   }
 }
