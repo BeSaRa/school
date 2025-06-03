@@ -12,6 +12,7 @@ import { DialogService } from "@/services/dialog.service";
 import { Subscription } from "rxjs";
 import { User } from "@/models/user";
 import { AppRoutes } from "@/constants/routes.constants";
+import { LocalService } from "@/services/local.service";
 
 @Component({
   selector: "app-navbar",
@@ -28,6 +29,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   router = inject(Router);
   dialog = inject(MatDialog);
   userService = inject(UserService);
+  localService = inject(LocalService);
 
   // Component properties
   currentUser!: User;
@@ -86,6 +88,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
   logout(): void {
     this.authService.logout();
     this.router.navigateByUrl(`/${AppRoutes.LOGIN}`);
+  }
+
+  toggleLanguage(): void {
+    this.localService.toggleLanguage();
   }
 
   isActiveRoute(route: string): boolean {
