@@ -1,73 +1,52 @@
 {
-  "send": { "ar": "إرسال", "en": "Send" },
-  "users": { "ar": "المستخدمين", "en": "Users" },
-  "action": { "ar": "العمليات", "en": "Action" },
-  "filter_placeholder": { "ar": "تصفية...", "en": "Filter..." },
-  "filter_all": { "ar": "الكل", "en": "All" },
-  "filter_yes": { "ar": "نعم", "en": "YES" },
-  "filter_no": { "ar": "لا", "en": "NO" },
-  "no_items_found": { "ar": "لم يتم العثور على عناصر", "en": "No items found" },
-  "get_started": {
-    "ar": "ابدأ بإنشاء العنصر الأول الخاص بك.",
-    "en": "Get started by creating your first item."
-  },
-  "edit_item": { "ar": "تعديل العنصر", "en": "Edit item" },
-  "edit": { "ar": "تعديل", "en": "Edit" },
-  "delete": { "ar": "حذف", "en": "Delete" },
-  "page": { "ar": "صفحة", "en": "Page" },
-  "of": { "ar": "من", "en": "of" },
-  "first_page": { "ar": "الصفحة الأولى", "en": "First page" },
-  "previous_page": { "ar": "الصفحة السابقة", "en": "Previous page" },
-  "next_page": { "ar": "الصفحة التالية", "en": "Next page" },
-  "last_page": { "ar": "الصفحة الأخيرة", "en": "Last page" },
-  "edit_title": { "ar": "تعديل", "en": "Edit" },
-  "add_new": { "ar": "إضافة جديد", "en": "Add New" },
-  "is_required": { "ar": "مطلوب.", "en": "is required." },
-  "cancel": { "ar": "إلغاء", "en": "Cancel" },
-  "update": { "ar": "تحديث", "en": "Update" },
-  "create": { "ar": "إنشاء", "en": "Create" },
-  "column_email": { "ar": "البريد الإلكتروني", "en": "Email" },
-  "column_full_name": { "ar": "الاسم الكامل", "en": "Full Name" },
-  "column_role": { "ar": "الدور", "en": "Role" },
-  "column_status": { "ar": "الحالة", "en": "Status" },
-  "column_name": { "ar": "اسم المدرسة", "en": "School Name" },
-  "column_education_level": {
-    "ar": "المرحلة التعليمية",
-    "en": "Education Level"
-  },
-  "column_category": { "ar": "الفئة", "en": "Category" },
-  "column_city": { "ar": "المدينة", "en": "City" },
-  "status_active": { "ar": "نشط", "en": "Active" },
-  "status_inactive": { "ar": "غير نشط", "en": "Inactive" },
-  "role_student": { "ar": "طالب", "en": "Student" },
-  "role_supervisor": { "ar": "مشرف", "en": "Supervisor" },
-  "role_teacher": { "ar": "معلم", "en": "Teacher" },
-  "role_superuser": { "ar": "مستخدم فائق", "en": "Superuser" },
-  "education_level_low": { "ar": "تعليم أساسي", "en": "Basic Education" },
-  "education_level_higher": { "ar": "تعليم عالي", "en": "Higher Education" },
-  "education_level_secondary": {
-    "ar": "تعليم ثانوي",
-    "en": "Secondary Education"
-  },
-  "education_level_primary": {
-    "ar": "تعليم ابتدائي",
-    "en": "Primary Education"
-  },
-  "no_face_repos_found": {
-    "en": "No face repositories found.",
-    "ar": "لم يتم العثور على مستودعات للوجوه."
-  },
+  "send": { "en": "Send", "ar": "إرسال" },
+  "users": { "en": "Users", "ar": "المستخدمين" },
+  "action": { "en": "Action", "ar": "العمليات" },
+  "filter_placeholder": { "en": "Filter...", "ar": "تصفية..." },
+  "filter_all": { "en": "All", "ar": "الكل" },
+  "filter_yes": { "en": "YES", "ar": "نعم" },
+  "filter_no": { "en": "NO", "ar": "لا" },
+  "no_items_found": { "en": "No items found", "ar": "لم يتم العثور على عناصر" },
+  "get_started": { "en": "Get started by creating your first item.", "ar": "ابدأ بإنشاء العنصر الأول الخاص بك." },
+  "edit_item": { "en": "Edit item", "ar": "تعديل العنصر" },
+  "edit": { "en": "Edit", "ar": "تعديل" },
+  "delete": { "en": "Delete", "ar": "حذف" },
+  "page": { "en": "Page", "ar": "صفحة" },
+  "of": { "en": "of", "ar": "من" },
+  "first_page": { "en": "First page", "ar": "الصفحة الأولى" },
+  "previous_page": { "en": "Previous page", "ar": "الصفحة السابقة" },
+  "next_page": { "en": "Next page", "ar": "الصفحة التالية" },
+  "last_page": { "en": "Last page", "ar": "الصفحة الأخيرة" },
+  "edit_title": { "en": "Edit", "ar": "تعديل" },
+  "add_new": { "en": "Add New", "ar": "إضافة جديد" },
+  "is_required": { "en": "is required.", "ar": "مطلوب." },
+  "cancel": { "en": "Cancel", "ar": "إلغاء" },
+  "update": { "en": "Update", "ar": "تحديث" },
+  "create": { "en": "Create", "ar": "إنشاء" },
+  "column_email": { "en": "Email", "ar": "البريد الإلكتروني" },
+  "column_full_name": { "en": "Full Name", "ar": "الاسم الكامل" },
+  "column_role": { "en": "Role", "ar": "الدور" },
+  "column_status": { "en": "Status", "ar": "الحالة" },
+  "column_name": { "en": "School Name", "ar": "اسم المدرسة" },
+  "column_education_level": { "en": "Education Level", "ar": "المرحلة التعليمية" },
+  "column_category": { "en": "Category", "ar": "الفئة" },
+  "column_city": { "en": "City", "ar": "المدينة" },
+  "status_active": { "en": "Active", "ar": "نشط" },
+  "status_inactive": { "en": "Inactive", "ar": "غير نشط" },
+  "role_student": { "en": "Student", "ar": "طالب" },
+  "role_supervisor": { "en": "Supervisor", "ar": "مشرف" },
+  "role_teacher": { "en": "Teacher", "ar": "معلم" },
+  "role_superuser": { "en": "Superuser", "ar": "مستخدم فائق" },
+  "education_level_low": { "en": "Basic Education", "ar": "تعليم أساسي" },
+  "education_level_higher": { "en": "Higher Education", "ar": "تعليم عالي" },
+  "education_level_secondary": { "en": "Secondary Education", "ar": "تعليم ثانوي" },
+  "education_level_primary": { "en": "Primary Education", "ar": "تعليم ابتدائي" },
+  "no_face_repos_found": { "en": "No face repositories found.", "ar": "لم يتم العثور على مستودعات للوجوه." },
   "class_title": { "en": "Class #{{number}}", "ar": "الصف رقم #{{number}}" },
   "students": { "en": "Students", "ar": "الطلاب" },
-  "no_students_found": {
-    "en": "No students found.",
-    "ar": "لم يتم العثور على طلاب."
-  },
+  "no_students_found": { "en": "No students found.", "ar": "لم يتم العثور على طلاب." },
   "teachers": { "en": "Teachers", "ar": "المعلمين" },
-  "no_teachers_found": {
-    "en": "No teachers found.",
-    "ar": "لم يتم العثور على معلمين."
-  },
+  "no_teachers_found": { "en": "No teachers found.", "ar": "لم يتم العثور على معلمين." },
   "id": { "en": "ID", "ar": "المعرف" },
   "full_image_view": { "en": "Full Image View", "ar": "عرض الصورة بالكامل" },
   "close": { "en": "Close", "ar": "إغلاق" },
@@ -78,30 +57,13 @@
   "inactive": { "en": "Inactive", "ar": "غير نشط" },
   "username": { "en": "Username", "ar": "اسم المستخدم" },
   "enter_username": { "en": "Enter your username", "ar": "أدخل اسم المستخدم" },
-  "username_required": {
-    "en": "Username is required",
-    "ar": "اسم المستخدم مطلوب"
-  },
-  "username_min": {
-    "en": "Username must be at least 3 characters",
-    "ar": "يجب ألا يقل الاسم عن 3 أحرف"
-  },
-
+  "username_required": { "en": "Username is required", "ar": "اسم المستخدم مطلوب" },
+  "username_min": { "en": "Username must be at least 3 characters", "ar": "يجب ألا يقل الاسم عن 3 أحرف" },
   "password": { "en": "Password", "ar": "كلمة المرور" },
   "enter_password": { "en": "Enter your password", "ar": "أدخل كلمة المرور" },
-  "password_required": {
-    "en": "Password is required",
-    "ar": "كلمة المرور مطلوبة"
-  },
-  "password_min": {
-    "en": "Password must be at least 6 characters",
-    "ar": "يجب ألا تقل كلمة المرور عن 6 أحرف"
-  },
-
-  "forgot_password": {
-    "en": "Forgot your password?",
-    "ar": "هل نسيت كلمة المرور؟"
-  },
+  "password_required": { "en": "Password is required", "ar": "كلمة المرور مطلوبة" },
+  "password_min": { "en": "Password must be at least 6 characters", "ar": "يجب ألا تقل كلمة المرور عن 6 أحرف" },
+  "forgot_password": { "en": "Forgot your password?", "ar": "هل نسيت كلمة المرور؟" },
   "sign_in": { "en": "Sign in", "ar": "تسجيل الدخول" },
   "signing_in": { "en": "Signing in...", "ar": "جاري تسجيل الدخول..." },
   "loading": { "en": "Loading...", "ar": "يتم التحميل..." },
@@ -122,80 +84,23 @@
   "last_year": { "en": "Last Year", "ar": "السنة الماضية" },
   "older": { "en": "Older", "ar": "أقدم" },
   "prof": { "en": "Prof", "ar": "د" },
-  "error_loading_data": {
-    "en": "Error loading data",
-    "ar": "خطأ أثناء تحميل البيانات"
-  },
-  "error_saving_model": {
-    "en": "Error saving model",
-    "ar": "خطأ أثناء الحفظ"
-  },
-  "error_loading_conversations": {
-    "en": "Error loading conversations",
-    "ar": "خطأ أثناء تحميل المحادثات"
-  },
-  "error_updating_conversation_title": {
-    "en": "Error updating conversation title",
-    "ar": "خطأ أثناء تعديل عنوان المحادثة"
-  },
-  "error_deleting_conversation": {
-    "en": "Error deleting conversation",
-    "ar": "خطأ أثناء حذف المحادثة"
-  },
-  "error_loading_profile": {
-    "en": "Error loading profile",
-    "ar": "خطأ أثناء تحميل بيانات المستخدم"
-  },
-  "error_request_failed": {
-    "en": "Error request failed",
-    "ar": "خطأ أثناء الطلب"
-  },
-  "error_streaming": {
-    "en": "Streaming error",
-    "ar": "خطأ أثناء تدفق البيانات"
-  },
-  "error_unexpected": {
-    "en": "Unexpected error",
-    "ar": "خطأ غير معروف"
-  },
-  "unsupported_feature": {
-    "en": "Unsupported feature",
-    "ar": "خدمة غير متوفرة"
-  },
-  "connection_error": {
-    "en": "Connection error",
-    "ar": "خطأ أثناء الاتصال"
-  },
-  "error_login": {
-    "en": "Error while login",
-    "ar": "خطأ أثناء تسجيل الدخول"
-  },
-  "error_sending_message": {
-    "en": "Error while sending message",
-    "ar": "خطأ أثناء ارسال الرسالة"
-  },
-  "error_validation": {
-    "en": "Validation error",
-    "ar": "خطأ بأحد الحقول"
-  },
-  "error_deleting_user": {
-    "en": "Error deleting user",
-    "ar": "خطأ أثناء حذف المستخدم"
-  },
-  "delete_conversation": {
-    "en": "Delete conversation",
-    "ar": "حذف المستخدم"
-  },
-  "delete_conversation_question": {
-    "en": "Are you sure you want to delete this conversation?",
-    "ar": "هل انت متأكد انك تريد حذف المحادثة؟"
-  },
-  "delete_user": {
-    "en": "Delete user",
-    "ar": "حذف المستخدم"
-  },
-  "delete_user_question": {
-    "en": "Are you sure you want to delete this user?",
-    "ar": "هل انت متأكد انك تريد حذف المستخدم؟"
-  }
+  "error_loading_data": { "en": "Error loading data", "ar": "خطأ أثناء تحميل البيانات" },
+  "error_saving_model": { "en": "Error saving model", "ar": "خطأ أثناء الحفظ" },
+  "error_loading_conversations": { "en": "Error loading conversations", "ar": "خطأ أثناء تحميل المحادثات" },
+  "error_updating_conversation_title": { "en": "Error updating conversation title", "ar": "خطأ أثناء تعديل عنوان المحادثة" },
+  "error_deleting_conversation": { "en": "Error deleting conversation", "ar": "خطأ أثناء حذف المحادثة" },
+  "error_loading_profile": { "en": "Error loading profile", "ar": "خطأ أثناء تحميل بيانات المستخدم" },
+  "error_request_failed": { "en": "Error request failed", "ar": "خطأ أثناء الطلب" },
+  "error_streaming": { "en": "Streaming error", "ar": "خطأ أثناء تدفق البيانات" },
+  "error_unexpected": { "en": "Unexpected error", "ar": "خطأ غير معروف" },
+  "unsupported_feature": { "en": "Unsupported feature", "ar": "خدمة غير متوفرة" },
+  "connection_error": { "en": "Connection error", "ar": "خطأ أثناء الاتصال" },
+  "error_login": { "en": "Error while login", "ar": "خطأ أثناء تسجيل الدخول" },
+  "error_sending_message": { "en": "Error while sending message", "ar": "خطأ أثناء ارسال الرسالة" },
+  "error_validation": { "en": "Validation error", "ar": "خطأ بأحد الحقول" },
+  "error_deleting_user": { "en": "Error deleting user", "ar": "خطأ أثناء حذف المستخدم" },
+  "delete_conversation": { "en": "Delete conversation", "ar": "حذف المستخدم" },
+  "delete_conversation_question": { "en": "Are you sure you want to delete this conversation?", "ar": "هل انت متأكد انك تريد حذف المحادثة؟" },
+  "delete_user": { "en": "Delete user", "ar": "حذف المستخدم" },
+  "delete_user_question": { "en": "Are you sure you want to delete this user?", "ar": "هل انت متأكد انك تريد حذف المستخدم؟" }
 }
