@@ -50,7 +50,10 @@ export class LoginComponent implements OnInit {
     // Validate form
     if (this.loginForm.invalid) {
       this.dialogService
-        .error("Validation Error", "Please fill in all fields correctly")
+        .error(
+          this.localService.locals().error_validation,
+          "Please fill in all fields correctly"
+        )
         .subscribe();
       return;
     }

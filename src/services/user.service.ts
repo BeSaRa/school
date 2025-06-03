@@ -6,6 +6,7 @@ import { PLATFORM_ID } from "@angular/core";
 import { CastResponseContainer } from "cast-response";
 import { BaseCrudService } from "@/abstracts/base-crud-service";
 import { User } from "@/models/user";
+import { LocalService } from "./local.service";
 
 @CastResponseContainer({
   $default: {
@@ -19,6 +20,7 @@ export class UserService extends BaseCrudService<User> {
   override serviceName: string = "UserService";
   private readonly dialogService = inject(DialogService);
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly localService = inject(LocalService);
 
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
@@ -48,7 +50,12 @@ export class UserService extends BaseCrudService<User> {
   getCurrentUser(): Observable<User> {
     return this.http.get<User>(`${this.getUrlSegment()}me`).pipe(
       catchError((error) => {
-        this.dialogService.error("Error fetching user", error).subscribe();
+        this.dialogService
+          .error(
+            this.localService.locals().error_loading_profile,
+            error.message
+          )
+          .subscribe();
         return throwError(() => error);
       })
     );

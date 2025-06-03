@@ -225,19 +225,14 @@ export class AIChatAssistantComponent
 
     this.chatService.sendMessage(userMessage).subscribe({
       error: (error) => {
-        this.handleMessageError(error);
+        this.dialogService
+          .error(
+            this.localService.locals().error_sending_message,
+            error.message
+          )
+          .subscribe();
       },
     });
-  }
-
-  /**
-   * Handles errors that occur when sending messages
-   * @param error - The error that occurred
-   */
-  private handleMessageError(error: any): void {
-    this.dialogService
-      .error("An error occurred while sending the message.", error)
-      .subscribe();
   }
 
   /**
@@ -265,19 +260,14 @@ export class AIChatAssistantComponent
           this.focusInput();
         },
         error: (error) => {
-          this.handleConversationLoadError(error);
+          this.dialogService
+            .error(
+              this.localService.locals().error_loading_conversations,
+              error.message
+            )
+            .subscribe();
         },
       });
-  }
-
-  /**
-   * Handles errors that occur when loading conversations
-   * @param error - The error that occurred
-   */
-  private handleConversationLoadError(error: any): void {
-    this.dialogService
-      .error("An error occurred while loading the conversation.", error)
-      .subscribe();
   }
 
   /**

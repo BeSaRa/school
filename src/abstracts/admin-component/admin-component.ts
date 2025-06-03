@@ -133,7 +133,9 @@ export abstract class AdminComponent<T extends BaseCrudModel<T, any>>
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         catchError((error) => {
-          console.error("Error loading data:", error);
+          this.dialogService
+            .error(this.localService.locals().error_loading_data, error.message)
+            .subscribe();
           return EMPTY;
         })
       )
