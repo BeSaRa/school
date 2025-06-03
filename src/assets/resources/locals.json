@@ -104,5 +104,8 @@
   },
   "sign_in": { "en": "Sign in", "ar": "تسجيل الدخول" },
   "signing_in": { "en": "Signing in...", "ar": "جاري تسجيل الدخول..." },
-  "loading": { "en": "Loading...", "ar": "يتم التحميل..." }
+  "loading": { "en": "Loading...", "ar": "يتم التحميل..." },
+  "ai_assistant": { "en": "AI Assistant", "ar": "المساعد الذكي" },
+  "schools": { "en": "Schools", "ar": "المدارس" },
+  "face_repo": { "en": "Face Repository", "ar": "مستودع الوجوه" }
 }
