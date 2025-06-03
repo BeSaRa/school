@@ -1,6 +1,14 @@
-import { Component, ViewChild, ElementRef, input, output } from "@angular/core";
+import {
+  Component,
+  ViewChild,
+  ElementRef,
+  input,
+  output,
+  inject,
+} from "@angular/core";
 import { FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { CommonModule } from "@angular/common";
+import { LocalService } from "@/services/local.service";
 
 @Component({
   selector: "app-chat-input",
@@ -14,6 +22,7 @@ export class ChatInputComponent {
   @ViewChild("promptInput") promptInput!: ElementRef<HTMLInputElement>;
 
   send = output<Event>();
+  localService = inject(LocalService);
 
   focus(): void {
     setTimeout(() => {
