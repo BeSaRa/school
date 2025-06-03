@@ -48,11 +48,11 @@ export class ConversationSidebarComponent implements OnInit {
         const grouped = this.groupConversations(response.conversations);
         this.conversations.set(grouped);
       },
-      error: () => {
+      error: (error) => {
         this.dialogService
           .error(
-            "Error loading conversations",
-            "An error occurred while loading conversations."
+            this.localService.locals().error_loading_conversations,
+            error.message
           )
           .subscribe();
       },
@@ -159,11 +159,11 @@ export class ConversationSidebarComponent implements OnInit {
           this.loadConversations();
           this.cancelEdit();
         },
-        error: () => {
+        error: (error) => {
           this.dialogService
             .error(
-              "Error updating conversation title",
-              "An error occurred while updating the conversation title."
+              this.localService.locals().error_updating_conversation_title,
+              error.message
             )
             .subscribe();
           this.cancelEdit();
@@ -196,10 +196,10 @@ export class ConversationSidebarComponent implements OnInit {
 
     this.dialogService
       .confirm(
-        "Delete Conversation",
-        "Are you sure you want to delete this conversation?",
-        "Delete",
-        "Cancel"
+        this.localService.locals().delete_conversation,
+        this.localService.locals().delete_conversation_question,
+        this.localService.locals().delete,
+        this.localService.locals().cancel
       )
       .pipe(
         filter((result) => result.confirmed),
@@ -214,11 +214,11 @@ export class ConversationSidebarComponent implements OnInit {
           this.loadConversations();
           this.showContextMenu.set(false);
         },
-        error: () => {
+        error: (error) => {
           this.dialogService
             .error(
-              "Error deleting conversation",
-              "An error occurred while deleting the conversation."
+              this.localService.locals().error_deleting_conversation,
+              error.message
             )
             .subscribe();
         },

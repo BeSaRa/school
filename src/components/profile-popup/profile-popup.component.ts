@@ -57,45 +57,21 @@ export class ProfilePopupComponent implements OnInit, OnDestroy {
           if (user) {
             this.currentUser = user;
             this.isLoading = false;
-          } else {
-            this.handleUserNotFound();
           }
         },
         error: (error) => {
-          this.handleError(error);
+          this.isLoading = false;
+          this.dialogService
+            .error(
+              this.localService.locals().error_loading_profile,
+              error.message
+            )
+            .subscribe(() => {
+              this.dialogRef.close();
+            });
         },
       });
     }
-  }
-
-  /**
-   * Handles the case when user data is not found
-   */
-  private handleUserNotFound(): void {
-    this.isLoading = false;
-    this.dialogService
-      .error(
-        "User Not Found",
-        "Unable to retrieve your profile information. Please log in again."
-      )
-      .subscribe(() => {
-        this.dialogRef.close();
-      });
-  }
-
-  /**
-   * Handles any errors that occur during profile loading
-   */
-  private handleError(error: any): void {
-    this.isLoading = false;
-    this.dialogService
-      .error(
-        "Error Loading Profile",
-        "An error occurred while loading your profile. Please try again later."
-      )
-      .subscribe(() => {
-        this.dialogRef.close();
-      });
   }
 
   /**

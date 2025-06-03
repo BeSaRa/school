@@ -121,5 +121,81 @@
   "last_month": { "en": "Last Month", "ar": "الشهر الماضي" },
   "last_year": { "en": "Last Year", "ar": "السنة الماضية" },
   "older": { "en": "Older", "ar": "أقدم" },
-  "prof": { "en": "Prof", "ar": "د" }
+  "prof": { "en": "Prof", "ar": "د" },
+  "error_loading_data": {
+    "en": "Error loading data",
+    "ar": "خطأ أثناء تحميل البيانات"
+  },
+  "error_saving_model": {
+    "en": "Error saving model",
+    "ar": "خطأ أثناء الحفظ"
+  },
+  "error_loading_conversations": {
+    "en": "Error loading conversations",
+    "ar": "خطأ أثناء تحميل المحادثات"
+  },
+  "error_updating_conversation_title": {
+    "en": "Error updating conversation title",
+    "ar": "خطأ أثناء تعديل عنوان المحادثة"
+  },
+  "error_deleting_conversation": {
+    "en": "Error deleting conversation",
+    "ar": "خطأ أثناء حذف المحادثة"
+  },
+  "error_loading_profile": {
+    "en": "Error loading profile",
+    "ar": "خطأ أثناء تحميل بيانات المستخدم"
+  },
+  "error_request_failed": {
+    "en": "Error request failed",
+    "ar": "خطأ أثناء الطلب"
+  },
+  "error_streaming": {
+    "en": "Streaming error",
+    "ar": "خطأ أثناء تدفق البيانات"
+  },
+  "error_unexpected": {
+    "en": "Unexpected error",
+    "ar": "خطأ غير معروف"
+  },
+  "unsupported_feature": {
+    "en": "Unsupported feature",
+    "ar": "خدمة غير متوفرة"
+  },
+  "connection_error": {
+    "en": "Connection error",
+    "ar": "خطأ أثناء الاتصال"
+  },
+  "error_login": {
+    "en": "Error while login",
+    "ar": "خطأ أثناء تسجيل الدخول"
+  },
+  "error_sending_message": {
+    "en": "Error while sending message",
+    "ar": "خطأ أثناء ارسال الرسالة"
+  },
+  "error_validation": {
+    "en": "Validation error",
+    "ar": "خطأ بأحد الحقول"
+  },
+  "error_deleting_user": {
+    "en": "Error deleting user",
+    "ar": "خطأ أثناء حذف المستخدم"
+  },
+  "delete_conversation": {
+    "en": "Delete conversation",
+    "ar": "حذف المستخدم"
+  },
+  "delete_conversation_question": {
+    "en": "Are you sure you want to delete this conversation?",
+    "ar": "هل انت متأكد انك تريد حذف المحادثة؟"
+  },
+  "delete_user": {
+    "en": "Delete user",
+    "ar": "حذف المستخدم"
+  },
+  "delete_user_question": {
+    "en": "Are you sure you want to delete this user?",
+    "ar": "هل انت متأكد انك تريد حذف المستخدم؟"
+  }
 }

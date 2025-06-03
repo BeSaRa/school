@@ -16,6 +16,8 @@ import {
 } from "@angular/forms";
 import { BaseCrudModel } from "@/abstracts/base-crud-model";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { DialogService } from "@/services/dialog.service";
+import { LocalService } from "@/services/local.service";
 
 export interface FormField {
   key: string;
@@ -68,6 +70,8 @@ export class AdminDialogComponent<T extends BaseCrudModel<T, any>> {
 
   private fb = inject(FormBuilder);
   private dialogRef = inject(MatDialogRef<AdminDialogComponent<T>>);
+  private dialogService = inject(DialogService);
+  private localService = inject(LocalService);
   private data = inject(MAT_DIALOG_DATA);
 
   constructor() {
@@ -139,7 +143,9 @@ export class AdminDialogComponent<T extends BaseCrudModel<T, any>> {
         this.dialogRef.close(savedModel);
       },
       error: (error) => {
-        console.error("Error saving model:", error);
+        this.dialogService
+          .error(this.localService.locals().error_saving_model, error.message)
+          .subscribe();
       },
     });
   }

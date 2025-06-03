@@ -18,6 +18,7 @@ import { Message } from "@/models/message";
 import { safeJsonParse } from "@/utils/utils";
 import { ConversationService } from "./conversation.service";
 import { DialogService } from "./dialog.service";
+import { LocalService } from "./local.service";
 
 @Injectable({
   providedIn: "root",
@@ -26,6 +27,7 @@ export class ChatService {
   private readonly conversationService = inject(ConversationService);
   private readonly urlService = inject(UrlService);
   private readonly dialogService = inject(DialogService);
+  private readonly localService = inject(LocalService);
 
   messages: WritableSignal<Message[]> = signal<Message[]>([]);
   status: WritableSignal<boolean> = signal<boolean>(false);
@@ -79,7 +81,10 @@ export class ChatService {
       switchMap((response) => {
         if (!response.ok || !response.body) {
           this.dialogService
-            .error("Request Failed", "Unable to connect or empty response.")
+            .error(
+              this.localService.locals().error_request_failed,
+              "Unable to connect or empty response."
+            )
             .subscribe();
           this.status.set(false);
           return EMPTY;
@@ -137,21 +142,18 @@ export class ChatService {
             }
             this.status.set(false);
           }),
-          catchError(() => {
+          catchError((error) => {
             this.dialogService
-              .error(
-                "Streaming Error",
-                "An error occurred while receiving the response."
-              )
+              .error(this.localService.locals().error_streaming, error.message)
               .subscribe();
             this.status.set(false);
             return EMPTY;
           })
         );
       }),
-      catchError(() => {
+      catchError((error) => {
         this.dialogService
-          .error("Unexpected Error", "An unexpected error occurred.")
+          .error(this.localService.locals().error_unexpected, error.message)
           .subscribe();
         this.status.set(false);
         return EMPTY;
@@ -183,7 +185,7 @@ export class ChatService {
         if (!response.body) {
           this.dialogService
             .error(
-              "Unsupported Feature",
+              this.localService.locals().unsupported_feature,
               "Streaming not supported by your browser."
             )
             .subscribe();
@@ -226,7 +228,7 @@ export class ChatService {
       .catch(() => {
         this.dialogService
           .error(
-            "Connection Error",
+            this.localService.locals().connection_error,
             "An error occurred while connecting to the server."
           )
           .subscribe();

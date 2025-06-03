@@ -85,6 +85,25 @@ export interface LangKeysContract {
   last_year: string;
   older: string;
   prof: string;
+  error_loading_data: string;
+  error_saving_model: string;
+  error_loading_conversations: string;
+  error_updating_conversation_title: string;
+  error_deleting_conversation: string;
+  error_loading_profile: string;
+  error_request_failed: string;
+  error_streaming: string;
+  error_unexpected: string;
+  unsupported_feature: string;
+  connection_error: string;
+  error_login: string;
+  error_sending_message: string;
+  error_validation: string;
+  error_deleting_user: string;
+  delete_conversation: string;
+  delete_conversation_question: string;
+  delete_user: string;
+  delete_user_question: string;
 }
 
 export type SupportedLanguage = "en" | "ar";

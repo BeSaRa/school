@@ -68,23 +68,19 @@ export class NavbarComponent implements OnInit, OnDestroy {
         (user) => {
           if (user) {
             this.currentUser = user;
-          } else {
-            this.handleUserNotFound();
           }
+        },
+        (error) => {
+          this.dialogService
+            .error(
+              this.localService.locals().error_loading_profile,
+              error.message
+            )
+            .subscribe();
         }
       );
     }
   }
-
-  private handleUserNotFound(): void {
-    this.dialogService
-      .error(
-        "Error",
-        "You are not logged in. Please log in to view your profile."
-      )
-      .subscribe();
-  }
-
   logout(): void {
     this.authService.logout();
     this.router.navigateByUrl(`/${AppRoutes.LOGIN}`);

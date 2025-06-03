@@ -108,8 +108,10 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
 
     this.dialogService
       .confirm(
-        "Delete User",
-        `Are you sure you want to delete ${user.fullName}?`
+        this.localService.locals().delete_user,
+        this.localService.locals().delete_user_question,
+        this.localService.locals().delete,
+        this.localService.locals().cancel
       )
       .pipe(
         filter((result) => result?.confirmed === true),
@@ -118,8 +120,9 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
       .subscribe({
         next: () => this.loadData(),
         error: (err) => {
-          this.dialogService.error("Delete failed", err.message);
-          console.error("Delete failed", err);
+          this.dialogService
+            .error(this.localService.locals().error_deleting_user, err.message)
+            .subscribe();
         },
       });
   }
