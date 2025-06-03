@@ -3,7 +3,7 @@
     #promptInput
     type="text"
     formControlName="prompt"
-    placeholder="Type your message..."
+    [placeholder]="localService.locals().type_your_message"
     [disabled]="isStreaming()"
     (keydown.enter)="onEnter($event)"
     class="flex-1 px-3 sm:px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary disabled:bg-gray-100 dark:disabled:bg-gray-700 bg-white dark:bg-dark-surface text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"

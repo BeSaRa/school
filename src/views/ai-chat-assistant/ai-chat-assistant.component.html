@@ -1,7 +1,6 @@
 <div
   class="relative flex flex-col md:flex-row h-[calc(100vh-10rem)] rounded-xl border border-gray-200 dark:border-gray-700"
 >
-  <!-- Sidebar (hidden on mobile, toggleable) -->
   <div
     class="md:hidden absolute top-0 left-0 right-0 z-10 p-2 bg-white dark:bg-dark-surface border-b border-gray-200 dark:border-gray-700"
   >
@@ -10,7 +9,11 @@
       (click)="toggleSidebar()"
     >
       <i [class]="'MENU' | icon" class="text-xl"></i>
-      {{ showSidebar() ? "Hide Conversations" : "Show Conversations" }}
+      {{
+        showSidebar()
+          ? localService.locals().hide_conversations
+          : localService.locals().show_conversations
+      }}
     </button>
   </div>
 
@@ -36,14 +39,29 @@
         class="chat-header text-lg sm:text-xl font-bold p-3 sm:p-4 text-center border-b border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white"
       >
         @if (currentUser) {
-          <span class="user-agent-title">
-            {{
-              (currentUser.role === "professor" ? "Prof. " : "") +
-                currentUser.fullName
-            }}'s Agent
-          </span>
+          <div class="flex text-center flex-row rtl:flex-row-reverse">
+            <span>
+              {{
+                localService.getCurrentLanguage() === "ar"
+                  ? localService.locals().agent +
+                    " " +
+                    (currentUser.role === "professor"
+                      ? localService.locals().prof + " "
+                      : "") +
+                    currentUser.fullName
+                  : (currentUser.role === "professor"
+                      ? localService.locals().prof + " "
+                      : "") +
+                    currentUser.fullName +
+                    "'s " +
+                    localService.locals().agent
+              }}
+            </span>
+          </div>
         } @else {
-          <span class="default-title">AI Chat Assistant</span>
+          <span class="default-title">{{
+            localService.locals().ai_assistant
+          }}</span>
         }
       </header>
 
