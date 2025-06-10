@@ -1,13 +1,4 @@
-import {
-  Component,
-  input,
-  output,
-  computed,
-  signal,
-  ContentChild,
-  TemplateRef,
-  inject,
-} from "@angular/core";
+import { Component, input, output, computed, signal, ContentChild, TemplateRef, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ColumnFilter } from "../../admin-component";
@@ -15,13 +6,7 @@ import { IconService } from "../../../../services/icon.service";
 import { LocalService } from "@/services/local.service";
 import { LangKeysContract } from "@/types/localization.types";
 
-export type FilterType =
-  | "text"
-  | "select"
-  | "date"
-  | "boolean"
-  | "number"
-  | "custom";
+export type FilterType = "text" | "select" | "date" | "boolean" | "number" | "custom";
 
 export interface TableColumn<T = any> {
   key: string;
@@ -51,7 +36,6 @@ export interface PaginationInfo {
 })
 export class AdminTableComponent<T> {
   localService = inject(LocalService);
-  // Inputs using new input() syntax
   data = input<T[]>([]);
   columns = input<TableColumn<T>[]>([]);
   pagination = input<PaginationInfo>({
@@ -106,11 +90,7 @@ export class AdminTableComponent<T> {
     this.sortChange.emit({ field, direction });
   }
 
-  protected formatCellValue(
-    value: any,
-    column: TableColumn<T>,
-    item: T
-  ): string {
+  protected formatCellValue(value: any, column: TableColumn<T>, item: T): string {
     if (column.customTemplate) {
       return column.customTemplate(value, item);
     }

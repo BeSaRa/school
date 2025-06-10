@@ -6,7 +6,7 @@
 @tailwind utilities;
 
 body {
-  @apply bg-white dark:bg-dark-bg text-gray-900 dark:text-dark-text transition-colors duration-200;
+  @apply bg-white text-gray-900 transition-colors duration-200;
 }
 
 markdown {
@@ -24,15 +24,15 @@ markdown {
   }
 
   blockquote {
-    @apply border-l-4 border-slate-300 dark:border-slate-600 pl-4 italic text-chat-assistant-text dark:text-dark-text;
+    @apply border-l-4 border-slate-300 pl-4 italic text-chat-assistant-text;
   }
 
   pre {
-    @apply text-chat-user-text dark:text-dark-text p-4 rounded-lg bg-chat-user-bg dark:bg-dark-surface font-mono max-w-full overflow-x-auto break-words;
+    @apply text-chat-user-text p-4 rounded-lg bg-chat-user-bg font-mono max-w-full overflow-x-auto break-words;
   }
 
   code {
-    @apply bg-chat-user-bg dark:bg-dark-surface px-1 py-0.5 rounded;
+    @apply bg-chat-user-bg  px-1 py-0.5 rounded;
   }
 }
 
@@ -42,11 +42,11 @@ markdown {
   }
 
   .scrollbar-custom::-webkit-scrollbar-track {
-    @apply bg-gray-100 dark:bg-gray-800 rounded-full;
+    @apply bg-gray-100 rounded-full;
   }
 
   .scrollbar-custom::-webkit-scrollbar-thumb {
-    @apply bg-gray-300 dark:bg-gray-600 rounded-full hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors duration-200;
+    @apply bg-gray-300 rounded-full hover:bg-gray-400 transition-colors duration-200;
   }
 
   .scrollbar-custom {

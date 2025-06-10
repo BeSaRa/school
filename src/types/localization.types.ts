@@ -104,6 +104,7 @@ export interface LangKeysContract {
   delete_conversation_question: string;
   delete_user: string;
   delete_user_question: string;
+  login_to_your_account: string;
 }
 
 export type SupportedLanguage = "en" | "ar";

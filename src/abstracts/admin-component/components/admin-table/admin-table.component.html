@@ -1,142 +1,91 @@
-<div
-  class="p-6 bg-white rounded-lg shadow-sm dark:bg-dark-surface dark:text-dark-text"
->
-  <div
-    class="overflow-x-auto bg-white rounded-lg border border-gray-200 dark:bg-dark-surface dark:border-dark-muted"
-  >
-    <table class="min-w-full divide-y divide-gray-200 dark:divide-dark-muted">
-      <thead class="bg-gray-50 dark:bg-dark-bg">
+<div class="p-6 bg-white rounded-lg shadow-sm">
+  <div class="overflow-x-auto bg-white rounded-lg border border-gray-200">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
         <tr>
           @for (column of columns(); track column.key) {
-            <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-dark-text"
-              [style.width]="column.width || 'auto'"
-            >
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" [style.width]="column.width || 'auto'">
               <div class="flex items-center gap-2">
                 <span>{{ localService.locals()[column.label] }}</span>
 
                 @if (column.sortable) {
-                  <button
-                    type="button"
-                    (click)="onSortChange(column.key, 'asc')"
-                    class="text-gray-400 hover:text-secondary transition-colors dark:text-dark-muted dark:hover:text-quinary"
-                  >
+                  <button type="button" (click)="onSortChange(column.key, 'asc')" class="text-gray-400 hover:text-secondary transition-colors">
                     <i [class]="'SORT' | icon"></i>
                   </button>
                 }
               </div>
             </th>
           }
-          <th
-            class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-dark-text"
-          >
+          <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
             {{ localService.locals().action }}
           </th>
         </tr>
         <!-- Filter row -->
         @if (hasColumnFilters()) {
-          <tr
-            class="bg-gray-50 dark:bg-dark-bg border-t border-gray-200 dark:border-dark-muted"
-          >
+          <tr class="bg-gray-50 border-t border-gray-200">
             @for (column of columns(); track column.key) {
               <th class="px-6 py-2">
                 @if (column.filterable) {
                   @if (column.filterType === "text") {
                     <div class="relative rounded-md shadow-sm">
-                      <div
-                        class="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none"
-                      >
-                        <i
-                          [class]="'SEARCH' | icon"
-                          class="text-gray-400 dark:text-dark-muted"
-                        ></i>
+                      <div class="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none">
+                        <i [class]="'SEARCH' | icon" class="text-gray-400"></i>
                       </div>
                       <input
                         type="text"
                         (input)="onFilterChange($event, column)"
                         [value]="columnFilters().get(column.key)?.value || ''"
-                        class="w-full pl-8 pr-3 py-1.5 border border-gray-300 dark:border-dark-muted rounded-md text-sm focus:ring-2 focus:ring-tertiary focus:border-tertiary dark:bg-dark-bg dark:text-dark-text"
+                        class="w-full pl-8 pr-3 py-1.5 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-tertiary focus:border-tertiary"
                         [placeholder]="localService.locals().filter_placeholder"
                       />
                     </div>
                   }
                   @if (column.filterType === "select") {
                     <div class="relative rounded-md shadow-sm">
-                      <div
-                        class="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none"
-                      >
-                        <i
-                          [class]="'FILTER' | icon"
-                          class="text-gray-400 dark:text-dark-muted"
-                        ></i>
+                      <div class="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none">
+                        <i [class]="'FILTER' | icon" class="text-gray-400"></i>
                       </div>
                       <select
                         (change)="onFilterChange($event, column)"
                         [value]="columnFilters().get(column.key)?.value || ''"
-                        class="w-full pl-8 pr-3 py-1.5 border border-gray-300 dark:border-dark-muted rounded-md text-sm focus:ring-2 focus:ring-tertiary focus:border-tertiary dark:bg-dark-bg dark:text-dark-text appearance-none"
+                        class="w-full pl-8 pr-3 py-1.5 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-tertiary focus:border-tertiary appearance-none"
                       >
                         <option value="">
                           {{ localService.locals().filter_all }}
                         </option>
-                        @for (
-                          option of column.filterOptions;
-                          track option.value
-                        ) {
+                        @for (option of column.filterOptions; track option.value) {
                           <option [value]="option.value">
                             {{ localService.locals()[option.label] }}
                           </option>
                         }
                       </select>
-                      <div
-                        class="absolute inset-y-0 right-0 pr-2 flex items-center pointer-events-none"
-                      >
-                        <i
-                          [class]="'CHEVRON_DOWN' | icon"
-                          class="text-gray-400 dark:text-dark-muted"
-                        ></i>
+                      <div class="absolute inset-y-0 right-0 pr-2 flex items-center pointer-events-none">
+                        <i [class]="'CHEVRON_DOWN' | icon" class="text-gray-400"></i>
                       </div>
                     </div>
                   }
                   @if (column.filterType === "boolean") {
                     <div class="relative rounded-md shadow-sm">
-                      <div
-                        class="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none"
-                      >
-                        <i
-                          [class]="'FILTER' | icon"
-                          class="text-gray-400 dark:text-dark-muted"
-                        ></i>
+                      <div class="absolute inset-y-0 left-0 pl-2 flex items-center pointer-events-none">
+                        <i [class]="'FILTER' | icon" class="text-gray-400"></i>
                       </div>
                       <select
                         (change)="onFilterChange($event, column)"
                         [value]="columnFilters().get(column.key)?.value ?? ''"
-                        class="w-full pl-8 pr-3 py-1.5 border border-gray-300 dark:border-dark-muted rounded-md text-sm focus:ring-2 focus:ring-tertiary focus:border-tertiary dark:bg-dark-bg dark:text-dark-text appearance-none"
+                        class="w-full pl-8 pr-3 py-1.5 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-tertiary focus:border-tertiary appearance-none"
                       >
                         <option value="">
                           {{ localService.locals().filter_all }}
                         </option>
                         <option value="true">
-                          {{
-                            localService.locals()[
-                              column.filterTrueLabel ?? "filter_yes"
-                            ]
-                          }}
+                          {{ localService.locals()[column.filterTrueLabel ?? "filter_yes"] }}
                         </option>
                         <option value="false">
-                          {{
-                            localService.locals()[
-                              column.filterFalseLabel ?? "filter_no"
-                            ]
-                          }}
+                          {{ localService.locals()[column.filterFalseLabel ?? "filter_no"] }}
                         </option>
                       </select>
-                      <div
-                        class="absolute inset-y-0 right-0 pr-2 flex items-center pointer-events-none"
-                      >
-                        <i
-                          [class]="'CHEVRON_DOWN' | icon"
-                          class="text-gray-400 dark:text-dark-muted"
-                        ></i>
+                      <div class="absolute inset-y-0 right-0 pr-2 flex items-center pointer-events-none">
+                        <i [class]="'CHEVRON_DOWN' | icon" class="text-gray-400"></i>
                       </div>
                     </div>
                   }
@@ -147,20 +96,12 @@
           </tr>
         }
       </thead>
-      <tbody
-        class="bg-white divide-y divide-gray-200 dark:bg-dark-surface dark:divide-dark-muted"
-      >
+      <tbody class="bg-white divide-y divide-gray-200">
         @if (data().length === 0) {
           <tr>
-            <td
-              [attr.colspan]="columns().length + 1"
-              class="px-6 py-8 text-center text-gray-500 dark:text-dark-muted"
-            >
+            <td [attr.colspan]="columns().length + 1" class="px-6 py-8 text-center text-gray-500">
               <div class="space-y-2">
-                <i
-                  [class]="'FILE' | icon"
-                  class="text-6xl mx-auto text-gray-300 dark:text-dark-muted"
-                ></i>
+                <i [class]="'FILE' | icon" class="text-6xl mx-auto text-gray-300"></i>
                 <p class="text-lg font-medium">
                   {{ localService.locals().no_items_found }}
                 </p>
@@ -170,36 +111,16 @@
           </tr>
         } @else {
           @for (item of data(); track item) {
-            <tr
-              class="hover:bg-gray-50 dark:hover:bg-dark-bg transition-colors"
-            >
+            <tr class="hover:bg-gray-50 transition-colors">
               @for (column of columns(); track column.key) {
-                <td
-                  class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-dark-text"
-                  [style.width]="column.width || 'auto'"
-                >
-                  <span
-                    [innerHTML]="
-                      formatCellValue(
-                        getNestedValue(item, column.key),
-                        column,
-                        item
-                      )
-                    "
-                  ></span>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900" [style.width]="column.width || 'auto'">
+                  <span [innerHTML]="formatCellValue(getNestedValue(item, column.key), column, item)"></span>
                 </td>
               }
-              <td
-                class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-3"
-              >
+              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-3">
                 @if (actionsTemplate) {
                   <!-- Use custom actions template -->
-                  <ng-container
-                    *ngTemplateOutlet="
-                      actionsTemplate;
-                      context: { $implicit: item }
-                    "
-                  ></ng-container>
+                  <ng-container *ngTemplateOutlet="actionsTemplate; context: { $implicit: item }"></ng-container>
                 }
               </td>
             </tr>
@@ -212,7 +133,7 @@
   <!-- Pagination -->
   @if (pagination().totalPages > 1) {
     <div class="flex items-center justify-between mt-6">
-      <div class="text-sm text-gray-700 dark:text-dark-text">
+      <div class="text-sm text-gray-700">
         {{ localService.locals().page }} {{ pagination().currentPage }}
         {{ localService.locals().of }}
         {{ pagination().totalPages }}
@@ -222,19 +143,16 @@
           type="button"
           [disabled]="pagination().currentPage === 1"
           (click)="onPageChange(1)"
-          class="px-3 py-2 border border-gray-300 dark:border-dark-muted rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-dark-bg transition-colors text-sm dark:text-dark-text"
+          class="px-3 py-2 border border-gray-300 rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors text-sm"
           [title]="localService.locals().first_page"
         >
-          <i
-            [class]="'CHEVRON_DOUBLE_LEFT' | icon"
-            class="transform rotate-90"
-          ></i>
+          <i [class]="'CHEVRON_DOUBLE_LEFT' | icon" class="transform rotate-90"></i>
         </button>
         <button
           type="button"
           [disabled]="pagination().currentPage === 1"
           (click)="onPageChange(pagination().currentPage - 1)"
-          class="px-3 py-2 border border-gray-300 dark:border-dark-muted rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-dark-bg transition-colors text-sm dark:text-dark-text"
+          class="px-3 py-2 border border-gray-300 rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors text-sm"
           [title]="localService.locals().previous_page"
         >
           <i [class]="'CHEVRON_LEFT' | icon"></i>
@@ -242,11 +160,7 @@
         @for (page of getVisiblePages(); track page) {
           <button
             type="button"
-            [class]="
-              page === pagination().currentPage
-                ? 'bg-tertiary text-white border-tertiary dark:bg-tertiary dark:border-tertiary'
-                : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300 dark:bg-dark-surface dark:text-dark-text dark:hover:bg-dark-bg dark:border-dark-muted'
-            "
+            [class]="page === pagination().currentPage ? 'bg-tertiary text-white border-tertiary' : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300'"
             (click)="onPageChange(page)"
             class="px-3 py-2 border rounded-md transition-colors text-sm min-w-[2.5rem]"
           >
@@ -257,7 +171,7 @@
           type="button"
           [disabled]="pagination().currentPage === pagination().totalPages"
           (click)="onPageChange(pagination().currentPage + 1)"
-          class="px-3 py-2 border border-gray-300 dark:border-dark-muted rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-dark-bg transition-colors text-sm dark:text-dark-text"
+          class="px-3 py-2 border border-gray-300 rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors text-sm"
           [title]="localService.locals().next_page"
         >
           <i [class]="'CHEVRON_RIGHT' | icon"></i>
@@ -266,13 +180,10 @@
           type="button"
           [disabled]="pagination().currentPage === pagination().totalPages"
           (click)="onPageChange(pagination().totalPages)"
-          class="px-3 py-2 border border-gray-300 dark:border-dark-muted rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-dark-bg transition-colors text-sm dark:text-dark-text"
+          class="px-3 py-2 border border-gray-300 rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors text-sm"
           [title]="localService.locals().last_page"
         >
-          <i
-            [class]="'CHEVRON_DOUBLE_RIGHT' | icon"
-            class="transform rotate-90"
-          ></i>
+          <i [class]="'CHEVRON_DOUBLE_RIGHT' | icon" class="transform rotate-90"></i>
         </button>
       </div>
     </div>
