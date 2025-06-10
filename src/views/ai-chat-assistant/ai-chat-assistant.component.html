@@ -1,75 +1,42 @@
-<div
-  class="relative flex flex-col md:flex-row h-[calc(100vh-10rem)] rounded-xl border border-gray-200 dark:border-gray-700"
->
-  <div
-    class="md:hidden absolute top-0 left-0 right-0 z-10 p-2 bg-white dark:bg-dark-surface border-b border-gray-200 dark:border-gray-700"
-  >
-    <button
-      class="w-full py-2 px-4 bg-primary hover:bg-secondary text-white rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
-      (click)="toggleSidebar()"
-    >
+<div class="relative flex flex-col md:flex-row h-[calc(100vh-10rem)] rounded-xl border border-gray-200">
+  <div class="md:hidden absolute top-0 left-0 right-0 z-10 p-2 bg-white border-b border-gray-200">
+    <button class="w-full py-2 px-4 bg-primary hover:bg-secondary text-white rounded-lg transition-colors duration-200 flex items-center justify-center gap-2" (click)="toggleSidebar()">
       <i [class]="'MENU' | icon" class="text-xl"></i>
-      {{
-        showSidebar()
-          ? localService.locals().hide_conversations
-          : localService.locals().show_conversations
-      }}
+      {{ showSidebar() ? localService.locals().hide_conversations : localService.locals().show_conversations }}
     </button>
   </div>
 
   <app-conversation-sidebar
-    [class]="
-      'sidebar w-full md:w-80 border-r border-gray-200 dark:border-gray-700 ' +
-      (showSidebar() ? 'block' : 'hidden md:block')
-    "
+    [class]="'sidebar w-full md:w-80 border-r border-gray-200 ' + (showSidebar() ? 'block' : 'hidden md:block')"
     (conversationSelected)="onConversationSelected($event)"
     (createNewChat)="onCreateNewChatClicked()"
   ></app-conversation-sidebar>
 
   @if (!showSidebar()) {
     <!-- Main Chat Area -->
-    <div
-      class="flex-1 flex flex-col h-full bg-white dark:bg-dark-surface relative"
-    >
+    <div class="flex-1 flex flex-col h-full bg-white relative">
       <!-- Add padding-top on mobile to account for the absolute positioned toggle button -->
       <div class="md:hidden h-14"></div>
 
       <!-- Header -->
-      <header
-        class="chat-header text-lg sm:text-xl font-bold p-3 sm:p-4 text-center border-b border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white"
-      >
+      <header class="chat-header text-lg sm:text-xl font-bold p-3 sm:p-4 text-center border-b border-gray-200 text-gray-900">
         @if (currentUser) {
           <div class="flex text-center flex-row rtl:flex-row-reverse">
             <span>
               {{
                 localService.getCurrentLanguage() === "ar"
-                  ? localService.locals().agent +
-                    " " +
-                    (currentUser.role === "professor"
-                      ? localService.locals().prof + " "
-                      : "") +
-                    currentUser.fullName
-                  : (currentUser.role === "professor"
-                      ? localService.locals().prof + " "
-                      : "") +
-                    currentUser.fullName +
-                    "'s " +
-                    localService.locals().agent
+                  ? localService.locals().agent + " " + (currentUser.role === "professor" ? localService.locals().prof + " " : "") + currentUser.fullName
+                  : (currentUser.role === "professor" ? localService.locals().prof + " " : "") + currentUser.fullName + "'s " + localService.locals().agent
               }}
             </span>
           </div>
         } @else {
-          <span class="default-title">{{
-            localService.locals().ai_assistant
-          }}</span>
+          <span class="default-title">{{ localService.locals().ai_assistant }}</span>
         }
       </header>
 
       <!-- Messages Container -->
-      <div
-        class="messages-container flex-1 overflow-y-auto p-3 sm:p-4 relative"
-        #messageContainer
-      >
+      <div class="messages-container flex-1 overflow-y-auto p-3 sm:p-4 relative" #messageContainer>
         <!-- Regular Messages -->
         @for (message of messages(); track message) {
           <app-chat-message [message]="message" />
@@ -87,14 +54,8 @@
       </div>
 
       <!-- Input Area -->
-      <footer
-        class="chat-input-container p-3 sm:p-4 border-t border-gray-200 dark:border-gray-700"
-      >
-        <app-chat-input
-          [form]="form"
-          [isStreaming]="chatService.status()"
-          (send)="handleSendMessage($event)"
-        />
+      <footer class="chat-input-container p-3 sm:p-4 border-t border-gray-200">
+        <app-chat-input [form]="form" [isStreaming]="chatService.status()" (send)="handleSendMessage($event)" />
       </footer>
     </div>
   }

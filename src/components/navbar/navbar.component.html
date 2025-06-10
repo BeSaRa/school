@@ -1,14 +1,10 @@
-<nav class="bg-white dark:bg-dark-surface shadow-lg relative">
+<nav class="bg-white shadow-lg relative">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between items-center h-16">
       <!-- Logo/Title Section -->
       <div class="flex items-center">
         <div class="flex items-center justify-center">
-          <img
-            src="assets/qulogo.png"
-            alt="School AI Logo"
-            class="h-10 w-auto"
-          />
+          <img src="assets/qulogo.png" alt="School AI Logo" class="h-10 w-auto" />
         </div>
       </div>
 
@@ -16,7 +12,7 @@
       <div class="flex md:hidden">
         <button
           type="button"
-          class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-dark-bg focus:outline-none"
+          class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:bg-gray-100 focus:outline-none"
           aria-controls="mobile-menu"
           aria-expanded="false"
           (click)="toggleMobileMenu()"
@@ -24,19 +20,11 @@
           <span class="sr-only">Open main menu</span>
           <!-- Icon when menu is closed -->
           @if (!isMobileMenuOpen) {
-            <i
-              [class]="'MENU' | icon"
-              class="block h-6 w-6"
-              aria-hidden="true"
-            ></i>
+            <i [class]="'MENU' | icon" class="block h-6 w-6" aria-hidden="true"></i>
           }
           <!-- Icon when menu is open -->
           @if (isMobileMenuOpen) {
-            <i
-              [class]="'CANCEL' | icon"
-              class="block h-6 w-6"
-              aria-hidden="true"
-            ></i>
+            <i [class]="'CANCEL' | icon" class="block h-6 w-6" aria-hidden="true"></i>
           }
         </button>
       </div>
@@ -46,33 +34,24 @@
         <!-- Menu Items -->
         @for (item of menuItems; track item.id) {
           <div class="relative group">
-            <a
-              [routerLink]="item.route"
-              class="flex items-center p-2 rounded-lg transition hover:bg-gray-50 dark:hover:bg-dark-bg"
-              [attr.aria-current]="
-                isActiveRoute(item.route) ? 'page' : undefined
-              "
-            >
+            <a [routerLink]="item.route" class="flex items-center p-2 rounded-lg transition hover:bg-gray-50" [attr.aria-current]="isActiveRoute(item.route) ? 'page' : undefined">
               <div class="flex items-center">
                 <div class="flex items-center min-w-[2.5rem]">
                   <i
                     [class]="item.icon | icon"
                     class="text-2xl transition-all duration-300 ease-out"
                     [class.text-primary]="isActiveRoute(item.route)"
-                    [class.dark:text-accent-yellow]="isActiveRoute(item.route)"
                     [class.text-gray-600]="!isActiveRoute(item.route)"
-                    [class.dark:text-gray-300]="!isActiveRoute(item.route)"
                     [class.scale-110]="isActiveRoute(item.route)"
                     aria-hidden="true"
                   ></i>
                 </div>
                 <span
-                  class="pl-1 text-gray-700 dark:text-gray-200 overflow-hidden transition-all duration-300 ease-in-out whitespace-nowrap"
+                  class="pl-1 text-gray-700 overflow-hidden transition-all duration-300 ease-in-out whitespace-nowrap"
                   [class.max-w-0]="!isActiveRoute(item.route)"
                   [class.max-w-[160px]]="isActiveRoute(item.route)"
                   [class.group-hover:max-w-[160px]]="!isActiveRoute(item.route)"
                   [class.text-primary]="isActiveRoute(item.route)"
-                  [class.dark:text-accent-yellow]="isActiveRoute(item.route)"
                   [class.opacity-0]="!isActiveRoute(item.route)"
                   [class.opacity-100]="isActiveRoute(item.route)"
                   [class.group-hover:opacity-100]="!isActiveRoute(item.route)"
@@ -86,23 +65,15 @@
 
         <button
           (click)="openProfileDialog(); closeMobileMenu()"
-          class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-dark-bg hover:bg-gray-200 dark:hover:bg-dark-surface hover:text-gray-600 dark:hover:text-white transition"
+          class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-700 bg-gray-100 hover:bg-gray-200 hover:text-gray-600 transition"
           aria-label="Open Profile"
         >
           <i [class]="iconClass | icon" class="text-xl" aria-hidden="true"></i>
         </button>
-        <button
-          (click)="logout()"
-          class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-dark-bg hover:bg-gray-200 dark:hover:bg-dark-surface hover:text-gray-600 dark:hover:text-white transition"
-          aria-label="Logout"
-        >
+        <button (click)="logout()" class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-700 bg-gray-100 hover:bg-gray-200 hover:text-gray-600 transition" aria-label="Logout">
           <i [class]="'LOGOUT' | icon" class="text-xl" aria-hidden="true"></i>
         </button>
-        <button
-          (click)="toggleLanguage()"
-          class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-dark-bg hover:bg-gray-200 dark:hover:bg-dark-surface hover:text-gray-600 dark:hover:text-white transition"
-          aria-label="Toggle Language"
-        >
+        <button (click)="toggleLanguage()" class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-700 bg-gray-100 hover:bg-gray-200 hover:text-gray-600 transition" aria-label="Toggle Language">
           <i [class]="'LANGUAGE' | icon" class="text-xl" aria-hidden="true"></i>
         </button>
       </div>
@@ -110,56 +81,37 @@
   </div>
 
   <!-- Mobile menu, show/hide based on menu state -->
-  <div
-    class="md:hidden relative bg-white dark:bg-dark-surface"
-    id="mobile-menu"
-    [class.hidden]="!isMobileMenuOpen"
-  >
-    <div
-      class="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-gray-200 dark:border-gray-700"
-    >
+  <div class="md:hidden relative bg-white" id="mobile-menu" [class.hidden]="!isMobileMenuOpen">
+    <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-gray-200">
       @for (item of menuItems; track item.id) {
         <a
           [routerLink]="item.route"
-          class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-dark-bg"
+          class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100"
           [class.bg-primary-50]="isActiveRoute(item.route)"
           [class.text-primary]="isActiveRoute(item.route)"
-          [class.dark:bg-dark-bg]="isActiveRoute(item.route)"
-          [class.dark:text-accent-yellow]="isActiveRoute(item.route)"
+          [class]="isActiveRoute(item.route)"
           (click)="closeMobileMenu()"
         >
           <div class="flex items-center">
-            <i
-              [class]="item.icon | icon"
-              class="mr-3 text-xl"
-              aria-hidden="true"
-            ></i>
+            <i [class]="item.icon | icon" class="mr-3 text-xl" aria-hidden="true"></i>
             <span>{{ localService.locals()[item.label] }}</span>
           </div>
         </a>
       }
     </div>
-    <div class="pt-4 pb-3 border-t border-gray-200 dark:border-gray-700">
+    <div class="pt-4 pb-3 border-t border-gray-200">
       <div class="flex items-center justify-between px-4">
         <button
           (click)="openProfileDialog(); closeMobileMenu()"
-          class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-dark-bg hover:bg-gray-200 dark:hover:bg-dark-surface hover:text-gray-600 dark:hover:text-white transition"
+          class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-700 bg-gray-100 hover:bg-gray-200 hover:text-gray-600 transition"
           aria-label="Open Profile"
         >
           <i [class]="iconClass | icon" class="text-xl" aria-hidden="true"></i>
         </button>
-        <button
-          (click)="logout()"
-          class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-dark-bg hover:bg-gray-200 dark:hover:bg-dark-surface hover:text-gray-600 dark:hover:text-white transition"
-          aria-label="Logout"
-        >
+        <button (click)="logout()" class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-700 bg-gray-100 hover:bg-gray-200 hover:text-gray-600 transition" aria-label="Logout">
           <i [class]="'LOGOUT' | icon" class="text-xl" aria-hidden="true"></i>
         </button>
-        <button
-          (click)="toggleLanguage()"
-          class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-dark-bg hover:bg-gray-200 dark:hover:bg-dark-surface hover:text-gray-600 dark:hover:text-white transition"
-          aria-label="Toggle Language"
-        >
+        <button (click)="toggleLanguage()" class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-700 bg-gray-100 hover:bg-gray-200 hover:text-gray-600 transition" aria-label="Toggle Language">
           <i [class]="'LANGUAGE' | icon" class="text-xl" aria-hidden="true"></i>
         </button>
       </div>

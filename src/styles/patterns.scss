@@ -1,35 +1,19 @@
 .decorative-pattern {
-  @apply bg-primary dark:bg-dark-surface;
+  @apply bg-primary;
   background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='white' stroke-opacity='0.1'%3E%3Cpath d='M0 0L60 60M60 0L0 60M30 0V60M0 30H60'/%3E%3Cpath stroke-opacity='0.05' d='M15 0V60M45 0V60M0 15H60M0 45H60'/%3E%3C/g%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 100px 100px;
   position: relative;
   isolation: isolate;
-
-  &.dark {
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='%23FCD34D' stroke-opacity='0.1'%3E%3Cpath d='M0 0L60 60M60 0L0 60M30 0V60M0 30H60'/%3E%3Cpath stroke-opacity='0.05' d='M15 0V60M45 0V60M0 15H60M0 45H60'/%3E%3C/g%3E%3C/svg%3E");
-  }
 }
 
 .decorative-pattern::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    45deg,
-    rgba(255, 255, 255, 0.03),
-    rgba(255, 255, 255, 0.01)
-  );
+  background: linear-gradient(45deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
   z-index: 1;
   pointer-events: none;
-
-  @media (prefers-color-scheme: dark) {
-    background: linear-gradient(
-      45deg,
-      rgba(252, 211, 77, 0.03),
-      rgba(252, 211, 77, 0.01)
-    );
-  }
 }
 
 .decorative-pattern > * {
