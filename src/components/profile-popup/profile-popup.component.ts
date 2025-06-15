@@ -8,6 +8,9 @@ import { Subscription } from "rxjs";
 import { User } from "@/models/user";
 import { LocalService } from "@/services/local.service";
 import { LangKeysContract } from "@/types/localization.types";
+import { AuthService } from "@/services/auth.service";
+import { Router } from "@angular/router";
+import { AppRoutes } from "@/constants/routes.constants";
 
 @Component({
   selector: "app-profile-popup",
@@ -21,6 +24,8 @@ export class ProfilePopupComponent implements OnInit, OnDestroy {
   private readonly dialogService = inject(DialogService);
   readonly localService = inject(LocalService);
   readonly dialogRef = inject(MatDialogRef<ProfilePopupComponent>);
+  readonly authService = inject(AuthService);
+  router = inject(Router);
 
   // Component properties
   currentUser!: User;
@@ -61,14 +66,9 @@ export class ProfilePopupComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           this.isLoading = false;
-          this.dialogService
-            .error(
-              this.localService.locals().error_loading_profile,
-              error.message
-            )
-            .subscribe(() => {
-              this.dialogRef.close();
-            });
+          this.dialogService.error(this.localService.locals().error_loading_profile, error.message).subscribe(() => {
+            this.dialogRef.close();
+          });
         },
       });
     }
@@ -86,5 +86,28 @@ export class ProfilePopupComponent implements OnInit, OnDestroy {
    */
   getRoleLocal(role: string) {
     return this.localService.locals()[`role_${role}` as keyof LangKeysContract];
+  }
+
+  /**
+   * Logout
+   */
+  logout(): void {
+    this.dialogRef.close();
+    this.authService.logout();
+    this.router.navigateByUrl(`/${AppRoutes.LOGIN}`);
+  }
+  toggleLanguage(): void {
+    this.localService.toggleLanguage();
+
+    const newDir = this.localService.getCurrentLanguage() === "ar" ? "rtl" : "ltr";
+    document.documentElement.setAttribute("dir", newDir);
+
+    document.documentElement.classList.remove("dir-ltr", "dir-rtl");
+    document.documentElement.classList.add(`dir-${newDir}`);
+
+    this.dialogRef.close();
+  }
+  get isRtl() {
+    return document.documentElement.getAttribute("dir") === "rtl";
   }
 }

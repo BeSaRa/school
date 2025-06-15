@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, OnDestroy } from "@angular/core";
-import { RouterModule, Router } from "@angular/router";
+import { RouterModule } from "@angular/router";
 import { AuthService } from "../../services/auth.service";
 import { IconService } from "@/services/icon.service";
 import { AppIcons } from "@/constants/icons.constants";
@@ -11,7 +11,6 @@ import { UserService } from "@/services/user.service";
 import { DialogService } from "@/services/dialog.service";
 import { Subscription } from "rxjs";
 import { User } from "@/models/user";
-import { AppRoutes } from "@/constants/routes.constants";
 import { LocalService } from "@/services/local.service";
 import { navbarAnimations } from "@/animations/navbar-animations";
 
@@ -28,7 +27,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
   authService = inject(AuthService);
   navigationService = inject(NavigationService);
   dialogService = inject(DialogService);
-  router = inject(Router);
   dialog = inject(MatDialog);
   userService = inject(UserService);
   localService = inject(LocalService);
@@ -77,14 +75,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
         }
       );
     }
-  }
-  logout(): void {
-    this.authService.logout();
-    this.router.navigateByUrl(`/${AppRoutes.LOGIN}`);
-  }
-
-  toggleLanguage(): void {
-    this.localService.toggleLanguage();
   }
 
   isActiveRoute(route: string): boolean {

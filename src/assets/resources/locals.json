@@ -103,5 +103,7 @@
   "delete_conversation_question": { "en": "Are you sure you want to delete this conversation?", "ar": "هل انت متأكد انك تريد حذف المحادثة؟" },
   "delete_user": { "en": "Delete user", "ar": "حذف المستخدم" },
   "delete_user_question": { "en": "Are you sure you want to delete this user?", "ar": "هل انت متأكد انك تريد حذف المستخدم؟" },
-  "login_to_your_account": { "en": "Login to your account", "ar": "تسجيل الدخول" }
+  "login_to_your_account": { "en": "Login to your account", "ar": "تسجيل الدخول" },
+  "logout": { "en": "Logout", "ar": "تسجيل الخروج" },
+  "toggleLanguage": { "en": "Toggle language", "ar": "تبديل اللغة" }
 }
