@@ -13,6 +13,7 @@ import { Subscription } from "rxjs";
 import { User } from "@/models/user";
 import { AppRoutes } from "@/constants/routes.constants";
 import { LocalService } from "@/services/local.service";
+import { navbarAnimations } from "@/animations/navbar-animations";
 
 @Component({
   selector: "app-navbar",
@@ -20,6 +21,7 @@ import { LocalService } from "@/services/local.service";
   imports: [RouterModule, IconService, MatDialogModule],
   templateUrl: "./navbar.component.html",
   styleUrl: "./navbar.component.scss",
+  animations: navbarAnimations,
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   // Services
@@ -71,12 +73,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
           }
         },
         (error) => {
-          this.dialogService
-            .error(
-              this.localService.locals().error_loading_profile,
-              error.message
-            )
-            .subscribe();
+          this.dialogService.error(this.localService.locals().error_loading_profile, error.message).subscribe();
         }
       );
     }
