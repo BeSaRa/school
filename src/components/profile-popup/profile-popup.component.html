@@ -44,7 +44,16 @@
   </div>
 
   <!-- Footer -->
-  <div class="p-3 sm:p-4 border-t border-gray-300 flex justify-end">
+  <div class="p-3 sm:p-4 border-t border-gray-300 flex justify-end gap-4">
+    <button
+      (click)="toggleLanguage()"
+      class="px-4 sm:px-6 py-2 bg-secondary text-white rounded-lg hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-sebg-secondary transition-colors duration-200"
+    >
+      {{ localService.locals().toggleLanguage }}
+    </button>
+    <button (click)="logout()" class="px-4 sm:px-6 py-2 bg-secondary text-white rounded-lg hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-sebg-secondary transition-colors duration-200">
+      {{ localService.locals().logout }}
+    </button>
     <button (click)="dialogRef.close()" class="px-4 sm:px-6 py-2 bg-primary text-white rounded-lg hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-primary transition-colors duration-200">
       {{ localService.locals().close }}
     </button>

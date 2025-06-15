@@ -54,4 +54,9 @@ module.exports = {
     },
   },
   plugins: [],
+  variants: {
+    extend: {
+      flexDirection: ["dir"],
+    },
+  },
 };

@@ -1,9 +1,8 @@
-<div class="navbar-container flex justify-center w-full py-4">
-  <nav class="floating-navbar bg-white/90 backdrop-blur-sm shadow-lg rounded-full px-4 py-2 max-w-3xl mx-auto">
-    <div class="flex items-center justify-between">
-      <!-- Desktop Navigation Menu -->
-      <div class="flex items-center space-x-2 md:space-x-4">
-        <!-- Menu Items -->
+<div class="navbar-container flex items-center h-full py-4 pl-4">
+  <nav class="floating-sidebar bg-white/90 backdrop-blur-sm shadow-lg rounded-full p-4 m-4 flex flex-col">
+    <div class="flex flex-col items-center space-y-6">
+      <!-- Menu Items -->
+      <div class="flex flex-col items-center space-y-4">
         @for (item of menuItems; track item.id) {
           <div class="relative group">
             <a [routerLink]="item.route" class="flex items-center p-2 rounded-full transition hover:bg-gray-50" [attr.aria-current]="isActiveRoute(item.route) ? 'page' : undefined">
@@ -20,24 +19,13 @@
             </a>
           </div>
         }
-
-        <button
-          (click)="openProfileDialog(); closeMobileMenu()"
-          class="flex items-center justify-center p-2 rounded-full text-gray-700 bg-gray-100 hover:bg-gray-200 hover:text-gray-600 transition"
-          aria-label="Open Profile"
-        >
-          <i [class]="iconClass | icon" class="text-xl" aria-hidden="true"></i>
-        </button>
-        <button (click)="logout()" class="flex items-center justify-center p-2 rounded-full text-gray-700 bg-gray-100 hover:bg-gray-200 hover:text-gray-600 transition" aria-label="Logout">
-          <i [class]="'LOGOUT' | icon" class="text-xl" aria-hidden="true"></i>
-        </button>
-        <button
-          (click)="toggleLanguage()"
-          class="flex items-center justify-center p-2 rounded-full text-gray-700 bg-gray-100 hover:bg-gray-200 hover:text-gray-600 transition"
-          aria-label="Toggle Language"
-        >
-          <i [class]="'LANGUAGE' | icon" class="text-xl" aria-hidden="true"></i>
-        </button>
+        <div class="relative group">
+          <button (click)="openProfileDialog(); closeMobileMenu()" class="flex items-center p-2 rounded-full transition hover:bg-gray-50" aria-label="Open Profile">
+            <div class="flex items-center justify-center min-w-[2.5rem] min-h-[2.5rem]">
+              <i [class]="iconClass | icon" class="text-2xl transition-all duration-300 ease-out" aria-hidden="true"></i>
+            </div>
+          </button>
+        </div>
       </div>
     </div>
   </nav>
