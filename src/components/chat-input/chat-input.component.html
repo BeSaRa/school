@@ -1,4 +1,4 @@
-<form [formGroup]="form()" (ngSubmit)="onSubmit($event)" class="flex gap-2">
+<form [formGroup]="form()" (ngSubmit)="onSubmit($event)" class="flex gap-3 items-center">
   <input
     #promptInput
     type="text"
@@ -6,12 +6,12 @@
     [placeholder]="localService.locals().type_your_message"
     [disabled]="isStreaming()"
     (keydown.enter)="onEnter($event)"
-    class="flex-1 px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary disabled:bg-gray-100 bg-white text-gray-900 placeholder-gray-500"
+    class="flex-1 px-3 sm:px-4 py-2 bg-white/10 text-white placeholder-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-white/30 disabled:bg-white/5"
   />
   <button
     type="submit"
     [disabled]="form().invalid || isStreaming()"
-    class="px-4 sm:px-6 py-2 bg-primary text-white rounded-lg hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-primary disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed transition-colors duration-200"
+    class="px-6 py-3 rounded-xl bg-primary text-white hover:bg-secondary transition-colors focus:outline-none focus:ring-2 focus:ring-primary disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"
   >
     {{ localService.locals().send }}
   </button>

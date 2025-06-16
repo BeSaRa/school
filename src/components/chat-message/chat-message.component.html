@@ -1,21 +1,20 @@
-<div class="flex mb-3 px-2">
+<div
+  class="flex mb-3 px-2"
+  [ngClass]="{
+    'justify-end': message().role === 'user',
+    'justify-start': message().role !== 'user',
+  }"
+>
   <div
-    class="p-2 sm:p-3 rounded-lg w-fit max-w-full break-words overflow-x-auto whitespace-pre-wrap"
+    class="p-3 rounded-xl max-w-[75%] break-words whitespace-pre-wrap overflow-x-auto shadow-sm"
     [ngClass]="{
-      'bg-chat-user-bg text-chat-user-text ms-auto': message().role === 'user',
-      'bg-chat-assistant-bg text-chat-assistant-text me-auto':
-        message().role === 'assistant',
-      'bg-chat-tool-bg text-chat-tool-text text-xs mx-auto text-center p-1':
-        message().role === 'tool',
-      'bg-chat-system-bg text-chat-system-text mx-auto text-center':
-        message().role === 'system',
-      'bg-chat-developer-bg text-chat-developer-text mx-auto text-center':
-        message().role === 'developer',
+      'bg-chat-user-bg text-chat-user-text rounded-br-none': message().role === 'user',
+      'bg-chat-assistant-bg text-chat-assistant-text rounded-bl-none': message().role === 'assistant',
+      'bg-chat-tool-bg text-chat-tool-text text-xs mx-auto text-center p-1 rounded-lg': message().role === 'tool',
+      'bg-chat-system-bg text-chat-system-text mx-auto text-center rounded-lg': message().role === 'system',
+      'bg-chat-developer-bg text-chat-developer-text mx-auto text-center rounded-lg': message().role === 'developer',
     }"
   >
-    <markdown
-      [data]="message().content | katex"
-      [disableSanitizer]="true"
-    ></markdown>
+    <markdown [data]="message().content | katex" [disableSanitizer]="true"></markdown>
   </div>
 </div>
