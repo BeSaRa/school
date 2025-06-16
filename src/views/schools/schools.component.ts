@@ -48,10 +48,7 @@ export class SchoolsComponent extends AdminComponent<School> implements OnInit {
             { value: "secondary", label: "education_level_secondary" },
             { value: "primary", label: "education_level_primary" },
           ],
-          customTemplate: (value: string) =>
-            this.formatEducationLevel(
-              `education_level_${value}` as keyof LangKeysContract
-            ),
+          customTemplate: (value: string) => this.formatEducationLevel(`education_level_${value}` as keyof LangKeysContract),
         },
         {
           key: "schoolType.category",
@@ -84,4 +81,7 @@ export class SchoolsComponent extends AdminComponent<School> implements OnInit {
   private formatEducationLevel(level: keyof LangKeysContract): string {
     return level ? this.localService.locals()[level] : "";
   }
+  protected openAddDialog(): void {}
+  protected openEditDialog(school: School): void {}
+  protected deleteItem(school: School): void {}
 }
