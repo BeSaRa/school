@@ -5,50 +5,48 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#1A1A1A",
-        secondary: "#D3D3D3",
-        tertiary: "#2D2D2D",
-        quaternary: "#757575",
-        quinary: "#B0B0B0",
+        primary: "#0f172a",
+        secondary: "#cbd5e1",
+        tertiary: "#1e293b",
         chat: {
           user: {
-            bg: "#E0E7FF",
-            text: "#1E3A8A",
+            bg: "#1e40af",
+            text: "#e0f2fe",
           },
           assistant: {
-            bg: "#E5E7EB",
-            text: "#1F2937",
+            bg: "#1e293b",
+            text: "#f1f5f9",
           },
           system: {
-            bg: "#FEF3C7",
-            text: "#92400E",
+            bg: "#fef08a",
+            text: "#78350f",
           },
           tool: {
-            bg: "#F5E6FF",
-            text: "#6B21A8",
+            bg: "#e9d5ff",
+            text: "#6b21a8",
           },
           developer: {
-            bg: "#FEE2E9",
-            text: "#9D174D",
+            bg: "#ffe4e6",
+            text: "#9d174d",
           },
           button: {
             primary: {
-              bg: "#3B82F6",
-              hover: "#2563EB",
-              focus: "#60A5FA",
-              text: "#FFFFFF",
-              disabled: "#9CA3AF",
+              bg: "#0ea5e9",
+              hover: "#0284c7",
+              focus: "#38bdf8",
+              text: "#ffffff",
+              disabled: "#64748b",
             },
             secondary: {
-              bg: "#4B5563",
-              hover: "#374151",
-              focus: "#6B7280",
-              text: "#FFFFFF",
+              bg: "#334155",
+              hover: "#1e293b",
+              focus: "#475569",
+              text: "#f8fafc",
             },
           },
         },
         accent: {
-          yellow: "#FBBF24",
+          yellow: "#facc15",
         },
       },
     },

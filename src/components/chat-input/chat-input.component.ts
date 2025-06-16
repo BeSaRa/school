@@ -1,11 +1,4 @@
-import {
-  Component,
-  ViewChild,
-  ElementRef,
-  input,
-  output,
-  inject,
-} from "@angular/core";
+import { Component, ViewChild, ElementRef, input, output, inject } from "@angular/core";
 import { FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { CommonModule } from "@angular/common";
 import { LocalService } from "@/services/local.service";
