@@ -13,6 +13,7 @@ import { Subscription } from "rxjs";
 import { User } from "@/models/user";
 import { LocalService } from "@/services/local.service";
 import { navbarAnimations } from "@/animations/navbar-animations";
+import { CommonModule } from "@angular/common";
 
 @Component({
   selector: "app-navbar",
