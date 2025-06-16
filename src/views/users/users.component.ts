@@ -16,13 +16,7 @@ import { LangKeysContract } from "@/types/localization.types";
 @Component({
   selector: "app-users",
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatIconModule,
-    AdminTableComponent,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, MatButtonModule, MatIconModule, AdminTableComponent],
   providers: [
     {
       provide: BaseCrudService,
@@ -38,7 +32,7 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
   constructor() {
     super();
     this.config.set({
-      itemsPerPage: 10,
+      itemsPerPage: 20,
       responseKey: "users",
       columns: [
         {
@@ -70,8 +64,7 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
             { value: "teacher", label: "role_teacher" },
             { value: "superuser", label: "role_superuser" },
           ],
-          customTemplate: (value: string) =>
-            this.formatRole(`role_${value}` as keyof LangKeysContract),
+          customTemplate: (value: string) => this.formatRole(`role_${value}` as keyof LangKeysContract),
         },
         {
           key: "isActive",
@@ -93,12 +86,8 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
   }
 
   private formatStatus(isActive: boolean): string {
-    const status = isActive
-      ? this.localService.locals().status_active
-      : this.localService.locals().status_inactive;
-    const statusClass = isActive
-      ? "bg-green-100 text-green-800"
-      : "bg-red-100 text-red-800";
+    const status = isActive ? this.localService.locals().status_active : this.localService.locals().status_inactive;
+    const statusClass = isActive ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800";
 
     return `<span class="text-xs font-medium px-2.5 py-0.5 rounded ${statusClass}">${status}</span>`;
   }
@@ -107,12 +96,7 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
     if (!user?.id) return;
 
     this.dialogService
-      .confirm(
-        this.localService.locals().delete_user,
-        this.localService.locals().delete_user_question,
-        this.localService.locals().delete,
-        this.localService.locals().cancel
-      )
+      .confirm(this.localService.locals().delete_user, this.localService.locals().delete_user_question, this.localService.locals().delete, this.localService.locals().cancel)
       .pipe(
         filter((result) => result?.confirmed === true),
         switchMap(() => this.userService.delete(user.id))
@@ -120,9 +104,7 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
       .subscribe({
         next: () => this.loadData(),
         error: (err) => {
-          this.dialogService
-            .error(this.localService.locals().error_deleting_user, err.message)
-            .subscribe();
+          this.dialogService.error(this.localService.locals().error_deleting_user, err.message).subscribe();
         },
       });
   }
