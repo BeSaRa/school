@@ -1,5 +1,12 @@
-<div class="navbar-container flex items-center h-full">
-  <nav class="floating-sidebar bg-white/10 backdrop-blur-sm backdrop-saturate-150 rounded-full p-4 m-4 flex flex-col">
+<!-- Hover Trigger Area -->
+<div class="group fixed top-0 right-0 h-screen w-6 z-50">
+  <!-- Visible Hover Strip -->
+  <div class="absolute top-1/2 -translate-y-1/2 right-0 w-4 h-32 bg-white rounded-l-full shadow-lg animate-pulse pointer-events-none"></div>
+
+  <!-- The actual navbar that shows on hover -->
+  <nav
+    class="floating-sidebar bg-white/10 backdrop-blur-sm backdrop-saturate-150 rounded-full p-4 m-4 flex flex-col transition-all duration-300 z-40 opacity-0 translate-x-full group-hover:opacity-100 group-hover:translate-x-0 fixed top-1/2 -translate-y-1/2 right-4"
+  >
     <div class="flex flex-col items-center space-y-6">
       <!-- Menu Items -->
       <div class="flex flex-col items-center space-y-4">
@@ -12,8 +19,10 @@
             </a>
           </div>
         }
+
+        <!-- Profile Button -->
         <div class="relative group">
-          <button (click)="openProfileDialog(); closeMobileMenu()" class="flex items-center p-2 rounded-full transition hover:bg-tertiary" aria-label="Open Profile">
+          <button (click)="openProfileDialog()" class="flex items-center p-2 rounded-full transition hover:bg-tertiary" aria-label="Open Profile">
             <div class="flex items-center justify-center min-w-[2.5rem] min-h-[2.5rem]">
               <i [class]="iconClass | icon" class="text-2xl transition-all duration-300 ease-out text-white" aria-hidden="true"></i>
             </div>
