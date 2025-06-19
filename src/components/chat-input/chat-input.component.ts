@@ -2,21 +2,22 @@ import { Component, ViewChild, ElementRef, input, output, inject } from "@angula
 import { FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { CommonModule } from "@angular/common";
 import { LocalService } from "@/services/local.service";
+import { IconService } from "../../services/icon.service";
 
 @Component({
   selector: "app-chat-input",
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, IconService],
   templateUrl: "./chat-input.component.html",
 })
 export class ChatInputComponent {
   form = input.required<FormGroup>();
   isStreaming = input(false);
+  isFirstMessage = input(true);
   @ViewChild("promptInput") promptInput!: ElementRef<HTMLInputElement>;
 
   send = output<Event>();
   localService = inject(LocalService);
-
   focus(): void {
     setTimeout(() => {
       this.promptInput?.nativeElement.focus();

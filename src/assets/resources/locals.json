@@ -75,6 +75,7 @@
   "hide_conversations": { "en": "Hide Conversations", "ar": "إخفاء المحادثات" },
   "show_conversations": { "en": "Show Conversations", "ar": "عرض المحادثات" },
   "type_your_message": { "en": "Type your message...", "ar": "اكتب رسالتك..." },
+  "what_do_you_want_to_know": { "en": "What do you want to know?", "ar": "ماذا تريد ان تعرف؟" },
   "agent": { "en": "Agent", "ar": "وكيل" },
   "today": { "en": "Today", "ar": "اليوم" },
   "yesterday": { "en": "Yesterday", "ar": "الأمس" },

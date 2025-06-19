@@ -1,60 +1,62 @@
-<div class="relative flex flex-col md:flex-row h-[95vh] rounded-xl">
-  <!-- Toggle Button for Mobile -->
-  <div class="md:hidden absolute top-0 left-0 right-0 z-10 p-2 bg-white">
-    <button class="w-full py-2 px-4 bg-primary hover:bg-secondary text-white rounded-lg transition-colors duration-200 flex items-center justify-center gap-2" (click)="toggleSidebar()">
-      <i [class]="'MENU' | icon" class="text-xl"></i>
-      {{ showSidebar() ? localService.locals().hide_conversations : localService.locals().show_conversations }}
-    </button>
-  </div>
+<div class="flex flex-col h-full">
+  <div class="relative flex flex-col md:flex-row h-[95vh] rounded-xl">
+    <!-- <div class="md:hidden absolute top-0 left-0 right-0 z-10 p-2 bg-white/10 backdrop-blur-sm">
+      <button class="w-full py-2 px-4 bg-primary hover:bg-secondary text-white rounded-lg transition-colors duration-200 flex items-center justify-center gap-2" (click)="toggleSidebar()">
+        <i [class]="'MENU' | icon" class="text-xl"></i>
+        {{ showSidebar() ? localService.locals().hide_conversations : localService.locals().show_conversations }}
+      </button>
+    </div> -->
 
-  <!-- Conversation Sidebar -->
-  <app-conversation-sidebar
-    [class]="'sidebar w-full md:w-80 ' + (showSidebar() ? 'block' : 'hidden md:block')"
-    (conversationSelected)="onConversationSelected($event)"
-    (createNewChat)="onCreateNewChatClicked()"
-  ></app-conversation-sidebar>
+    <!-- <app-conversation-sidebar
+      [class]="'sidebar w-full md:w-80 ' + (showSidebar() ? 'block' : 'hidden md:block')"
+      (conversationSelected)="onConversationSelected($event)"
+      (createNewChat)="onCreateNewChatClicked()"
+    ></app-conversation-sidebar> -->
 
-  <!-- Main Chat Area -->
-  <div class="flex-1 flex flex-col h-full bg-white/10 backdrop-blur-sm backdrop-saturate-150 relative">
-    <!-- Padding for Mobile Header -->
-    <div class="md:hidden h-14"></div>
+    <div class="flex-1 flex flex-col h-full bg-white/10 backdrop-blur-sm backdrop-saturate-150 relative">
+      <div class="md:hidden h-14"></div>
 
-    <!-- Header -->
-    <header class="chat-header text-lg sm:text-xl font-bold p-3 sm:p-4 text-center text-white">
-      @if (currentUser) {
-        <div class="flex text-center flex-row rtl:flex-row-reverse">
-          <span class="w-full">
-            {{
-              localService.getCurrentLanguage() === "ar"
-                ? localService.locals().agent + " " + (currentUser.role === "professor" ? localService.locals().prof + " " : "") + currentUser.fullName
-                : (currentUser.role === "professor" ? localService.locals().prof + " " : "") + currentUser.fullName + "'s " + localService.locals().agent
-            }}
-          </span>
+      <header class="text-center text-white p-4">
+        <div class="text-lg sm:text-xl font-bold">
+          @if (currentUser) {
+            <div class="flex justify-center">
+              <span>
+                {{
+                  localService.getCurrentLanguage() === "ar"
+                    ? localService.locals().agent + " " + (currentUser.role === "professor" ? localService.locals().prof + " " : "") + currentUser.fullName
+                    : (currentUser.role === "professor" ? localService.locals().prof + " " : "") + currentUser.fullName + "'s " + localService.locals().agent
+                }}
+              </span>
+            </div>
+          } @else {
+            {{ localService.locals().ai_assistant }}
+          }
+        </div>
+      </header>
+
+      @if (messages().length === 0) {
+        <div class="flex flex-1 items-center justify-center px-4">
+          <div class="w-full max-w-2xl">
+            <app-chat-input [form]="form" [isStreaming]="chatService.status()" (send)="handleSendMessage($event)" [isFirstMessage]="true" />
+          </div>
         </div>
       } @else {
-        <span class="w-full">{{ localService.locals().ai_assistant }}</span>
-      }
-    </header>
+        <div class="flex flex-col flex-1 overflow-hidden">
+          <div class="flex-1 overflow-y-auto p-3 sm:p-4" #messageContainer>
+            @for (message of messages(); track message) {
+              <app-chat-message [message]="message" />
+            }
 
-    <!-- Messages -->
-    <div class="messages-container flex-1 overflow-y-auto p-3 sm:p-4 bg-transparent" #messageContainer>
-      @for (message of messages(); track message) {
-        <app-chat-message [message]="message" />
-      }
+            @if (streamingAssistantContent() && chatService.status()) {
+              <app-chat-message [message]="{ role: 'assistant', content: streamingAssistantContent() }" />
+            }
+          </div>
 
-      @if (streamingAssistantContent() && chatService.status()) {
-        <app-chat-message
-          [message]="{
-            role: 'assistant',
-            content: streamingAssistantContent(),
-          }"
-        />
+          <footer class="chat-input-container p-3 sm:p-4">
+            <app-chat-input [form]="form" [isStreaming]="chatService.status()" (send)="handleSendMessage($event)" [isFirstMessage]="false" />
+          </footer>
+        </div>
       }
     </div>
-
-    <!-- Input -->
-    <footer class="chat-input-container p-3 sm:p-4">
-      <app-chat-input [form]="form" [isStreaming]="chatService.status()" (send)="handleSendMessage($event)" />
-    </footer>
   </div>
 </div>
