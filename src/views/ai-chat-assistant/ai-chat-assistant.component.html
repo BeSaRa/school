@@ -1,19 +1,16 @@
-<div class="flex flex-col h-full">
-  <div class="relative flex flex-col md:flex-row h-[95vh] rounded-xl">
-    <!-- <div class="md:hidden absolute top-0 left-0 right-0 z-10 p-2 bg-white/10 backdrop-blur-sm">
-      <button class="w-full py-2 px-4 bg-primary hover:bg-secondary text-white rounded-lg transition-colors duration-200 flex items-center justify-center gap-2" (click)="toggleSidebar()">
-        <i [class]="'MENU' | icon" class="text-xl"></i>
-        {{ showSidebar() ? localService.locals().hide_conversations : localService.locals().show_conversations }}
-      </button>
-    </div> -->
+<div class="flex flex-col h-full relative">
+  <div class="relative flex flex-col md:flex-row h-[95vh] rounded-xl overflow-hidden">
+    <!-- Conversation Sidebar -->
+    <div
+      class="absolute top-0 left-0 h-full w-80 transform transition-transform duration-300 ease-in-out bg-white/70 backdrop-blur-sm backdrop-saturate-150 rounded-r-xl shadow-lg z-30"
+      [class.-translate-x-full]="!showSidebar()"
+      [class.translate-x-0]="showSidebar()"
+    >
+      <app-conversation-sidebar class="h-full w-full" (conversationSelected)="onConversationSelected($event)" (createNewChat)="onCreateNewChatClicked()"></app-conversation-sidebar>
+    </div>
 
-    <!-- <app-conversation-sidebar
-      [class]="'sidebar w-full md:w-80 ' + (showSidebar() ? 'block' : 'hidden md:block')"
-      (conversationSelected)="onConversationSelected($event)"
-      (createNewChat)="onCreateNewChatClicked()"
-    ></app-conversation-sidebar> -->
-
-    <div class="flex-1 flex flex-col h-full bg-white/10 backdrop-blur-sm backdrop-saturate-150 relative">
+    <!-- Main Chat Area -->
+    <div class="flex-1 flex flex-col h-full bg-white/10 backdrop-blur-sm backdrop-saturate-150 relative z-10">
       <div class="md:hidden h-14"></div>
 
       <header class="text-center text-white p-4">
@@ -46,7 +43,6 @@
             @for (message of messages(); track message) {
               <app-chat-message [message]="message" />
             }
-
             @if (streamingAssistantContent() && chatService.status()) {
               <app-chat-message [message]="{ role: 'assistant', content: streamingAssistantContent() }" />
             }
@@ -59,4 +55,13 @@
       }
     </div>
   </div>
+
+  <!-- Toggle Sidebar Button (always on top) -->
+  <button
+    (click)="toggleSidebar()"
+    class="fixed top-2 md:top-8 left-2 md:left-8 w-12 h-12 rounded-full bg-primary hover:bg-primary/90 text-white shadow-lg flex items-center justify-center transition duration-300 z-50"
+    [class.rotate-180]="showSidebar()"
+  >
+    <i [class]="'CHEVRON_RIGHT' | icon" class="text-xl transition-transform duration-300"></i>
+  </button>
 </div>

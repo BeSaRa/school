@@ -5,20 +5,21 @@ import { CommonModule } from "@angular/common";
 import { ChatService } from "@/services/ai-chat-assistant.service";
 import { ChatMessageComponent } from "@/components/chat-message/chat-message.component";
 import { ChatInputComponent } from "@/components/chat-input/chat-input.component";
-// import { ConversationSidebarComponent } from "@/components/conversation-sidebar/conversation-sidebar.component";
+import { ConversationSidebarComponent } from "@/components/conversation-sidebar/conversation-sidebar.component";
 import { ConversationService } from "@/services/conversation.service";
 import { DialogService } from "../../services/dialog.service";
 import { UserService } from "@/services/user.service";
 import { Subscription } from "rxjs";
-// import { IconService } from "@/services/icon.service";
+import { IconService } from "@/services/icon.service";
 import { User } from "@/models/user";
 import { LocalService } from "@/services/local.service";
 
 @Component({
   selector: "app-ai-chat-assistant",
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ChatMessageComponent, ChatInputComponent],
+  imports: [CommonModule, ReactiveFormsModule, ChatMessageComponent, ChatInputComponent, ConversationSidebarComponent, IconService],
   templateUrl: "./ai-chat-assistant.component.html",
+  styleUrls: ["./ai-chat-assistant.component.scss"],
 })
 export class AIChatAssistantComponent implements OnInit, AfterViewInit, OnDestroy {
   // Injected services
@@ -230,6 +231,7 @@ export class AIChatAssistantComponent implements OnInit, AfterViewInit, OnDestro
   /**
    * Toggles the sidebar visibility on mobile devices
    */
+  // Update the toggleSidebar method
   toggleSidebar(): void {
     this.showSidebar.update((value) => !value);
   }
