@@ -1,7 +1,7 @@
 .floating-sidebar {
   transition: all 0.3s ease;
   &:hover {
-    transform: translateX(-5px) scale(1.05);
+    transform: translateX(-10px) scale(1.05);
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
   }
   a,

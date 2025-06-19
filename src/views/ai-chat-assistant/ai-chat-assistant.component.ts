@@ -1,51 +1,26 @@
-import {
-  Component,
-  DestroyRef,
-  OnInit,
-  inject,
-  signal,
-  effect,
-  ViewChild,
-  AfterViewInit,
-  ElementRef,
-  OnDestroy,
-} from "@angular/core";
+import { Component, DestroyRef, OnInit, inject, signal, effect, ViewChild, AfterViewInit, ElementRef, OnDestroy } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from "@angular/forms";
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { CommonModule } from "@angular/common";
 import { ChatService } from "@/services/ai-chat-assistant.service";
 import { ChatMessageComponent } from "@/components/chat-message/chat-message.component";
 import { ChatInputComponent } from "@/components/chat-input/chat-input.component";
-import { ConversationSidebarComponent } from "@/components/conversation-sidebar/conversation-sidebar.component";
+// import { ConversationSidebarComponent } from "@/components/conversation-sidebar/conversation-sidebar.component";
 import { ConversationService } from "@/services/conversation.service";
 import { DialogService } from "../../services/dialog.service";
 import { UserService } from "@/services/user.service";
 import { Subscription } from "rxjs";
-import { IconService } from "@/services/icon.service";
+// import { IconService } from "@/services/icon.service";
 import { User } from "@/models/user";
 import { LocalService } from "@/services/local.service";
 
 @Component({
   selector: "app-ai-chat-assistant",
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    ChatMessageComponent,
-    ChatInputComponent,
-    ConversationSidebarComponent,
-    IconService,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, ChatMessageComponent, ChatInputComponent],
   templateUrl: "./ai-chat-assistant.component.html",
 })
-export class AIChatAssistantComponent
-  implements OnInit, AfterViewInit, OnDestroy
-{
+export class AIChatAssistantComponent implements OnInit, AfterViewInit, OnDestroy {
   // Injected services
   private readonly destroyRef = inject(DestroyRef);
   private readonly fb = inject(FormBuilder);
@@ -74,10 +49,7 @@ export class AIChatAssistantComponent
 
   constructor() {
     this.form = this.fb.group({
-      prompt: [
-        { value: "", disabled: false },
-        [Validators.required, Validators.minLength(1)],
-      ],
+      prompt: [{ value: "", disabled: false }, [Validators.required, Validators.minLength(1)]],
     });
 
     // Effect to handle streaming state changes
@@ -117,11 +89,9 @@ export class AIChatAssistantComponent
 
     // If not available, subscribe to the user observable
     if (!this.currentUser) {
-      this.userSubscription = this.userService.currentUser$.subscribe(
-        (user) => {
-          this.currentUser = user;
-        }
-      );
+      this.userSubscription = this.userService.currentUser$.subscribe((user) => {
+        this.currentUser = user;
+      });
     }
   }
 
@@ -129,10 +99,7 @@ export class AIChatAssistantComponent
    * Subscribes to message updates from the chat service
    */
   private subscribeToMessages(): void {
-    this.chatService
-      .getMessages()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe();
+    this.chatService.getMessages().pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
   }
 
   /**
@@ -225,12 +192,7 @@ export class AIChatAssistantComponent
 
     this.chatService.sendMessage(userMessage).subscribe({
       error: (error) => {
-        this.dialogService
-          .error(
-            this.localService.locals().error_sending_message,
-            error.message
-          )
-          .subscribe();
+        this.dialogService.error(this.localService.locals().error_sending_message, error.message).subscribe();
       },
     });
   }
@@ -260,12 +222,7 @@ export class AIChatAssistantComponent
           this.focusInput();
         },
         error: (error) => {
-          this.dialogService
-            .error(
-              this.localService.locals().error_loading_conversations,
-              error.message
-            )
-            .subscribe();
+          this.dialogService.error(this.localService.locals().error_loading_conversations, error.message).subscribe();
         },
       });
   }

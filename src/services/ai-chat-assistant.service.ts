@@ -1,18 +1,5 @@
 import { inject, Injectable, WritableSignal, signal } from "@angular/core";
-import {
-  catchError,
-  defer,
-  EMPTY,
-  expand,
-  filter,
-  finalize,
-  from,
-  map,
-  Observable,
-  Subject,
-  switchMap,
-  takeWhile,
-} from "rxjs";
+import { catchError, defer, EMPTY, expand, filter, finalize, from, map, Observable, Subject, switchMap, takeWhile } from "rxjs";
 import { UrlService } from "./url.service";
 import { Message } from "@/models/message";
 import { safeJsonParse } from "@/utils/utils";
@@ -75,17 +62,10 @@ export class ChatService {
 
     let buffer = "";
 
-    return defer(() =>
-      from(fetch(url, { method: "POST", headers, body }))
-    ).pipe(
+    return defer(() => from(fetch(url, { method: "POST", headers, body }))).pipe(
       switchMap((response) => {
         if (!response.ok || !response.body) {
-          this.dialogService
-            .error(
-              this.localService.locals().error_request_failed,
-              "Unable to connect or empty response."
-            )
-            .subscribe();
+          this.dialogService.error(this.localService.locals().error_request_failed, "Unable to connect or empty response.").subscribe();
           this.status.set(false);
           return EMPTY;
         }
@@ -96,9 +76,7 @@ export class ChatService {
         return from(reader.read()).pipe(
           expand(() => from(reader.read())),
           takeWhile(({ done }) => !done, true),
-          map(({ value }) =>
-            decoder.decode(value || new Uint8Array(), { stream: true })
-          ),
+          map(({ value }) => decoder.decode(value || new Uint8Array(), { stream: true })),
           map((chunk) =>
             chunk
               .split("\n")
@@ -119,9 +97,7 @@ export class ChatService {
             }
             return { type: "unknown", data };
           }),
-          filter(
-            (event): event is { type: string; data?: any } => event !== null
-          ),
+          filter((event): event is { type: string; data?: any } => event !== null),
           map((event) => {
             if (event.data?.conversationId) {
               this.conversationId.set(event.data.conversationId);
@@ -134,27 +110,20 @@ export class ChatService {
           }),
           finalize(() => {
             if (buffer) {
-              this.messages.update((msgs) => [
-                ...msgs,
-                new Message(buffer, "assistant"),
-              ]);
+              this.messages.update((msgs) => [...msgs, new Message(buffer, "assistant")]);
               this.messagesSubject.next(this.messages());
             }
             this.status.set(false);
           }),
           catchError((error) => {
-            this.dialogService
-              .error(this.localService.locals().error_streaming, error.message)
-              .subscribe();
+            this.dialogService.error(this.localService.locals().error_streaming, error.message).subscribe();
             this.status.set(false);
             return EMPTY;
           })
         );
       }),
       catchError((error) => {
-        this.dialogService
-          .error(this.localService.locals().error_unexpected, error.message)
-          .subscribe();
+        this.dialogService.error(this.localService.locals().error_unexpected, error.message).subscribe();
         this.status.set(false);
         return EMPTY;
       })
@@ -183,12 +152,7 @@ export class ChatService {
     })
       .then((response) => {
         if (!response.body) {
-          this.dialogService
-            .error(
-              this.localService.locals().unsupported_feature,
-              "Streaming not supported by your browser."
-            )
-            .subscribe();
+          this.dialogService.error(this.localService.locals().unsupported_feature, "Streaming not supported by your browser.").subscribe();
           return;
         }
 
@@ -211,10 +175,10 @@ export class ChatService {
             for (const line of lines) {
               if (line.startsWith("data:")) {
                 const action = line.replace("data:", "").trim();
-                this.messages.update((msgs) => [
-                  ...msgs,
-                  new Message(action, "tool"),
-                ]);
+                if (action.includes("connected to actions SSE stream")) {
+                  continue;
+                }
+                this.messages.update((msgs) => [...msgs, new Message(action, "tool")]);
                 this.messagesSubject.next(this.messages());
               }
             }
@@ -226,12 +190,7 @@ export class ChatService {
         read();
       })
       .catch(() => {
-        this.dialogService
-          .error(
-            this.localService.locals().connection_error,
-            "An error occurred while connecting to the server."
-          )
-          .subscribe();
+        this.dialogService.error(this.localService.locals().connection_error, "An error occurred while connecting to the server.").subscribe();
       });
   }
 }

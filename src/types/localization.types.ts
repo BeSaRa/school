@@ -76,6 +76,7 @@ export interface LangKeysContract {
   hide_conversations: string;
   show_conversations: string;
   type_your_message: string;
+  what_do_you_want_to_know: string;
   agent: string;
   today: string;
   yesterday: string;

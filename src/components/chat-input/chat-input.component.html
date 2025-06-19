@@ -1,18 +1,20 @@
-<form [formGroup]="form()" (ngSubmit)="onSubmit($event)" class="flex gap-3 items-center">
-  <input
-    #promptInput
-    type="text"
-    formControlName="prompt"
-    [placeholder]="localService.locals().type_your_message"
-    [disabled]="isStreaming()"
-    (keydown.enter)="onEnter($event)"
-    class="flex-1 px-3 sm:px-4 py-2 bg-white/10 text-white placeholder-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-white/30 disabled:bg-white/5"
-  />
-  <button
-    type="submit"
-    [disabled]="form().invalid || isStreaming()"
-    class="px-6 py-3 rounded-xl bg-primary text-white hover:bg-secondary transition-colors focus:outline-none focus:ring-2 focus:ring-primary disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"
-  >
-    {{ localService.locals().send }}
-  </button>
+<form [formGroup]="form()" (ngSubmit)="onSubmit($event)" class="relative flex items-end w-full">
+  <div class="relative flex-1">
+    <textarea
+      #promptInput
+      formControlName="prompt"
+      [placeholder]="localService.locals().what_do_you_want_to_know"
+      [disabled]="isStreaming()"
+      (keydown.enter)="onEnter($event)"
+      [class.h-16]="!isFirstMessage()"
+      [class.h-32]="isFirstMessage()"
+      class="w-full px-4 pr-16 py-3 bg-white/10 text-white placeholder-gray-300 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-white/30 disabled:bg-white/5 transition-all duration-200"
+    ></textarea>
+
+    <button type="submit" [disabled]="form().invalid || isStreaming()" class="absolute right-1 p-0 bottom-2 md:right-2 md:p-2 rounded-full transition hover:bg-tertiary">
+      <div class="flex items-center justify-center min-w-[2.5rem] min-h-[2.5rem]">
+        <i [class]="'ARROW_UP' | icon" class="text-2xl transition-all duration-300 ease-out text-white" aria-hidden="true"></i>
+      </div>
+    </button>
+  </div>
 </form>
