@@ -6,6 +6,12 @@
   position: relative;
   isolation: isolate;
   filter: blur(0.3px);
+  &.fullscreen {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
 }
 
 .decorative-pattern::before {

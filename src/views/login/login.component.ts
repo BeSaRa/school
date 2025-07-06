@@ -1,11 +1,5 @@
-import { Component, inject, OnInit, signal } from "@angular/core";
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from "@angular/forms";
+import { AfterViewInit, Component, ElementRef, inject, OnInit, signal, ViewChild } from "@angular/core";
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { CommonModule } from "@angular/common";
 import { DialogService } from "../../services/dialog.service";
 import { LoginService } from "../../services/login.service";
@@ -18,7 +12,8 @@ import { LocalService } from "@/services/local.service";
   imports: [FormsModule, CommonModule, ReactiveFormsModule],
   templateUrl: "./login.component.html",
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, AfterViewInit {
+  @ViewChild("usernameInput") usernameInputRef!: ElementRef<HTMLInputElement>;
   // Injected services
   private readonly fb = inject(FormBuilder);
   private readonly dialogService = inject(DialogService);
@@ -31,6 +26,9 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.initializeForm();
+  }
+  ngAfterViewInit(): void {
+    this.usernameInputRef.nativeElement.focus();
   }
 
   /**
@@ -49,12 +47,7 @@ export class LoginComponent implements OnInit {
   onSubmit(): void {
     // Validate form
     if (this.loginForm.invalid) {
-      this.dialogService
-        .error(
-          this.localService.locals().error_validation,
-          "Please fill in all fields correctly"
-        )
-        .subscribe();
+      this.dialogService.error(this.localService.locals().error_validation, "Please fill in all fields correctly").subscribe();
       return;
     }
 
