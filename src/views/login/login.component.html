@@ -1,96 +1,75 @@
-<div class="min-h-screen flex flex-row">
-  <!-- Left side: Login Form -->
-  <div class="w-full lg:w-1/2 flex items-center justify-center p-6 md:p-12 bg-white">
-    <div class="w-full max-w-md space-y-8">
+<!-- Container wrapper -->
+<div class="relative min-h-screen overflow-hidden">
+  <!-- Decorative Pattern -->
+  <div class="decorative-pattern fullscreen"></div>
+
+  <!-- Login Form in Center -->
+  <div class="relative z-10 flex items-center justify-center min-h-screen px-4">
+    <div class="w-full max-w-md space-y-8 bg-white p-8 rounded-xl shadow-xl">
       <!-- Logo -->
       <div class="text-center">
-        <div class="flex justify-center mb-4">
-          <img src="assets/qulogo.png" [alt]="localService.locals().logo_alt" class="h-12 sm:h-16 w-auto transition-transform duration-300 hover:scale-105" />
-        </div>
-        <h2 class="mt-6 text-3xl font-bold text-gray-900">{{ localService.locals().login_to_your_account }}</h2>
+        <img src="assets/qulogo.png" [alt]="localService.locals().logo_alt" class="h-12 sm:h-16 w-auto mx-auto hover:scale-105 transition-transform duration-300" />
+        <h2 class="mt-6 text-3xl font-bold text-gray-900">
+          {{ localService.locals().login_to_your_account }}
+        </h2>
       </div>
 
       <!-- Login Form -->
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="mt-8 space-y-6">
-        <!-- Username Field -->
-        <div class="space-y-2">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
+        <!-- Username -->
+        <div>
           <label for="username" class="block text-sm font-medium text-gray-700">
             {{ localService.locals().username }}
           </label>
           <div class="relative">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <span class="text-gray-500">
-                <i class="mdi mdi-account text-lg"></i>
-              </span>
+              <i class="mdi mdi-account text-lg text-gray-500"></i>
             </div>
             <input
+              #usernameInput
               id="username"
               formControlName="username"
               type="text"
               required
-              class="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary text-gray-900 bg-white sm:text-sm"
+              class="pl-10 pr-3 py-2 w-full border border-gray-300 rounded-md shadow-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
               [placeholder]="localService.locals().enter_username"
             />
           </div>
-          @if (loginForm.get("username")?.touched && loginForm.get("username")?.invalid) {
-            <div class="text-xs text-red-500 mt-1">
-              @if (loginForm.get("username")?.errors?.["required"]) {
-                <span>{{ localService.locals().username_required }}</span>
-              }
-              @if (loginForm.get("username")?.errors?.["minlength"]) {
-                <span>{{ localService.locals().username_minlength }}</span>
-              }
-            </div>
-          }
         </div>
 
-        <!-- Password Field -->
-        <div class="space-y-2">
+        <!-- Password -->
+        <div>
           <label for="password" class="block text-sm font-medium text-gray-700">
             {{ localService.locals().password }}
           </label>
           <div class="relative">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <span class="text-gray-500">
-                <i class="mdi mdi-lock text-lg"></i>
-              </span>
+              <i class="mdi mdi-lock text-lg text-gray-500"></i>
             </div>
             <input
               id="password"
               formControlName="password"
               type="password"
               required
-              class="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary text-gray-900 bg-white sm:text-sm"
+              class="pl-10 pr-3 py-2 w-full border border-gray-300 rounded-md shadow-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
               [placeholder]="localService.locals().enter_password"
             />
           </div>
-          @if (loginForm.get("password")?.touched && loginForm.get("password")?.invalid) {
-            <div class="text-xs text-red-500 mt-1">
-              @if (loginForm.get("password")?.errors?.["required"]) {
-                <span>{{ localService.locals().password_required }}</span>
-              }
-              @if (loginForm.get("password")?.errors?.["minlength"]) {
-                <span>{{ localService.locals().password_minlength }}</span>
-              }
-            </div>
-          }
         </div>
 
-        <!-- Forgot Password -->
-        <div class="flex items-center justify-end">
-          <div class="text-sm">
-            <a href="#" class="font-medium text-primary hover:text-gray-700 hover:text-gray-300 transition-colors duration-200">
-              {{ localService.locals().forgot_password }}
-            </a>
-          </div>
+        <!-- Forgot -->
+        <div class="text-right">
+          <a href="#" class="text-sm text-primary hover:text-gray-700">
+            {{ localService.locals().forgot_password }}
+          </a>
         </div>
 
-        <!-- Login Button -->
+        <!-- Submit -->
         <div>
           <button
             type="submit"
             [disabled]="isLoading() || loginForm.invalid"
-            class="group relative w-full flex justify-center py-3 px-4 border-2 border-dark-gray text-sm font-medium rounded-md text-dark-gray bg-custom-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-dark-gray dark:focus:ring-offset-dark-gray shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
+            class="w-full py-3 px-4 border-2 text-sm font-medium rounded-md text-white bg-primary hover:bg-primary/800 focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
           >
             @if (isLoading()) {
               <span>{{ localService.locals().signing_in }}</span>
@@ -101,10 +80,5 @@
         </div>
       </form>
     </div>
-  </div>
-
-  <!-- Right side: Decorative Pattern -->
-  <div class="hidden md:block lg:w-1/2 decorative-pattern">
-    <!-- The decorative pattern with gradient and 'G' shape is applied via CSS -->
   </div>
 </div>
