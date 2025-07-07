@@ -47,11 +47,19 @@
       }
     </div>
     <div
-      class="transition-all duration-300 ease-in-out bg-white/70 backdrop-blur-sm backdrop-saturate-150 shadow-lg z-30 overflow-hidden"
+      class="bg-white/70 backdrop-blur-sm backdrop-saturate-150 shadow-lg z-30 overflow-hidden transition-all duration-300 ease-in-out"
       [ngClass]="{
         'w-80': showSidebar(),
         'w-0': !showSidebar(),
       }"
+      [class.fixed]="showSidebar()"
+      [class.top-0]="showSidebar()"
+      [class.bottom-0]="showSidebar()"
+      [class.left-0]="showSidebar()"
+      [class.md:relative]="true"
+      [class.md:top-auto]="true"
+      [class.md:left-auto]="true"
+      [class.md:bottom-auto]="true"
     >
       <app-conversation-sidebar
         [class.hidden]="!showSidebar()"
@@ -65,7 +73,7 @@
   <!-- Toggle Sidebar Button (always on top) -->
   <button
     (click)="toggleSidebar()"
-    class="fixed top-2 md:top-8 left-2 md:left-8 w-12 h-12 rounded-full bg-primary hover:bg-primary/90 text-white shadow-lg flex items-center justify-center transition duration-300 z-50"
+    class="fixed top-2 md:top-8 ltr:right-2 md:ltr:right-8 rtl:left-2 md:rtl:left-8 w-12 h-12 rounded-full bg-primary hover:bg-primary/90 text-white shadow-lg flex items-center justify-center transition duration-300 z-50"
     [class.rotate-180]="showSidebar()"
   >
     <i [class]="'CHEVRON_RIGHT' | icon" class="text-xl transition-transform duration-300"></i>
