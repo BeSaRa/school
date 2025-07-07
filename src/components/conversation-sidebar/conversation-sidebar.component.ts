@@ -1,5 +1,4 @@
-// Add LocalService to the imports
-import { Component, output, inject, OnInit, signal, model, effect, AfterViewInit } from "@angular/core";
+import { Component, output, inject, OnInit, signal, model, computed } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ConversationService } from "@/services/conversation.service";
 import { Conversation, ConversationGroup } from "@/types/conversation.types";
@@ -20,7 +19,9 @@ import { ChatService } from "@/services/ai-chat-assistant.service";
 export class ConversationSidebarComponent implements OnInit {
   conversationSelected = output<string>();
   createNewChat = output<void>();
-  conversations = signal<ConversationGroup[]>([]);
+
+  private rawConversations = signal<Conversation[]>([]);
+
   conversationService = inject(ConversationService);
   chatService = inject(ChatService);
   dialogService = inject(DialogService);
@@ -33,27 +34,12 @@ export class ConversationSidebarComponent implements OnInit {
 
   selectedConversation: Conversation | null = null;
 
-  ngOnInit(): void {
-    this.loadConversations();
+  groupLabels = computed(() => this.localService.locals());
 
-    this.chatService.newConversationCreated$.subscribe(() => {
-      this.loadConversations();
-    });
-  }
+  conversations = computed<ConversationGroup[]>(() => {
+    const conversations = this.rawConversations();
+    const labels = this.groupLabels();
 
-  private loadConversations() {
-    this.conversationService.getConversations().subscribe({
-      next: (response) => {
-        const grouped = this.groupConversations(response.conversations);
-        this.conversations.set(grouped);
-      },
-      error: (error) => {
-        this.dialogService.error(this.localService.locals().error_loading_conversations, error.message).subscribe();
-      },
-    });
-  }
-
-  private groupConversations(conversations: Conversation[]): ConversationGroup[] {
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const yesterday = new Date(today);
@@ -68,13 +54,13 @@ export class ConversationSidebarComponent implements OnInit {
     yearAgo.setFullYear(yearAgo.getFullYear() - 1);
 
     const groups: ConversationGroup[] = [
-      { title: this.localService.locals().today, conversations: [] },
-      { title: this.localService.locals().yesterday, conversations: [] },
-      { title: this.localService.locals().last_3_days, conversations: [] },
-      { title: this.localService.locals().last_week, conversations: [] },
-      { title: this.localService.locals().last_month, conversations: [] },
-      { title: this.localService.locals().last_year, conversations: [] },
-      { title: this.localService.locals().older, conversations: [] },
+      { title: labels.today, conversations: [] },
+      { title: labels.yesterday, conversations: [] },
+      { title: labels.last_3_days, conversations: [] },
+      { title: labels.last_week, conversations: [] },
+      { title: labels.last_month, conversations: [] },
+      { title: labels.last_year, conversations: [] },
+      { title: labels.older, conversations: [] },
     ];
 
     conversations.forEach((conversation) => {
@@ -97,7 +83,27 @@ export class ConversationSidebarComponent implements OnInit {
         groups[6].conversations.push(conversation);
       }
     });
+
     return groups.filter((group) => group.conversations.length > 0);
+  });
+
+  ngOnInit(): void {
+    this.loadConversations();
+
+    this.chatService.newConversationCreated$.subscribe(() => {
+      this.loadConversations();
+    });
+  }
+
+  private loadConversations() {
+    this.conversationService.getConversations().subscribe({
+      next: (response) => {
+        this.rawConversations.set(response.conversations);
+      },
+      error: (error) => {
+        this.dialogService.error(this.localService.locals().error_loading_conversations, error.message).subscribe();
+      },
+    });
   }
 
   onConversationClick(conversation: Conversation) {
@@ -122,7 +128,6 @@ export class ConversationSidebarComponent implements OnInit {
     this.editingConversation.set(this.selectedConversation.id);
     this.showContextMenu.set(false);
 
-    // Allow time for the input to render before focusing
     setTimeout(() => {
       const inputElement = document.getElementById(`edit-${this.selectedConversation?.id}`);
       inputElement?.focus();
