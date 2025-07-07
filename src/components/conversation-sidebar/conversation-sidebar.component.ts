@@ -1,12 +1,5 @@
 // Add LocalService to the imports
-import {
-  Component,
-  output,
-  inject,
-  OnInit,
-  signal,
-  model,
-} from "@angular/core";
+import { Component, output, inject, OnInit, signal, model, effect, AfterViewInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ConversationService } from "@/services/conversation.service";
 import { Conversation, ConversationGroup } from "@/types/conversation.types";
@@ -15,6 +8,7 @@ import { FormsModule } from "@angular/forms";
 import { DialogService } from "../../services/dialog.service";
 import { filter, switchMap } from "rxjs";
 import { LocalService } from "@/services/local.service";
+import { ChatService } from "@/services/ai-chat-assistant.service";
 
 @Component({
   selector: "app-conversation-sidebar",
@@ -28,6 +22,7 @@ export class ConversationSidebarComponent implements OnInit {
   createNewChat = output<void>();
   conversations = signal<ConversationGroup[]>([]);
   conversationService = inject(ConversationService);
+  chatService = inject(ChatService);
   dialogService = inject(DialogService);
   localService = inject(LocalService);
   editingTitle = model<string>("");
@@ -40,6 +35,10 @@ export class ConversationSidebarComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadConversations();
+
+    this.chatService.newConversationCreated$.subscribe(() => {
+      this.loadConversations();
+    });
   }
 
   private loadConversations() {
@@ -49,19 +48,12 @@ export class ConversationSidebarComponent implements OnInit {
         this.conversations.set(grouped);
       },
       error: (error) => {
-        this.dialogService
-          .error(
-            this.localService.locals().error_loading_conversations,
-            error.message
-          )
-          .subscribe();
+        this.dialogService.error(this.localService.locals().error_loading_conversations, error.message).subscribe();
       },
     });
   }
 
-  private groupConversations(
-    conversations: Conversation[]
-  ): ConversationGroup[] {
+  private groupConversations(conversations: Conversation[]): ConversationGroup[] {
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const yesterday = new Date(today);
@@ -87,11 +79,7 @@ export class ConversationSidebarComponent implements OnInit {
 
     conversations.forEach((conversation) => {
       const updateDate = new Date(conversation.updatedAt);
-      const updateDay = new Date(
-        updateDate.getFullYear(),
-        updateDate.getMonth(),
-        updateDate.getDate()
-      );
+      const updateDay = new Date(updateDate.getFullYear(), updateDate.getMonth(), updateDate.getDate());
 
       if (updateDay.getTime() === today.getTime()) {
         groups[0].conversations.push(conversation);
@@ -113,12 +101,10 @@ export class ConversationSidebarComponent implements OnInit {
   }
 
   onConversationClick(conversation: Conversation) {
-    console.log("Conversation clicked:", conversation.id);
     this.conversationSelected.emit(conversation.id);
   }
 
   onNewChatClick() {
-    console.log("New chat clicked");
     this.createNewChat.emit();
   }
 
@@ -138,9 +124,7 @@ export class ConversationSidebarComponent implements OnInit {
 
     // Allow time for the input to render before focusing
     setTimeout(() => {
-      const inputElement = document.getElementById(
-        `edit-${this.selectedConversation?.id}`
-      );
+      const inputElement = document.getElementById(`edit-${this.selectedConversation?.id}`);
       inputElement?.focus();
     });
   }
@@ -152,23 +136,16 @@ export class ConversationSidebarComponent implements OnInit {
       return;
     }
 
-    this.conversationService
-      .editConversationTitle(conversationId, newTitle)
-      .subscribe({
-        next: () => {
-          this.loadConversations();
-          this.cancelEdit();
-        },
-        error: (error) => {
-          this.dialogService
-            .error(
-              this.localService.locals().error_updating_conversation_title,
-              error.message
-            )
-            .subscribe();
-          this.cancelEdit();
-        },
-      });
+    this.conversationService.editConversationTitle(conversationId, newTitle).subscribe({
+      next: () => {
+        this.loadConversations();
+        this.cancelEdit();
+      },
+      error: (error) => {
+        this.dialogService.error(this.localService.locals().error_updating_conversation_title, error.message).subscribe();
+        this.cancelEdit();
+      },
+    });
   }
 
   cancelEdit() {
@@ -195,19 +172,10 @@ export class ConversationSidebarComponent implements OnInit {
     if (!this.selectedConversation) return;
 
     this.dialogService
-      .confirm(
-        this.localService.locals().delete_conversation,
-        this.localService.locals().delete_conversation_question,
-        this.localService.locals().delete,
-        this.localService.locals().cancel
-      )
+      .confirm(this.localService.locals().delete_conversation, this.localService.locals().delete_conversation_question, this.localService.locals().delete, this.localService.locals().cancel)
       .pipe(
         filter((result) => result.confirmed),
-        switchMap(() =>
-          this.conversationService.deleteConversation(
-            this.selectedConversation!.id
-          )
-        )
+        switchMap(() => this.conversationService.deleteConversation(this.selectedConversation!.id))
       )
       .subscribe({
         next: () => {
@@ -215,12 +183,7 @@ export class ConversationSidebarComponent implements OnInit {
           this.showContextMenu.set(false);
         },
         error: (error) => {
-          this.dialogService
-            .error(
-              this.localService.locals().error_deleting_conversation,
-              error.message
-            )
-            .subscribe();
+          this.dialogService.error(this.localService.locals().error_deleting_conversation, error.message).subscribe();
         },
       });
   }
