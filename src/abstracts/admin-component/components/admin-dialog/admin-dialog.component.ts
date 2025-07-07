@@ -1,41 +1,22 @@
-import {
-  Component,
-  inject,
-  computed,
-  effect,
-  Output,
-  EventEmitter,
-} from "@angular/core";
+import { Component, inject, computed, effect, Output, EventEmitter } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import {
-  ReactiveFormsModule,
-  FormBuilder,
-  FormGroup,
-  Validators,
-  FormsModule,
-} from "@angular/forms";
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from "@angular/forms";
 import { BaseCrudModel } from "@/abstracts/base-crud-model";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { DialogService } from "@/services/dialog.service";
 import { LocalService } from "@/services/local.service";
+import { LangKeysContract } from "@/types/localization.types";
 
 export interface FormField {
   key: string;
   label: string;
-  type?:
-    | "text"
-    | "number"
-    | "email"
-    | "password"
-    | "textarea"
-    | "select"
-    | "boolean"
-    | "date";
+  type?: "text" | "number" | "email" | "password" | "textarea" | "select" | "boolean" | "date";
   required?: boolean;
-  options?: { value: any; label: string }[];
+  options?: Array<{ value: any; label: keyof LangKeysContract }>;
   validators?: any[];
   disabled?: boolean;
   placeholder?: string;
+  width?: "1" | "1/2" | "1/3";
 }
 
 @Component({
@@ -57,6 +38,34 @@ export interface FormField {
   ],
 })
 export class AdminDialogComponent<T extends BaseCrudModel<T, any>> {
+  getErrorMessage(fieldKey: string): string | null {
+    const control = this.form.get(fieldKey);
+    if (!control || !control.errors || !control.touched) return null;
+
+    if (control.hasError("required")) {
+      return "This field is required.";
+    }
+
+    if (control.hasError("email")) {
+      return "Invalid email format.";
+    }
+
+    if (control.hasError("minlength")) {
+      const requiredLength = control.getError("minlength").requiredLength;
+      return `Minimum ${requiredLength} characters required.`;
+    }
+
+    if (control.hasError("maxlength")) {
+      const requiredLength = control.getError("maxlength").requiredLength;
+      return `Maximum ${requiredLength} characters allowed.`;
+    }
+
+    if (control.hasError("pattern")) {
+      return "Invalid format.";
+    }
+
+    return "Invalid input.";
+  }
   modelName = "Item";
   model: T | null = null;
   formFields: FormField[] = [];
@@ -71,7 +80,7 @@ export class AdminDialogComponent<T extends BaseCrudModel<T, any>> {
   private fb = inject(FormBuilder);
   private dialogRef = inject(MatDialogRef<AdminDialogComponent<T>>);
   private dialogService = inject(DialogService);
-  private localService = inject(LocalService);
+  localService = inject(LocalService);
   private data = inject(MAT_DIALOG_DATA);
 
   constructor() {
@@ -79,7 +88,7 @@ export class AdminDialogComponent<T extends BaseCrudModel<T, any>> {
     effect(() => {
       this.initializeForm();
       if (this.isEditMode() && this.model) {
-        this.form.patchValue(this.model as any);
+        this.form.patchValue(this.flatten(this.model as any));
       }
     });
   }
@@ -90,6 +99,7 @@ export class AdminDialogComponent<T extends BaseCrudModel<T, any>> {
     this.modelName = this.data.modelName || "";
     this.modelConstructor = this.data.modelConstructor; // Get constructor from data
     this.initializeForm();
+    console.log(this.formFields);
   }
 
   private initializeForm(): void {
@@ -103,10 +113,7 @@ export class AdminDialogComponent<T extends BaseCrudModel<T, any>> {
       const key = field.key as keyof typeof this.model;
       const initialValue = this.model ? (this.model[key] ?? "") : "";
 
-      formGroup[field.key] = this.fb.control(
-        { value: initialValue, disabled: field.disabled ?? false },
-        validators
-      );
+      formGroup[field.key] = this.fb.control({ value: initialValue, disabled: field.disabled ?? false }, validators);
     });
 
     this.form = this.fb.group(formGroup);
@@ -115,27 +122,24 @@ export class AdminDialogComponent<T extends BaseCrudModel<T, any>> {
   protected onSubmit(): void {
     if (this.form.invalid) return;
 
+    const rawValue = this.form.getRawValue();
+    const nestedValue = this.unFlatten(rawValue);
+
     let modelInstance: T;
 
     if (this.isEditMode() && this.model) {
-      // Edit mode: update existing model
-      modelInstance = Object.assign(this.model, this.form.getRawValue());
+      modelInstance = Object.assign(this.model, nestedValue);
     } else {
-      // Create mode: create new model instance
       try {
-        // Create new instance using the constructor
         modelInstance = new this.modelConstructor();
-        // Assign form values to the new instance
-        Object.assign(modelInstance, this.form.getRawValue());
+        Object.assign(modelInstance, nestedValue);
       } catch (error) {
         console.error("Error creating model instance:", error);
         return;
       }
     }
 
-    const save$ = this.isEditMode()
-      ? modelInstance.update()
-      : modelInstance.create();
+    const save$ = this.isEditMode() ? modelInstance.update() : modelInstance.create();
 
     save$.subscribe({
       next: (savedModel) => {
@@ -143,9 +147,7 @@ export class AdminDialogComponent<T extends BaseCrudModel<T, any>> {
         this.dialogRef.close(savedModel);
       },
       error: (error) => {
-        this.dialogService
-          .error(this.localService.locals().error_saving_model, error.message)
-          .subscribe();
+        this.dialogService.error(this.localService.locals().error_saving_model, error.message).subscribe();
       },
     });
   }
@@ -153,5 +155,39 @@ export class AdminDialogComponent<T extends BaseCrudModel<T, any>> {
   protected onCancel(): void {
     this.cancelled.emit();
     this.dialogRef.close();
+  }
+
+  private flatten(obj: Record<string, any>, parentKey = "", result: Record<string, any> = {}): Record<string, any> {
+    for (const key in obj) {
+      if (!obj.hasOwnProperty(key)) continue;
+
+      const newKey = parentKey ? `${parentKey}.${key}` : key;
+      const value = obj[key];
+
+      if (value && typeof value === "object" && !Array.isArray(value)) {
+        this.flatten(value, newKey, result);
+      } else {
+        result[newKey] = value;
+      }
+    }
+    return result;
+  }
+
+  unFlatten(flatObj: Record<string, any>): any {
+    const result: Record<string, any> = {};
+
+    for (const flatKey in flatObj) {
+      const keys = flatKey.split(".");
+      keys.reduce((acc, key, index) => {
+        if (index === keys.length - 1) {
+          acc[key] = flatObj[flatKey];
+          return;
+        }
+        acc[key] = acc[key] || {};
+        return acc[key];
+      }, result);
+    }
+
+    return result;
   }
 }
