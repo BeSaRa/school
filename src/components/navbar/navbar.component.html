@@ -5,29 +5,27 @@
 
   <!-- The actual navbar that shows on hover -->
   <nav
-    class="floating-sidebar bg-primary backdrop-blur-sm backdrop-saturate-150 rounded-full p-4 m-4 flex flex-col transition-all duration-300 z-40 opacity-0 translate-x-full group-hover:opacity-100 group-hover:translate-x-0 fixed top-1/2 -translate-y-1/2 right-4"
+    class="floating-sidebar bg-primary rounded-full p-4 m-4 flex flex-col fixed top-1/2 -translate-y-1/2 right-0 translate-x-full opacity-0 pointer-events-none group-hover:translate-x-0 group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-300 z-40"
   >
     <div class="flex flex-col items-center space-y-6">
       <!-- Menu Items -->
-      <div class="flex flex-col items-center space-y-4">
-        @for (item of menuItems; track item.id) {
-          <div class="relative group">
-            <a [routerLink]="item.route" class="flex items-center p-2 rounded-full transition hover:bg-tertiary" [attr.aria-current]="isActiveRoute(item.route) ? 'page' : undefined">
-              <div class="flex items-center justify-center min-w-[2.5rem] min-h-[2.5rem]">
-                <i [class]="item.icon | icon" class="text-2xl transition-all duration-300 ease-out text-white" [class.scale-110]="isActiveRoute(item.route)" aria-hidden="true"></i>
-              </div>
-            </a>
-          </div>
-        }
-
-        <!-- Profile Button -->
+      @for (item of menuItems; track item.id) {
         <div class="relative group">
-          <button (click)="openProfileDialog()" class="flex items-center p-2 rounded-full transition hover:bg-tertiary" aria-label="Open Profile">
+          <a [routerLink]="item.route" class="flex items-center p-2 rounded-full transition hover:bg-tertiary" [attr.aria-current]="isActiveRoute(item.route) ? 'page' : undefined">
             <div class="flex items-center justify-center min-w-[2.5rem] min-h-[2.5rem]">
-              <i [class]="iconClass | icon" class="text-2xl transition-all duration-300 ease-out text-white" aria-hidden="true"></i>
+              <i [class]="item.icon | icon" class="text-2xl transition-all duration-300 ease-out text-white" [class.scale-110]="isActiveRoute(item.route)" aria-hidden="true"></i>
             </div>
-          </button>
+          </a>
         </div>
+      }
+
+      <!-- Profile Button -->
+      <div class="relative group">
+        <button (click)="openProfileDialog()" class="flex items-center p-2 rounded-full transition hover:bg-tertiary" aria-label="Open Profile">
+          <div class="flex items-center justify-center min-w-[2.5rem] min-h-[2.5rem]">
+            <i [class]="iconClass | icon" class="text-2xl transition-all duration-300 ease-out text-white" aria-hidden="true"></i>
+          </div>
+        </button>
       </div>
     </div>
   </nav>
