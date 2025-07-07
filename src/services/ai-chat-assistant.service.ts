@@ -15,12 +15,12 @@ export class ChatService {
   private readonly urlService = inject(UrlService);
   private readonly dialogService = inject(DialogService);
   private readonly localService = inject(LocalService);
-
   messages: WritableSignal<Message[]> = signal<Message[]>([]);
   status: WritableSignal<boolean> = signal<boolean>(false);
   conversationId: WritableSignal<string> = signal<string>("");
   private messagesSubject = new Subject<Message[]>();
   private streamingAssistantSubject = new Subject<string>();
+  newConversationCreated$ = new Subject<void>();
 
   getUrlSegment(): string {
     return this.urlService.URLS.AI_CHAT_ASSISTANT;
@@ -100,8 +100,14 @@ export class ChatService {
           filter((event): event is { type: string; data?: any } => event !== null),
           map((event) => {
             if (event.data?.conversationId) {
+              const currentId = this.conversationId();
               this.conversationId.set(event.data.conversationId);
+
+              if (!currentId) {
+                this.newConversationCreated$.next();
+              }
             }
+
             if (event.type === "content") {
               buffer += event.data.content || "";
               this.streamingAssistantSubject.next(buffer);

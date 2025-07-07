@@ -202,7 +202,6 @@ export class AIChatAssistantComponent implements OnInit, AfterViewInit, OnDestro
    * Creates a new chat conversation
    */
   onCreateNewChatClicked(): void {
-    this.showSidebar.set(false);
     this.chatService.resetChat();
   }
 
@@ -211,7 +210,6 @@ export class AIChatAssistantComponent implements OnInit, AfterViewInit, OnDestro
    * @param conversationId - The ID of the conversation to load
    */
   onConversationSelected(conversationId: string): void {
-    this.showSidebar.set(false);
     this.chatService.conversationId.set(conversationId);
 
     this.conversationService

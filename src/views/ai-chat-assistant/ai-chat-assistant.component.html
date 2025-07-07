@@ -1,16 +1,8 @@
 <div class="flex flex-col h-full relative">
+  <!-- Container -->
   <div class="relative flex flex-col md:flex-row h-[95vh] rounded-xl overflow-hidden">
-    <!-- Conversation Sidebar -->
-    <div
-      class="absolute top-0 left-0 h-full w-80 transform transition-transform duration-300 ease-in-out bg-white/70 backdrop-blur-sm backdrop-saturate-150 rounded-r-xl shadow-lg z-30"
-      [class.-translate-x-full]="!showSidebar()"
-      [class.translate-x-0]="showSidebar()"
-    >
-      <app-conversation-sidebar class="h-full w-full" (conversationSelected)="onConversationSelected($event)" (createNewChat)="onCreateNewChatClicked()"></app-conversation-sidebar>
-    </div>
-
     <!-- Main Chat Area -->
-    <div class="flex-1 flex flex-col h-full bg-white relative z-10">
+    <div class="flex-1 flex flex-col h-full bg-white relative z-10 transition-all duration-300">
       <div class="md:hidden h-14"></div>
 
       <header class="text-center text-primary p-4">
@@ -53,6 +45,20 @@
           </footer>
         </div>
       }
+    </div>
+    <div
+      class="transition-all duration-300 ease-in-out bg-white/70 backdrop-blur-sm backdrop-saturate-150 shadow-lg z-30 overflow-hidden"
+      [ngClass]="{
+        'w-80': showSidebar(),
+        'w-0': !showSidebar(),
+      }"
+    >
+      <app-conversation-sidebar
+        [class.hidden]="!showSidebar()"
+        class="h-full w-80"
+        (conversationSelected)="onConversationSelected($event)"
+        (createNewChat)="onCreateNewChatClicked()"
+      ></app-conversation-sidebar>
     </div>
   </div>
 
