@@ -1,14 +1,12 @@
-<!-- Hover Trigger Area -->
-<div class="group fixed top-0 right-0 h-screen w-6 z-50">
-  <!-- Visible Hover Strip -->
-  <div class="absolute top-1/2 -translate-y-1/2 right-0 w-4 h-32 bg-white rounded-l-full shadow-lg animate-pulse pointer-events-none"></div>
+<div class="group fixed top-0 ltr:left-0 rtl:right-0 h-screen w-6 z-50">
+  <!-- Hover strip -->
+  <div class="absolute top-1/2 -translate-y-1/2 ltr:left-[-10px] ltr:rounded-r-full rtl:right-[-10px] rtl:rounded-l-full w-6 h-32 bg-white shadow-lg animate-pulse pointer-events-none"></div>
 
-  <!-- The actual navbar that shows on hover -->
+  <!-- Sidebar nav -->
   <nav
-    class="floating-sidebar bg-primary rounded-full p-4 m-4 flex flex-col fixed top-1/2 -translate-y-1/2 right-0 translate-x-full opacity-0 pointer-events-none group-hover:translate-x-0 group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-300 z-40"
+    class="floating-sidebar bg-primary rounded-full p-4 m-4 flex flex-col fixed top-1/2 -translate-y-1/2 transition-all duration-300 z-40 ltr:left-0 ltr:-translate-x-full ltr:group-hover:translate-x-0 rtl:right-0 rtl:translate-x-full rtl:group-hover:translate-x-0 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto"
   >
     <div class="flex flex-col items-center space-y-6">
-      <!-- Menu Items -->
       @for (item of menuItems; track item.id) {
         <div class="relative group">
           <a [routerLink]="item.route" class="flex items-center p-2 rounded-full transition hover:bg-tertiary" [attr.aria-current]="isActiveRoute(item.route) ? 'page' : undefined">
@@ -19,7 +17,7 @@
         </div>
       }
 
-      <!-- Profile Button -->
+      <!-- Profile -->
       <div class="relative group">
         <button (click)="openProfileDialog()" class="flex items-center p-2 rounded-full transition hover:bg-tertiary" aria-label="Open Profile">
           <div class="flex items-center justify-center min-w-[2.5rem] min-h-[2.5rem]">

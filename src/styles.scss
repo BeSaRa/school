@@ -5,7 +5,8 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
+body,
+html {
   @apply bg-white text-gray-900 transition-colors duration-200;
   @apply overflow-hidden;
 }
