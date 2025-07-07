@@ -149,6 +149,9 @@ export interface LangKeysContract {
   school_type_independent: string;
   school: string;
   user: string;
+  delete_school: string;
+  delete_school_question: string;
+  error_deleting_school: string;
 }
 
 export type SupportedLanguage = "en" | "ar";

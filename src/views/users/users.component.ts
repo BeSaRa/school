@@ -89,7 +89,7 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
     return `<span class="text-xs font-medium px-2.5 py-0.5 rounded ${statusClass}">${status}</span>`;
   }
 
-  protected deleteItem(user: User): void {
+  protected deleteUser(user: User): void {
     if (!user?.id) return;
 
     this.dialogService
