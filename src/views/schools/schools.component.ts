@@ -9,6 +9,7 @@ import { LangKeysContract } from "@/types/localization.types";
 import { MatDialog } from "@angular/material/dialog";
 import { AdminDialogComponent } from "@/abstracts/admin-component/components/admin-dialog/admin-dialog.component";
 import { LookupService } from "@/services/lookup.service";
+import { filter, switchMap } from "rxjs";
 
 @Component({
   selector: "app-schools",
@@ -26,6 +27,7 @@ export class SchoolsComponent extends AdminComponent<School> implements OnInit {
   protected itemForm!: FormGroup;
   private dialog = inject(MatDialog);
   private lookupService = inject(LookupService);
+  private schoolService = inject(SchoolService);
 
   override ngOnInit() {
     this.config.set({
@@ -100,6 +102,24 @@ export class SchoolsComponent extends AdminComponent<School> implements OnInit {
   private formatEducationLevel(level: keyof LangKeysContract): string {
     return level ? this.localService.locals()[level] : "";
   }
+
+  protected deleteSchool(school: School): void {
+    if (!school?.id) return;
+
+    this.dialogService
+      .confirm(this.localService.locals().delete_school, this.localService.locals().delete_school_question, this.localService.locals().delete, this.localService.locals().cancel)
+      .pipe(
+        filter((result) => result?.confirmed === true),
+        switchMap(() => this.schoolService.delete(school.id))
+      )
+      .subscribe({
+        next: () => this.loadData(),
+        error: (err) => {
+          this.dialogService.error(this.localService.locals().error_deleting_school, err.message).subscribe();
+        },
+      });
+  }
+
   protected openAddDialog(): void {
     this.openDialog();
   }
@@ -243,5 +263,4 @@ export class SchoolsComponent extends AdminComponent<School> implements OnInit {
       }
     });
   }
-  protected deleteItem(school: School): void {}
 }
