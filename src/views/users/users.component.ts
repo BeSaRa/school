@@ -12,6 +12,7 @@ import { CommonModule } from "@angular/common";
 import { AdminTableComponent } from "../../abstracts/admin-component/components/admin-table/admin-table.component";
 import { filter, switchMap } from "rxjs";
 import { LangKeysContract } from "@/types/localization.types";
+import { LookupService } from "@/services/lookup.service";
 
 @Component({
   selector: "app-users",
@@ -28,6 +29,7 @@ import { LangKeysContract } from "@/types/localization.types";
 export class UsersComponent extends AdminComponent<User> implements OnInit {
   private dialog = inject(MatDialog);
   protected userService = inject(UserService);
+  protected lookupService = inject(LookupService);
 
   constructor() {
     super();
@@ -58,12 +60,7 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
           filterable: true,
           type: "custom",
           filterType: "select",
-          filterOptions: [
-            { value: "student", label: "role_student" },
-            { value: "supervisor", label: "role_supervisor" },
-            { value: "teacher", label: "role_teacher" },
-            { value: "superuser", label: "role_superuser" },
-          ],
+          filterOptions: this.lookupService.lookups.role,
           customTemplate: (value: string) => this.formatRole(`role_${value}` as keyof LangKeysContract),
         },
         {
@@ -123,12 +120,12 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
       disableClose: true,
       data: {
         model: user,
-        modelName: "User",
+        modelName: this.localService.locals().user,
         modelConstructor: User,
         formFields: [
           {
             key: "email",
-            label: "Email",
+            label: this.localService.locals().email,
             type: "email",
             required: true,
             placeholder: "Enter email address",
@@ -136,15 +133,15 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
           },
           {
             key: "fullName",
-            label: "Full Name",
+            label: this.localService.locals().username,
             type: "text",
             required: true,
-            placeholder: "Enter full name",
+            placeholder: this.localService.locals().enter_username,
             validators: [Validators.minLength(2), Validators.maxLength(100)],
           },
           {
             key: "password",
-            label: "Password",
+            label: this.localService.locals().password,
             type: "password",
             required: true,
             placeholder: "Enter password",
@@ -152,19 +149,14 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
           },
           {
             key: "role",
-            label: "Role",
+            label: this.localService.locals().role,
             type: "select",
             required: true,
-            options: [
-              { value: "student", label: "Student" },
-              { value: "supervisor", label: "Supervisor" },
-              { value: "teacher", label: "Teacher" },
-              { value: "superuser", label: "Superuser" },
-            ],
+            options: this.lookupService.lookups.role,
           },
           {
             key: "isActive",
-            label: "Active",
+            label: this.localService.locals().active,
             type: "boolean",
           },
         ],

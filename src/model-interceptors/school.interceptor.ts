@@ -36,12 +36,8 @@ export class SchoolInterceptor extends GeneralInterceptor {
 
     // Handle location coordinates
     if (model.location?.coordinate) {
-      model.location.coordinate.latitude = Number(
-        model.location.coordinate.latitude
-      );
-      model.location.coordinate.longitude = Number(
-        model.location.coordinate.longitude
-      );
+      model.location.coordinate.latitude = Number(model.location.coordinate.latitude);
+      model.location.coordinate.longitude = Number(model.location.coordinate.longitude);
     }
 
     return model;
@@ -65,20 +61,14 @@ export class SchoolInterceptor extends GeneralInterceptor {
 
     // Format and validate contact information
     if (sanitizedModel.contact) {
-      if (sanitizedModel.contact.website) {
-        sanitizedModel.contact.website = this.formatWebsite(
-          sanitizedModel.contact.website
-        );
-      }
       if (sanitizedModel.contact.phone) {
-        sanitizedModel.contact.phone = this.formatPhoneNumber(
-          sanitizedModel.contact.phone
-        );
+        sanitizedModel.contact.phone = this.formatPhoneNumber(sanitizedModel.contact.phone);
+      }
+      if (sanitizedModel.contact.website) {
+        sanitizedModel.contact.website = this.formatWebsite(sanitizedModel.contact.website);
       }
       if (sanitizedModel.contact.email) {
-        sanitizedModel.contact.email = sanitizedModel.contact.email
-          .toLowerCase()
-          .trim();
+        sanitizedModel.contact.email = sanitizedModel.contact.email.toLowerCase().trim();
       }
     }
 
