@@ -11,7 +11,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:todo": "node dist/todo/server/server.mjs",
+    "serve:ssr:school-ai": "node dist/school-ai/server/server.mjs",
     "lint": "ng lint",
     "prepare": "husky install",
     "version": "node bin/version.js",
