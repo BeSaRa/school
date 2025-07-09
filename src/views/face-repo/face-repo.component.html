@@ -7,19 +7,19 @@
   <div class="space-y-6">
     @for (class of classes; track $index) {
       <div class="border rounded-xl p-4 shadow-md bg-white">
-        <h2 class="text-xl font-semibold mb-4">{{ localService.locals().class_title.replace('{{number}}', class.class_no) }}</h2>
+        <h2 class="text-xl font-semibold mb-4">{{ localService.locals().class_title.replace('{{number}}', class.classNo) }}</h2>
 
         <!-- Students Section -->
         <div>
           <h3 class="text-lg font-medium mb-2 text-blue-600">
             {{ localService.locals().students }}
-            <span class="text-sm text-gray-500"> ({{ class.student_repos.length }}) </span>
+            <span class="text-sm text-gray-500"> ({{ class.studentRepos.length }}) </span>
           </h3>
-          @if (class.student_repos.length) {
+          @if (class.studentRepos.length) {
             <div class="flex flex-wrap gap-4">
-              @for (student of class.student_repos; track $index) {
+              @for (student of class.studentRepos; track $index) {
                 <div class="w-28 p-2 bg-gray-50 rounded-lg border text-center text-sm">
-                  <p class="font-medium mb-1">{{ localService.locals().id }}: {{ student.person_no }}</p>
+                  <p class="font-medium mb-1">{{ localService.locals().id }}: {{ student.student.studentNo }}</p>
                   <div class="flex justify-center flex-wrap gap-2">
                     @for (photo of student.photos; track $index) {
                       <img [src]="photo" alt="face" class="w-20 h-20 object-cover rounded border hover:scale-105 transition cursor-pointer" (click)="openImageModal(photo)" />
@@ -39,13 +39,13 @@
         <div class="mt-6">
           <h3 class="text-lg font-medium mb-2 text-green-600">
             {{ localService.locals().teachers }}
-            <span class="text-sm text-gray-500"> ({{ class.teacher_repos?.length }}) </span>
+            <span class="text-sm text-gray-500"> ({{ class.teacherRepos?.length }}) </span>
           </h3>
-          @if (class.teacher_repos?.length) {
+          @if (class.teacherRepos?.length) {
             <div class="flex flex-wrap gap-4">
-              @for (teacher of class.teacher_repos; track $index) {
+              @for (teacher of class.teacherRepos; track $index) {
                 <div class="w-28 p-2 bg-gray-50 rounded-lg border text-center text-sm">
-                  <p class="font-medium mb-1">{{ localService.locals().id }}: {{ teacher.person_no }}</p>
+                  <p class="font-medium mb-1">{{ localService.locals().id }}: {{ teacher.teacher.teacherNo }}</p>
                   <div class="flex justify-center flex-wrap gap-2">
                     @for (photo of teacher.photos; track $index) {
                       <img [src]="photo" alt="face" class="w-20 h-20 object-cover rounded border hover:scale-105 transition cursor-pointer" (click)="openImageModal(photo)" />

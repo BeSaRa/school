@@ -15,9 +15,7 @@ export class FaceRepoComponent implements OnInit {
   classes$!: Observable<FaceRepoResponse["classes"]>;
   localService = inject(LocalService);
   ngOnInit(): void {
-    this.classes$ = this.faceRepoService
-      .loadFaceRepos()
-      .pipe(map(() => this.faceRepoService.faceRepos().classes));
+    this.classes$ = this.faceRepoService.loadFaceRepos().pipe(map(() => this.faceRepoService.faceRepos().classes));
   }
   selectedImage: string | null = null;
 
