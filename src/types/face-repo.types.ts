@@ -5,15 +5,92 @@ export enum PhotoType {
 }
 
 export interface FaceRepoResponse {
-  classes: {
-    class_no: string;
-    student_repos: {
-      person_no: string;
-      photos: PhotoType[];
-    }[];
-    teacher_repos?: {
-      person_no: string;
-      photos: PhotoType[];
-    }[];
-  }[];
+  classes: ClassRepo[];
+}
+
+export interface ClassRepo {
+  classNo: string;
+  studentRepos: StudentRepo[];
+  teacherRepos?: TeacherRepo[];
+}
+
+export interface StudentRepo {
+  student: Student;
+  photos: string[];
+}
+
+export interface TeacherRepo {
+  teacher: Teacher;
+  photos: PhotoType[];
+}
+
+export interface Student {
+  id: number;
+  studentNo: string;
+  personalInfo: PersonalInfo;
+  guardians: any[];
+  academicLevel: AcademicLevel;
+  school: School;
+  schoolBranch: SchoolBranch;
+}
+
+export interface PersonalInfo {
+  id: number;
+  nameEn: string;
+  nameAr: string;
+  username: string;
+  dateOfBirth: string | null;
+  gender: string | null;
+  personalAgentName: string;
+  contact: any;
+  createdBy: number;
+  isActive: boolean;
+  isDeleted: boolean;
+}
+
+export interface AcademicLevel {
+  id: number;
+  educationType: string;
+  systemNameEn: string;
+  systemNameAr: string;
+  levelCode: string;
+  levelOrder: number;
+  createdBy: number;
+}
+
+export interface School {
+  id: number;
+  category: string;
+  nameEn: string;
+  nameAr: string;
+  isActive: boolean;
+  isDeleted: boolean;
+  createdBy: number;
+  updatedBy: number | null;
+  createdAt: string;
+  updatedAt: string | null;
+  contact: SchoolContact;
+}
+
+export interface SchoolContact {
+  id: number;
+  type: string;
+  contact: string;
+  createdBy: number;
+  updatedBy: number | null;
+  createdAt: string;
+  updatedAt: string | null;
+}
+
+export interface SchoolBranch {
+  id: number;
+  country: string;
+  city: string;
+  area: string | null;
+  street: string | null;
+  latitude: number | null;
+  longitude: number | null;
+}
+export interface Teacher {
+  teacherNo: string;
 }
