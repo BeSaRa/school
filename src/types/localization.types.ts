@@ -152,6 +152,16 @@ export interface LangKeysContract {
   delete_school: string;
   delete_school_question: string;
   error_deleting_school: string;
+  face: string;
+  photo: string;
+  unknown_face: string;
+  no_unknown_faces: string;
+  search_students: string;
+  previous: string;
+  next: string;
+  student_identification: string;
+  face_repository: string;
+  confirm: string;
 }
 
 export type SupportedLanguage = "en" | "ar";

@@ -150,5 +150,15 @@
   "school_type_religious": { "en": "Religious", "ar": "دينية" },
   "school_type_independent": { "en": "Independent", "ar": "مستقلة" },
   "school": { "en": "School", "ar": "مدرسة" },
-  "user": { "en": "User", "ar": "مستخدم" }
+  "user": { "en": "User", "ar": "مستخدم" },
+  "face": { "en": "face", "ar": "وجه" },
+  "photo": { "en": "photo", "ar": "صورة" },
+  "unknown_face": { "en": "unknown face", "ar": "وجه غير معروف" },
+  "no_unknown_faces": { "en": "no unknown faces", "ar": "لا يوجد وجه غير معروف" },
+  "search_students": { "en": "search for student", "ar": "ابحث عن طالب" },
+  "previous": { "en": "previous", "ar": "السابق" },
+  "confirm": { "en": "confirm", "ar": "تأكيد" },
+  "next": { "en": "next", "ar": "التالي" },
+  "face_repository": { "en": "Face Repository", "ar": "أرشيف الوجوه" },
+  "student_identification": { "en": "Student Identification", "ar": "تحديد هوية الطالب" }
 }

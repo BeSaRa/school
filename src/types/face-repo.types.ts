@@ -94,3 +94,15 @@ export interface SchoolBranch {
 export interface Teacher {
   teacherNo: string;
 }
+export interface LabelSubmission {
+  studentNo: string;
+  photoName: string;
+}
+export interface UnknownFaceGroup {
+  classNo: string;
+  unknownStudentsRepos: UnknownFace[];
+}
+export interface UnknownFace {
+  photoName: string;
+  photo: string;
+}
