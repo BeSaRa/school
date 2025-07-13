@@ -120,28 +120,29 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   get iconClass(): string {
-    if (!this.currentUser?.role) {
-      return "USER";
-    }
+    // if (!this.currentUser?.role) {
+    //   return "USER";
+    // }
 
-    switch (this.currentUser.role) {
-      case "teacher":
-        return "TEACHER";
-      case "student":
-        return "STUDENT";
-      case "staff":
-        return "STAFF";
-      case "supervisor":
-        return "SUPERVISOR";
-      case "superuser":
-        return "SUPERUSER";
-      case "school_management":
-        return "SCHOOL_MANAGEMENT";
-      case "moe":
-        return "MOE";
-      default:
-        return "USER";
-    }
+    // switch (this.currentUser.role) {
+    //   case "teacher":
+    //     return "TEACHER";
+    //   case "student":
+    //     return "STUDENT";
+    //   case "staff":
+    //     return "STAFF";
+    //   case "supervisor":
+    //     return "SUPERVISOR";
+    //   case "superuser":
+    //     return "SUPERUSER";
+    //   case "school_management":
+    //     return "SCHOOL_MANAGEMENT";
+    //   case "moe":
+    //     return "MOE";
+    //   default:
+    //     return "USER";
+    // }
+    return "USER";
   }
 
   toggleMobileMenu(): void {

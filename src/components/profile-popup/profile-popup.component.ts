@@ -110,4 +110,12 @@ export class ProfilePopupComponent implements OnInit, OnDestroy {
   get isRtl() {
     return document.documentElement.getAttribute("dir") === "rtl";
   }
+  getName(user: User) {
+    try {
+      const lang = this.localService.getCurrentLanguage();
+      return lang === "ar" ? user.nameAr : user.nameEn;
+    } catch {
+      return user.nameEn;
+    }
+  }
 }

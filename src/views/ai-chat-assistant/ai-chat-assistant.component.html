@@ -10,11 +10,12 @@
           @if (currentUser) {
             <div class="flex justify-center">
               <span>
-                {{
+                <!-- {{
                   localService.getCurrentLanguage() === "ar"
                     ? localService.locals().agent + " " + (currentUser.role === "professor" ? localService.locals().prof + " " : "") + currentUser.fullName
                     : (currentUser.role === "professor" ? localService.locals().prof + " " : "") + currentUser.fullName + "'s " + localService.locals().agent
-                }}
+                }} -->
+                {{ currentUser.personalAgentName }}
               </span>
             </div>
           } @else {
