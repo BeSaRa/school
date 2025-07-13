@@ -3,7 +3,7 @@ import { Observable, catchError, throwError, BehaviorSubject } from "rxjs";
 import { DialogService } from "./dialog.service";
 import { isPlatformBrowser } from "@angular/common";
 import { PLATFORM_ID } from "@angular/core";
-import { CastResponseContainer } from "cast-response";
+import { CastResponse, CastResponseContainer } from "cast-response";
 import { BaseCrudService } from "@/abstracts/base-crud-service";
 import { User } from "@/models/user";
 import { LocalService } from "./local.service";
@@ -47,15 +47,11 @@ export class UserService extends BaseCrudService<User> {
     return this.urlService.URLS.USERS;
   }
 
+  @CastResponse()
   getCurrentUser(): Observable<User> {
     return this.http.get<User>(`${this.getUrlSegment()}me`).pipe(
       catchError((error) => {
-        this.dialogService
-          .error(
-            this.localService.locals().error_loading_profile,
-            error.message
-          )
-          .subscribe();
+        this.dialogService.error(this.localService.locals().error_loading_profile, error.message).subscribe();
         return throwError(() => error);
       })
     );

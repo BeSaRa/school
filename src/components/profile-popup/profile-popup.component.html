@@ -15,23 +15,23 @@
       <div class="flex items-center gap-3 sm:gap-4">
         <div class="w-14 h-14 sm:w-16 sm:h-16 bg-indigo-100 rounded-full flex items-center justify-center">
           <span class="text-xl sm:text-2xl text-indigo-600">
-            {{ currentUser.fullName.charAt(0) }}
+            {{ getName(currentUser) }}
           </span>
         </div>
         <div>
           <h3 class="text-xl sm:text-2xl font-semibold text-gray-800">
-            {{ currentUser.fullName }}
+            {{ getName(currentUser) }}
           </h3>
-          <p class="text-sm text-gray-600">
+          <!-- <p class="text-sm text-gray-600">
             {{ currentUser.email }}
-          </p>
+          </p> -->
         </div>
       </div>
 
       <div class="text-sm text-gray-700">
-        <p class="flex items-center gap-2 sm:gap-4 mb-2">
+        <!-- <p class="flex items-center gap-2 sm:gap-4 mb-2">
           <span class="font-medium">{{ localService.locals().role }}: </span>{{ getRoleLocal(currentUser.role) }}
-        </p>
+        </p> -->
         <p class="flex items-center gap-2 sm:gap-4">
           <span class="font-medium">{{ localService.locals().status }}: </span>
           <span class="flex items-center gap-2">
