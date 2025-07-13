@@ -136,7 +136,7 @@
                 <div class="aspect-square rounded-lg overflow-hidden bg-gray-100">
                   <img [src]="currentFace().photo" [alt]="localService.locals().unknown_face" class="w-full h-full object-cover" />
                 </div>
-                <div class="space-x-2 mt-4">
+                <div class="space-x-2 mt-4 flex flex-row rtl:flex-row-reverse justify-center">
                   <button
                     type="button"
                     [disabled]="!currentFace() || faceRepoService.currentFaceIndex() === 0"
