@@ -10,13 +10,14 @@ import { LangKeysContract } from "@/types/localization.types";
 export interface FormField {
   key: string;
   label: string;
-  type?: "text" | "number" | "email" | "password" | "textarea" | "select" | "boolean" | "date";
+  type?: "text" | "number" | "email" | "password" | "textarea" | "select" | "boolean" | "date" | "hidden";
   required?: boolean;
   options?: Array<{ value: any; label: keyof LangKeysContract }>;
   validators?: any[];
   disabled?: boolean;
   placeholder?: string;
   width?: "1" | "1/2" | "1/3";
+  value?: any;
 }
 
 @Component({
@@ -111,7 +112,8 @@ export class AdminDialogComponent<T extends BaseCrudModel<T, any>> {
       if (field.validators) validators.push(...field.validators);
 
       const key = field.key as keyof typeof this.model;
-      const initialValue = this.model ? (this.model[key] ?? "") : "";
+
+      const initialValue = field.value ?? (this.model ? (this.model[key] ?? "") : "");
 
       formGroup[field.key] = this.fb.control({ value: initialValue, disabled: field.disabled ?? false }, validators);
     });
