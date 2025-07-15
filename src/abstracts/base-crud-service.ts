@@ -8,10 +8,7 @@ import { CastResponse, HasInterception, InterceptParam } from "cast-response";
 import { ServiceContract } from "@/contracts/service-contract";
 import { RegisterServiceMixin } from "@/mixins/register-service-mixin";
 
-export abstract class BaseCrudService<Model, PrimaryKey = number>
-  extends RegisterServiceMixin(class {})
-  implements BaseCrudServiceContract<Model, PrimaryKey>, ServiceContract
-{
+export abstract class BaseCrudService<Model, PrimaryKey = number> extends RegisterServiceMixin(class {}) implements BaseCrudServiceContract<Model, PrimaryKey>, ServiceContract {
   abstract serviceName: string;
 
   abstract getUrlSegment(): string;
@@ -20,8 +17,8 @@ export abstract class BaseCrudService<Model, PrimaryKey = number>
   protected http = inject(HttpClient);
 
   @CastResponse()
-  load(options?: OptionsContract | undefined): Observable<Model[]> {
-    return this.http.get<Model[]>(this.getUrlSegment(), {
+  load(options?: OptionsContract, customPath?: string): Observable<Model[]> {
+    return this.http.get<Model[]>(customPath ?? this.getUrlSegment(), {
       params: new HttpParams({
         fromObject: options as never,
       }),

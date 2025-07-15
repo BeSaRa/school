@@ -11,7 +11,6 @@ import { MatIconModule } from "@angular/material/icon";
 import { CommonModule } from "@angular/common";
 import { AdminTableComponent } from "../../abstracts/admin-component/components/admin-table/admin-table.component";
 import { filter, switchMap } from "rxjs";
-import { LangKeysContract } from "@/types/localization.types";
 import { LookupService } from "@/services/lookup.service";
 
 @Component({

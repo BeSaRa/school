@@ -28,6 +28,7 @@ export interface AdminComponentConfig<T> {
   defaultSort?: ColumnSort;
   itemsPerPage?: number;
   responseKey?: string;
+  customLoadPath?: string;
 }
 
 @Component({
@@ -109,8 +110,10 @@ export abstract class AdminComponent<T extends BaseCrudModel<T, any>> implements
   }
 
   protected loadData(): void {
+    const customPath = this.config().customLoadPath;
+
     this.service
-      .load()
+      .load(undefined, customPath)
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         catchError((error) => {
