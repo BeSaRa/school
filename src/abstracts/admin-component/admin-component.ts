@@ -1,24 +1,13 @@
 // admin-component.ts
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  inject,
-  signal,
-  computed,
-  DestroyRef,
-} from "@angular/core";
+import { Component, OnInit, OnDestroy, inject, signal, computed, DestroyRef } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule, FormBuilder, FormGroup } from "@angular/forms";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { catchError, EMPTY } from "rxjs";
+import { catchError, EMPTY, tap } from "rxjs";
 import { BaseCrudService } from "@/abstracts/base-crud-service";
 import { BaseCrudModel } from "@/abstracts/base-crud-model";
 import { DialogService } from "@/services/dialog.service";
-import {
-  FilterType,
-  TableColumn,
-} from "./components/admin-table/admin-table.component";
+import { FilterType, TableColumn } from "./components/admin-table/admin-table.component";
 import { LocalService } from "@/services/local.service";
 
 export type SortDirection = "asc" | "desc" | null;
@@ -47,9 +36,7 @@ export interface AdminComponentConfig<T> {
   imports: [CommonModule, ReactiveFormsModule],
   template: "",
 })
-export abstract class AdminComponent<T extends BaseCrudModel<T, any>>
-  implements OnInit, OnDestroy
-{
+export abstract class AdminComponent<T extends BaseCrudModel<T, any>> implements OnInit, OnDestroy {
   config = signal<AdminComponentConfig<T>>({
     columns: [],
     itemsPerPage: 10,
@@ -73,13 +60,9 @@ export abstract class AdminComponent<T extends BaseCrudModel<T, any>>
   protected showFilters = signal(false);
 
   // Computed values
-  protected sortableColumns = computed(() =>
-    this.config().columns.filter((col) => col.sortable !== false)
-  );
+  protected sortableColumns = computed(() => this.config().columns.filter((col) => col.sortable !== false));
 
-  protected filterableColumns = computed(() =>
-    this.config().columns.filter((col) => col.filterable !== false)
-  );
+  protected filterableColumns = computed(() => this.config().columns.filter((col) => col.filterable !== false));
 
   protected itemsPerPage = computed(() => this.config().itemsPerPage || 10);
 
@@ -88,9 +71,7 @@ export abstract class AdminComponent<T extends BaseCrudModel<T, any>>
   });
 
   protected hasActiveSorts = computed(() => {
-    return Array.from(this.columnSorts().values()).some(
-      (sort) => sort.direction !== null
-    );
+    return Array.from(this.columnSorts().values()).some((sort) => sort.direction !== null);
   });
 
   protected totalPages = computed(() => {
@@ -133,9 +114,7 @@ export abstract class AdminComponent<T extends BaseCrudModel<T, any>>
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         catchError((error) => {
-          this.dialogService
-            .error(this.localService.locals().error_loading_data, error.message)
-            .subscribe();
+          this.dialogService.error(this.localService.locals().error_loading_data, error.message).subscribe();
           return EMPTY;
         })
       )
@@ -149,11 +128,7 @@ export abstract class AdminComponent<T extends BaseCrudModel<T, any>>
     let result = this.items();
 
     this.columnFilters().forEach((filter) => {
-      if (
-        filter.value === null ||
-        filter.value === undefined ||
-        filter.value === ""
-      ) {
+      if (filter.value === null || filter.value === undefined || filter.value === "") {
         return;
       }
 
@@ -161,13 +136,10 @@ export abstract class AdminComponent<T extends BaseCrudModel<T, any>>
         const value = this.getNestedValue(item, filter.field);
         switch (filter.type) {
           case "text":
-            return String(value)
-              .toLowerCase()
-              .includes(filter.value.toLowerCase());
+            return String(value).toLowerCase().includes(filter.value.toLowerCase());
           case "boolean":
             // Ensure value is boolean
-            const filterValue =
-              filter.value === true || filter.value === "true";
+            const filterValue = filter.value === true || filter.value === "true";
             return value === filterValue;
           case "select":
             return value === filter.value;
@@ -178,9 +150,7 @@ export abstract class AdminComponent<T extends BaseCrudModel<T, any>>
     });
 
     // Sorting
-    const sorts = Array.from(this.columnSorts().values()).filter(
-      (s) => s.direction
-    );
+    const sorts = Array.from(this.columnSorts().values()).filter((s) => s.direction);
     if (sorts.length > 0) {
       result = [...result].sort((a, b) => {
         const sortField = sorts[0].field;
@@ -207,13 +177,7 @@ export abstract class AdminComponent<T extends BaseCrudModel<T, any>>
     this.currentPage.set(page);
   }
 
-  protected onColumnSort({
-    field,
-    direction,
-  }: {
-    field: string;
-    direction: "asc" | "desc";
-  }): void {
+  protected onColumnSort({ field, direction }: { field: string; direction: "asc" | "desc" }): void {
     const currentSorts = new Map(this.columnSorts());
 
     if (currentSorts.has(field)) {

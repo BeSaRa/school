@@ -35,33 +35,40 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
     super();
     this.config.set({
       itemsPerPage: 20,
-      responseKey: "users",
+      responseKey: "persons",
       columns: [
         {
-          key: "email",
-          label: "column_email",
+          key: "nameAr",
+          label: "name_ar",
           sortable: true,
           filterable: true,
           type: "text",
           filterType: "text",
         },
         {
-          key: "fullName",
-          label: "column_full_name",
+          key: "nameEn",
+          label: "name_en",
           sortable: true,
           filterable: true,
           type: "text",
           filterType: "text",
         },
         {
-          key: "role",
-          label: "column_role",
+          key: "contactId",
+          label: "contact",
           sortable: true,
           filterable: true,
-          type: "custom",
+          type: "text",
+          filterType: "text",
+        },
+        {
+          key: "gender",
+          label: "gender",
+          sortable: true,
+          filterable: true,
+          type: "text",
           filterType: "select",
-          filterOptions: this.lookupService.lookups.role,
-          customTemplate: (value: string) => this.formatRole(`role_${value}` as keyof LangKeysContract),
+          filterOptions: this.lookupService.lookups.gender,
         },
         {
           key: "isActive",
@@ -78,9 +85,9 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
     });
   }
 
-  private formatRole(label: keyof LangKeysContract): string {
-    return label ? this.localService.locals()[label] : "";
-  }
+  // private formatRole(label: keyof LangKeysContract): string {
+  //   return label ? this.localService.locals()[label] : "";
+  // }
 
   private formatStatus(isActive: boolean): string {
     const status = isActive ? this.localService.locals().status_active : this.localService.locals().status_inactive;
@@ -124,15 +131,23 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
         modelConstructor: User,
         formFields: [
           {
-            key: "email",
-            label: this.localService.locals().email,
-            type: "email",
+            key: "nameEn",
+            label: this.localService.locals().name_en,
+            type: "text",
             required: true,
-            placeholder: "Enter email address",
-            validators: [Validators.email],
+            placeholder: this.localService.locals().enter_en_name,
+            validators: [Validators.minLength(2), Validators.maxLength(100)],
           },
           {
-            key: "fullName",
+            key: "nameAr",
+            label: this.localService.locals().name_ar,
+            type: "text",
+            required: true,
+            placeholder: this.localService.locals().enter_ar_name,
+            validators: [Validators.minLength(2), Validators.maxLength(100)],
+          },
+          {
+            key: "username",
             label: this.localService.locals().username,
             type: "text",
             required: true,
@@ -140,11 +155,26 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
             validators: [Validators.minLength(2), Validators.maxLength(100)],
           },
           {
+            key: "contactId",
+            label: this.localService.locals().contact,
+            type: "number",
+            required: false,
+            placeholder: this.localService.locals().enter_contact,
+            value: null,
+          },
+          {
+            key: "schoolId",
+            label: this.localService.locals().school_id,
+            type: "number",
+            required: true,
+            placeholder: this.localService.locals().enter_school_id,
+          },
+          {
             key: "password",
             label: this.localService.locals().password,
             type: "password",
             required: true,
-            placeholder: "Enter password",
+            placeholder: this.localService.locals().enter_password,
             validators: [Validators.minLength(8), Validators.maxLength(100)],
           },
           {
@@ -153,6 +183,13 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
             type: "select",
             required: true,
             options: this.lookupService.lookups.role,
+          },
+          {
+            key: "createdBy",
+            label: "",
+            type: "hidden",
+            required: true,
+            value: this.userService.currentUser?.id,
           },
           {
             key: "isActive",

@@ -162,6 +162,17 @@ export interface LangKeysContract {
   student_identification: string;
   face_repository: string;
   confirm: string;
+  contact: string;
+  name_ar: string;
+  name_en: string;
+  enter_contact: string;
+  enter_en_name: string;
+  enter_ar_name: string;
+  school_id: string;
+  enter_school_id: string;
+  created_by: string;
+  male: string;
+  female: string;
 }
 
 export type SupportedLanguage = "en" | "ar";

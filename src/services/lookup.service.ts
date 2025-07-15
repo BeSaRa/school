@@ -46,9 +46,8 @@ export class LookupService {
         { value: "independent", label: "school_type_independent" },
       ],
       gender: [
-        { value: "boys", label: "gender_boys" },
-        { value: "girls", label: "gender_girls" },
-        { value: "mixed", label: "gender_mixed" },
+        { value: "male", label: "male" },
+        { value: "female", label: "female" },
       ],
       visionProvider: [
         { value: "azure", label: "azure" },
