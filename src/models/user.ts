@@ -8,14 +8,20 @@ const { send, receive } = new UserInterceptor();
 @InterceptModel({ send, receive })
 export class User extends BaseCrudModel<User, UserService> {
   override $$__service_name__$$: string = "UserService";
+
+  schoolId!: number;
+  role!: string;
+  description!: string;
+  isSystemRole!: boolean;
+  createdBy!: number;
+  dateOfBirth!: string;
+  gender!: "male" | "female";
   nameEn!: string;
   nameAr!: string;
+  username!: string;
   isActive!: boolean;
   isDeleted!: boolean;
-  dateOfBirth!: string;
-  gender!: boolean;
-  username!: string;
-  createdBy!: number;
-  contact!: string;
-  personalAgentName!: string;
+  password!: string;
+  contactId!: number;
+  personalAgentName?: string;
 }

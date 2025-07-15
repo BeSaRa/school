@@ -160,5 +160,15 @@
   "confirm": { "en": "confirm", "ar": "تأكيد" },
   "next": { "en": "next", "ar": "التالي" },
   "face_repository": { "en": "Face Repository", "ar": "أرشيف الوجوه" },
-  "student_identification": { "en": "Student Identification", "ar": "تحديد هوية الطالب" }
+  "student_identification": { "en": "Student Identification", "ar": "تحديد هوية الطالب" },
+  "name_ar": { "en": "name in Arabic", "ar": "الاسم باللغة العربية" },
+  "name_en": { "en": "name in English", "ar": "الاسم باللغة الانكليزية" },
+  "contact": { "en": "Contact", "ar": "تواصل" },
+  "enter_en_name": { "en": "Enter English name", "ar": "ادخل الاسم باللغة الانكليزية" },
+  "enter_ar_name": { "en": "Enter Arabic name", "ar": "ادخل الاسم باللغة العربية" },
+  "enter_contact": { "en": "Enter contact", "ar": "ادخل طريقة التواصل" },
+  "school_id": { "en": "School id", "ar": "رمز المدرسة" },
+  "male": { "en": "male", "ar": "ذكر" },
+  "female": { "en": "female", "ar": "انثى" },
+  "enter_school_id": { "en": "Enter school id", "ar": "ادخل رمز المدرسة" }
 }

@@ -113,8 +113,7 @@ export class AdminDialogComponent<T extends BaseCrudModel<T, any>> {
 
       const key = field.key as keyof typeof this.model;
 
-      const initialValue = field.value ?? (this.model ? (this.model[key] ?? "") : "");
-
+      const initialValue = field.value !== undefined ? field.value : this.model ? (this.model[key] ?? "") : "";
       formGroup[field.key] = this.fb.control({ value: initialValue, disabled: field.disabled ?? false }, validators);
     });
 
