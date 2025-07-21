@@ -202,5 +202,10 @@
   "enter_person": { "en": "Enter person ID", "ar": "أدخل رقم الشخص" },
   "delete_student": { "en": "Delete student", "ar": "حذف الطالب" },
   "delete_student_question": { "en": "Are you sure you want to delete this student?", "ar": "هل أنت متأكد أنك تريد حذف هذا الطالب؟" },
-  "error_deleting_student": { "en": "An error occurred while deleting the student.", "ar": "حدث خطأ أثناء حذف الطالب." }
+  "error_deleting_student": { "en": "An error occurred while deleting the student.", "ar": "حدث خطأ أثناء حذف الطالب." },
+  "subjects": { "en": "Subjects", "ar": "المواد الدراسية" },
+  "subject": { "en": "Subject", "ar": "المادة الدراسية" },
+  "delete_subject": { "en": "Delete subject", "ar": "حذف المادة" },
+  "delete_subject_question": { "en": "Are you sure you want to delete this subject?", "ar": "هل أنت متأكد من حذف هذه المادة؟" },
+  "error_deleting_subject": { "en": "Error deleting subject", "ar": "حدث خطأ أثناء حذف المادة" }
 }

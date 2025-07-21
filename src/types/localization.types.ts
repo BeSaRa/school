@@ -206,6 +206,11 @@ export interface LangKeysContract {
   delete_student: string;
   delete_student_question: string;
   error_deleting_student: string;
+  subjects: string;
+  subject: string;
+  delete_subject: string;
+  delete_subject_question: string;
+  error_deleting_subject: string;
 }
 
 export type SupportedLanguage = "en" | "ar";
