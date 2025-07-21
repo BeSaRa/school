@@ -1,3 +1,5 @@
+import { AcademicLevel } from "@/models/academic-level";
+
 export enum PhotoType {
   PATH = "path",
   BASE64 = "base64",
@@ -48,15 +50,15 @@ export interface PersonalInfo {
   isDeleted: boolean;
 }
 
-export interface AcademicLevel {
-  id: number;
-  educationType: string;
-  systemNameEn: string;
-  systemNameAr: string;
-  levelCode: string;
-  levelOrder: number;
-  createdBy: number;
-}
+// export interface AcademicLevel {
+//   id: number;
+//   educationType: string;
+//   systemNameEn: string;
+//   systemNameAr: string;
+//   levelCode: string;
+//   levelOrder: number;
+//   createdBy: number;
+// }
 
 export interface School {
   id: number;

@@ -1,20 +1,20 @@
 import { BaseCrudService } from "@/abstracts/base-crud-service";
-import { Contact } from "@/models/contact";
+import { AcademicLevel } from "@/models/academic-level";
 import { Injectable } from "@angular/core";
 import { CastResponseContainer } from "cast-response";
 
 @CastResponseContainer({
   $default: {
-    model: () => Contact,
+    model: () => AcademicLevel,
   },
 })
 @Injectable({
   providedIn: "root",
 })
-export class ContactService extends BaseCrudService<Contact> {
-  override serviceName: string = "ContactService";
+export class AcademicLevelService extends BaseCrudService<AcademicLevel> {
+  override serviceName: string = "AcademicLevelService";
 
   getUrlSegment(): string {
-    return this.urlService.URLS.CONTACTS;
+    return this.urlService.URLS.ACADEMIC_LEVEL;
   }
 }

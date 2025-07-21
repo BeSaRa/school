@@ -181,6 +181,20 @@ export interface LangKeysContract {
   contact_value: string;
   contact_type: string;
   mobile: string;
+  academic_levels: string;
+  academic_level: string;
+  education_type: string;
+  level_code: string;
+  level_order: string;
+  enter_level_code: string;
+  enter_level_order: string;
+  delete_level_question: string;
+  delete_level: string;
+  error_deleting_level: string;
+  elementry: string;
+  middle: string;
+  secondary: string;
+  higher: string;
 }
 
 export type SupportedLanguage = "en" | "ar";
