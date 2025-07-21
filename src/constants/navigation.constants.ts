@@ -26,4 +26,10 @@ export const menuItems: NavigationItem[] = [
     icon: "FACE_REPOSITORY",
     route: AppRoutes.FACE_REPOSITORY,
   },
+  {
+    id: 5,
+    label: "contact",
+    icon: "EMAIL",
+    route: AppRoutes.CONTACT,
+  },
 ];

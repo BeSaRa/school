@@ -173,6 +173,14 @@ export interface LangKeysContract {
   created_by: string;
   male: string;
   female: string;
+  contacts: string;
+  type: string;
+  delete_contact: string;
+  delete_contact_question: string;
+  error_deleting_contact: string;
+  contact_value: string;
+  contact_type: string;
+  mobile: string;
 }
 
 export type SupportedLanguage = "en" | "ar";

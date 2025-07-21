@@ -5,6 +5,7 @@ export const EndPoints = {
   AI_CHAT_ASSISTANT: "/chat/",
   CONVERSATION: "/conversations/",
   USERS: "/users/",
+  CONTACTS: "/contacts/",
   FACE_REPO: "/face-repository/",
 };
 

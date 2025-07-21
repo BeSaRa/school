@@ -70,7 +70,7 @@ export class AdminDialogComponent<T extends BaseCrudModel<T, any>> {
   modelName = "Item";
   model: T | null = null;
   formFields: FormField[] = [];
-  modelConstructor: new () => T = null!; // Add this property
+  modelConstructor: new () => T = null!;
 
   @Output() saved = new EventEmitter<T>();
   @Output() cancelled = new EventEmitter<void>();
@@ -98,7 +98,7 @@ export class AdminDialogComponent<T extends BaseCrudModel<T, any>> {
     this.formFields = this.data.formFields || [];
     this.model = this.data.model;
     this.modelName = this.data.modelName || "";
-    this.modelConstructor = this.data.modelConstructor; // Get constructor from data
+    this.modelConstructor = this.data.modelConstructor;
     this.initializeForm();
     console.log(this.formFields);
   }

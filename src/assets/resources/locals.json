@@ -170,5 +170,12 @@
   "school_id": { "en": "School id", "ar": "رمز المدرسة" },
   "male": { "en": "male", "ar": "ذكر" },
   "female": { "en": "female", "ar": "انثى" },
-  "enter_school_id": { "en": "Enter school id", "ar": "ادخل رمز المدرسة" }
+  "enter_school_id": { "en": "Enter school id", "ar": "ادخل رمز المدرسة" },
+  "contacts": { "en": "Contacts", "ar": "جهات الاتصال" },
+  "contact_value": { "en": "Contact", "ar": "جهة الاتصال" },
+  "contact_type": { "en": "Contact Type", "ar": "نوع جهة الاتصال" },
+  "delete_contact": { "en": "Delete contact", "ar": "حذف جهة الاتصال" },
+  "delete_contact_question": { "en": "Are you sure you want to delete this contact?", "ar": "هل أنت متأكد أنك تريد حذف جهة الاتصال هذه؟" },
+  "error_deleting_contact": { "en": "An error occurred while deleting the contact", "ar": "حدث خطأ أثناء حذف جهة الاتصال" },
+  "mobile": { "en": "mobile", "ar": "محمول" }
 }

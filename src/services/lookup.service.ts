@@ -16,6 +16,7 @@ export interface LookupMap {
   visionProvider: LookupItem[];
   storageProvider: LookupItem[];
   role: LookupItem[];
+  contact_type: LookupItem[];
 }
 
 @Injectable({ providedIn: "root" })
@@ -62,6 +63,12 @@ export class LookupService {
         { value: "supervisor", label: "role_supervisor" },
         { value: "teacher", label: "role_teacher" },
         { value: "superuser", label: "role_superuser" },
+      ],
+      contact_type: [
+        { value: "email", label: "email" },
+        { value: "mobile", label: "mobile" },
+        { value: "phone", label: "phone" },
+        { value: "website", label: "website" },
       ],
     };
   }

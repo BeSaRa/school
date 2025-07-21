@@ -8,6 +8,7 @@ export const AppRoutes = {
   USERS: "users",
   SCHOOLS: "schools",
   FACE_REPOSITORY: "face-repository",
+  CONTACT: "contact",
 
   // Error routes
   NOT_FOUND: "404",
