@@ -195,6 +195,17 @@ export interface LangKeysContract {
   middle: string;
   secondary: string;
   higher: string;
+  student: string;
+  student_no: string;
+  branch: string;
+  person: string;
+  enter_student_no: string;
+  enter_academic_level: string;
+  enter_branch: string;
+  enter_person: string;
+  delete_student: string;
+  delete_student_question: string;
+  error_deleting_student: string;
 }
 
 export type SupportedLanguage = "en" | "ar";

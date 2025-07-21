@@ -8,6 +8,7 @@ export const EndPoints = {
   CONTACTS: "/contacts/",
   ACADEMIC_LEVEL: "/academic-levels/",
   FACE_REPO: "/face-repository/",
+  STUDENTS: "/students/",
 };
 
 export type EndpointsType = typeof EndPoints;
