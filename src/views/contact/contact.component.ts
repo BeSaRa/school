@@ -4,7 +4,6 @@ import { CommonModule } from "@angular/common";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatDialog } from "@angular/material/dialog";
-import { filter, switchMap } from "rxjs";
 
 import { Contact } from "@/models/contact";
 import { ContactService } from "@/services/contact.service";
@@ -59,23 +58,6 @@ export class ContactComponent extends AdminComponent<Contact> implements OnInit 
         },
       ],
     });
-  }
-
-  protected deleteContact(contact: Contact): void {
-    if (!contact?.id) return;
-
-    this.dialogService
-      .confirm(this.localService.locals().delete_contact, this.localService.locals().delete_contact_question, this.localService.locals().delete, this.localService.locals().cancel)
-      .pipe(
-        filter((result) => result?.confirmed === true),
-        switchMap(() => this.contactService.delete(contact.id))
-      )
-      .subscribe({
-        next: () => this.loadData(),
-        error: (err) => {
-          this.dialogService.error(this.localService.locals().error_deleting_contact, err.message).subscribe();
-        },
-      });
   }
 
   protected openAddDialog(): void {

@@ -83,23 +83,6 @@ export class AcademicLevelComponent extends AdminComponent<AcademicLevel> implem
     });
   }
 
-  protected deleteLevel(level: AcademicLevel): void {
-    if (!level?.id) return;
-
-    this.dialogService
-      .confirm(this.localService.locals().delete_level, this.localService.locals().delete_level_question, this.localService.locals().delete, this.localService.locals().cancel)
-      .pipe(
-        filter((result) => result?.confirmed === true),
-        switchMap(() => this.academicLevelService.delete(level.id))
-      )
-      .subscribe({
-        next: () => this.loadData(),
-        error: (err) => {
-          this.dialogService.error(this.localService.locals().error_deleting_level, err.message).subscribe();
-        },
-      });
-  }
-
   protected openAddDialog(): void {
     this.openDialog();
   }

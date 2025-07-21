@@ -75,23 +75,6 @@ export class StudentsComponent extends AdminComponent<Student> implements OnInit
     });
   }
 
-  protected deleteStudent(student: Student): void {
-    if (!student?.id) return;
-
-    this.dialogService
-      .confirm(this.localService.locals().delete_student, this.localService.locals().delete_student_question, this.localService.locals().delete, this.localService.locals().cancel)
-      .pipe(
-        filter((result) => result?.confirmed === true),
-        switchMap(() => this.studentService.delete(student.id))
-      )
-      .subscribe({
-        next: () => this.loadData(),
-        error: (err) => {
-          this.dialogService.error(this.localService.locals().error_deleting_student, err.message).subscribe();
-        },
-      });
-  }
-
   protected openAddDialog(): void {
     this.openDialog();
   }

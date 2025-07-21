@@ -10,7 +10,6 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { CommonModule } from "@angular/common";
 import { AdminTableComponent } from "../../abstracts/admin-component/components/admin-table/admin-table.component";
-import { filter, switchMap } from "rxjs";
 import { LookupService } from "@/services/lookup.service";
 
 @Component({
@@ -93,23 +92,6 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
     const statusClass = isActive ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800";
 
     return `<span class="text-xs font-medium px-2.5 py-0.5 rounded ${statusClass}">${status}</span>`;
-  }
-
-  protected deleteUser(user: User): void {
-    if (!user?.id) return;
-
-    this.dialogService
-      .confirm(this.localService.locals().delete_user, this.localService.locals().delete_user_question, this.localService.locals().delete, this.localService.locals().cancel)
-      .pipe(
-        filter((result) => result?.confirmed === true),
-        switchMap(() => this.userService.delete(user.id))
-      )
-      .subscribe({
-        next: () => this.loadData(),
-        error: (err) => {
-          this.dialogService.error(this.localService.locals().error_deleting_user, err.message).subscribe();
-        },
-      });
   }
 
   protected openAddDialog(): void {

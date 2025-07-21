@@ -1,27 +1,9 @@
-import {
-  Injectable,
-  signal,
-  computed,
-  effect,
-  inject,
-  PLATFORM_ID,
-} from "@angular/core";
+import { Injectable, signal, computed, effect, inject, PLATFORM_ID } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import {
-  BehaviorSubject,
-  Observable,
-  catchError,
-  firstValueFrom,
-  of,
-  tap,
-} from "rxjs";
+import { BehaviorSubject, Observable, catchError, firstValueFrom, of, tap } from "rxjs";
 import { DOCUMENT } from "@angular/common";
 import { isPlatformBrowser } from "@angular/common";
-import {
-  LangKeysContract,
-  LocalizationData,
-  SupportedLanguage,
-} from "@/types/localization.types";
+import { LangKeysContract, LocalizationData, SupportedLanguage } from "@/types/localization.types";
 
 @Injectable({
   providedIn: "root",
@@ -32,17 +14,14 @@ export class LocalService {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly currentLang = signal<SupportedLanguage>("en");
   private readonly localizationData = signal<LocalizationData>({});
-  private readonly langChangeSubject = new BehaviorSubject<SupportedLanguage>(
-    "en"
-  );
+  private readonly langChangeSubject = new BehaviorSubject<SupportedLanguage>("en");
   readonly langChange$ = this.langChangeSubject.asObservable();
   readonly locals = computed<LangKeysContract>(() => {
     const data = this.localizationData();
     const lang = this.currentLang();
 
     return Object.keys(data).reduce((acc, key) => {
-      acc[key as keyof LangKeysContract] =
-        data[key]?.[lang] || this.getMissingKeyFallback(key);
+      acc[key as keyof LangKeysContract] = data[key]?.[lang] || this.getMissingKeyFallback(key);
       return acc;
     }, {} as LangKeysContract);
   });
@@ -54,9 +33,7 @@ export class LocalService {
       this.updateDocumentAttributes(lang);
     });
     if (isPlatformBrowser(this.platformId)) {
-      const savedLang = localStorage.getItem(
-        "app_language"
-      ) as SupportedLanguage;
+      const savedLang = localStorage.getItem("app_language") as SupportedLanguage;
       if (savedLang && (savedLang === "en" || savedLang === "ar")) {
         this.setLanguage(savedLang);
       }
@@ -68,9 +45,7 @@ export class LocalService {
    */
   async loadTranslations(): Promise<void> {
     try {
-      const data = await firstValueFrom(
-        this.http.get<LocalizationData>("assets/resources/locals.json")
-      );
+      const data = await firstValueFrom(this.http.get<LocalizationData>("assets/resources/locals.json"));
       this.localizationData.set(data);
     } catch (error) {
       console.error("Failed to load translations:", error);
@@ -139,5 +114,18 @@ export class LocalService {
    */
   private getMissingKeyFallback(key: string): string {
     return `[MISSING KEY]: ${key}`;
+  }
+
+  /**
+   * Interpolates a localized string with dynamic placeholders like {{item}}
+   * @param key The localization key (must exist in locals)
+   * @param params A map of variables to replace in the string
+   * @returns The interpolated localized string
+   */
+  interpolate(key: keyof LangKeysContract, params: Record<string, string | number>): string {
+    const template = this.locals()[key] || this.getMissingKeyFallback(key);
+    return Object.entries(params).reduce((acc, [paramKey, paramValue]) => {
+      return acc.replace(new RegExp(`{{\\s*${paramKey}\\s*}}`, "g"), String(paramValue));
+    }, template);
   }
 }

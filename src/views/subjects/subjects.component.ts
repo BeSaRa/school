@@ -4,7 +4,6 @@ import { CommonModule } from "@angular/common";
 import { MatDialog } from "@angular/material/dialog";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
-import { filter, switchMap } from "rxjs";
 
 import { AdminComponent } from "@/abstracts/admin-component/admin-component";
 import { BaseCrudService } from "@/abstracts/base-crud-service";
@@ -56,23 +55,6 @@ export class SubjectsComponent extends AdminComponent<Subject> implements OnInit
         },
       ],
     });
-  }
-
-  protected deleteSubject(subject: Subject): void {
-    if (!subject?.id) return;
-
-    this.dialogService
-      .confirm(this.localService.locals().delete_subject, this.localService.locals().delete_subject_question, this.localService.locals().delete, this.localService.locals().cancel)
-      .pipe(
-        filter((result) => result?.confirmed === true),
-        switchMap(() => this.subjectService.delete(subject.id))
-      )
-      .subscribe({
-        next: () => this.loadData(),
-        error: (err) => {
-          this.dialogService.error(this.localService.locals().error_deleting_subject, err.message).subscribe();
-        },
-      });
   }
 
   protected openAddDialog(): void {
