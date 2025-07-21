@@ -38,4 +38,10 @@ export const menuItems: NavigationItem[] = [
     icon: "EDUCATION_LEVEL",
     route: AppRoutes.ACADEMIC_LEVEL,
   },
+  {
+    id: 7,
+    label: "students",
+    icon: "STUDENTS",
+    route: AppRoutes.STUDENTS,
+  },
 ];

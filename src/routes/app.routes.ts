@@ -44,6 +44,10 @@ export const routes: Routes = [
         path: AppRoutes.ACADEMIC_LEVEL,
         loadComponent: () => import("../views/academic-level/academic-level.component").then((m) => m.AcademicLevelComponent),
       },
+      {
+        path: AppRoutes.STUDENTS,
+        loadComponent: () => import("../views/students/students.component").then((m) => m.StudentsComponent),
+      },
     ],
   },
   {

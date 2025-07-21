@@ -10,6 +10,7 @@ export const AppRoutes = {
   FACE_REPOSITORY: "face-repository",
   CONTACT: "contact",
   ACADEMIC_LEVEL: "academic-levels",
+  STUDENTS: "students",
 
   // Error routes
   NOT_FOUND: "404",
