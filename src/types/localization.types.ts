@@ -1,4 +1,7 @@
 export interface LangKeysContract {
+  delete_item: string;
+  delete_item_question: string;
+  error_deleting_item: string;
   send: string;
   filter_placeholder: string;
   filter_all: string;
@@ -90,7 +93,6 @@ export interface LangKeysContract {
   error_saving_model: string;
   error_loading_conversations: string;
   error_updating_conversation_title: string;
-  error_deleting_conversation: string;
   error_loading_profile: string;
   error_request_failed: string;
   error_streaming: string;
@@ -100,11 +102,6 @@ export interface LangKeysContract {
   error_login: string;
   error_sending_message: string;
   error_validation: string;
-  error_deleting_user: string;
-  delete_conversation: string;
-  delete_conversation_question: string;
-  delete_user: string;
-  delete_user_question: string;
   login_to_your_account: string;
   logout: string;
   toggleLanguage: string;
@@ -149,9 +146,6 @@ export interface LangKeysContract {
   school_type_independent: string;
   school: string;
   user: string;
-  delete_school: string;
-  delete_school_question: string;
-  error_deleting_school: string;
   face: string;
   photo: string;
   unknown_face: string;
@@ -175,9 +169,6 @@ export interface LangKeysContract {
   female: string;
   contacts: string;
   type: string;
-  delete_contact: string;
-  delete_contact_question: string;
-  error_deleting_contact: string;
   contact_value: string;
   contact_type: string;
   mobile: string;
@@ -188,9 +179,6 @@ export interface LangKeysContract {
   level_order: string;
   enter_level_code: string;
   enter_level_order: string;
-  delete_level_question: string;
-  delete_level: string;
-  error_deleting_level: string;
   elementry: string;
   middle: string;
   secondary: string;
@@ -203,14 +191,9 @@ export interface LangKeysContract {
   enter_academic_level: string;
   enter_branch: string;
   enter_person: string;
-  delete_student: string;
-  delete_student_question: string;
-  error_deleting_student: string;
   subjects: string;
   subject: string;
-  delete_subject: string;
-  delete_subject_question: string;
-  error_deleting_subject: string;
+  conversation: string;
 }
 
 export type SupportedLanguage = "en" | "ar";

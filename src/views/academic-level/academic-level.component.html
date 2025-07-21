@@ -27,7 +27,7 @@
         <button (click)="$event.stopPropagation(); openEditDialog(item)" class="text-secondary font-medium me-4 transition">
           {{ localService.locals().edit }}
         </button>
-        <button (click)="$event.stopPropagation(); deleteLevel(item)" class="text-secondary font-medium transition">
+        <button (click)="$event.stopPropagation(); onDelete(item, 'academic_level')" class="text-secondary font-medium transition">
           {{ localService.locals().delete }}
         </button>
       </ng-template>

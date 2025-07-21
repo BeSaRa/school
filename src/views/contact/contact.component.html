@@ -27,7 +27,7 @@
         <button (click)="$event.stopPropagation(); openEditDialog(item)" class="text-secondary font-medium me-4 transition" [title]="localService.locals().edit">
           {{ localService.locals().edit }}
         </button>
-        <button (click)="$event.stopPropagation(); deleteContact(item)" class="text-secondary font-medium transition" [title]="localService.locals().delete">
+        <button (click)="$event.stopPropagation(); onDelete(item, 'contact')" class="text-secondary font-medium transition" [title]="localService.locals().delete">
           {{ localService.locals().delete }}
         </button>
       </ng-template>

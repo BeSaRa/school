@@ -176,8 +176,15 @@ export class ConversationSidebarComponent implements OnInit {
   onDeleteConversation() {
     if (!this.selectedConversation) return;
 
+    const item = this.localService.locals().conversation;
+
     this.dialogService
-      .confirm(this.localService.locals().delete_conversation, this.localService.locals().delete_conversation_question, this.localService.locals().delete, this.localService.locals().cancel)
+      .confirm(
+        this.localService.interpolate("delete_item", { item }),
+        this.localService.interpolate("delete_item_question", { item }),
+        this.localService.locals().delete,
+        this.localService.locals().cancel
+      )
       .pipe(
         filter((result) => result.confirmed),
         switchMap(() => this.conversationService.deleteConversation(this.selectedConversation!.id))
@@ -188,7 +195,7 @@ export class ConversationSidebarComponent implements OnInit {
           this.showContextMenu.set(false);
         },
         error: (error) => {
-          this.dialogService.error(this.localService.locals().error_deleting_conversation, error.message).subscribe();
+          this.dialogService.error(this.localService.interpolate("error_deleting_item", { item }), error.message).subscribe();
         },
       });
   }

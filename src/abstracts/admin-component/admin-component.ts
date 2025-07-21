@@ -3,12 +3,13 @@ import { Component, OnInit, OnDestroy, inject, signal, computed, DestroyRef } fr
 import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule, FormBuilder, FormGroup } from "@angular/forms";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { catchError, EMPTY, tap } from "rxjs";
+import { catchError, EMPTY, filter, switchMap, tap } from "rxjs";
 import { BaseCrudService } from "@/abstracts/base-crud-service";
 import { BaseCrudModel } from "@/abstracts/base-crud-model";
 import { DialogService } from "@/services/dialog.service";
 import { FilterType, TableColumn } from "./components/admin-table/admin-table.component";
 import { LocalService } from "@/services/local.service";
+import { LangKeysContract } from "@/types/localization.types";
 
 export type SortDirection = "asc" | "desc" | null;
 
@@ -213,5 +214,31 @@ export abstract class AdminComponent<T extends BaseCrudModel<T, any>> implements
 
     this.columnFilters.set(currentFilters);
     this.currentPage.set(1);
+  }
+
+  protected onDelete(model: { id?: number }, itemNameKey: keyof LangKeysContract, onSuccess?: () => void): void {
+    if (!model?.id) return;
+    const item = this.localService.locals()[itemNameKey];
+    if (!item) return;
+
+    this.dialogService
+      .confirm(
+        this.localService.interpolate("delete_item", { item }),
+        this.localService.interpolate("delete_item_question", { item }),
+        this.localService.locals().delete,
+        this.localService.locals().cancel
+      )
+      .pipe(
+        filter((res) => res.confirmed),
+        switchMap(() => this.service.delete(model.id!))
+      )
+      .subscribe({
+        next: () => {
+          onSuccess?.() ?? this.loadData();
+        },
+        error: (err) => {
+          this.dialogService.error(this.localService.interpolate("error_deleting_item", { item }), err.message).subscribe();
+        },
+      });
   }
 }
