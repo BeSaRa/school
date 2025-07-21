@@ -11,6 +11,7 @@ export const AppRoutes = {
   CONTACT: "contact",
   ACADEMIC_LEVEL: "academic-levels",
   STUDENTS: "students",
+  SUBJECTS: "subjects",
 
   // Error routes
   NOT_FOUND: "404",

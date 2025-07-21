@@ -44,4 +44,10 @@ export const menuItems: NavigationItem[] = [
     icon: "STUDENTS",
     route: AppRoutes.STUDENTS,
   },
+  {
+    id: 7,
+    label: "subjects",
+    icon: "CODE",
+    route: AppRoutes.SUBJECTS,
+  },
 ];
