@@ -1,5 +1,6 @@
 export const AppIcons = {
   LANGUAGE: "translate",
+  EDUCATION_LEVEL: "book-education",
   ARROW_UP: "arrow-up",
   FACE_REPOSITORY: "account-box-edit-outline",
   SUCCESS: "check",

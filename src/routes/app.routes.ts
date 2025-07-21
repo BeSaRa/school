@@ -40,6 +40,10 @@ export const routes: Routes = [
         path: AppRoutes.CONTACT,
         loadComponent: () => import("../views/contact/contact.component").then((m) => m.ContactComponent),
       },
+      {
+        path: AppRoutes.ACADEMIC_LEVEL,
+        loadComponent: () => import("../views/academic-level/academic-level.component").then((m) => m.AcademicLevelComponent),
+      },
     ],
   },
   {

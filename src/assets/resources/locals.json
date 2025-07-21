@@ -177,5 +177,19 @@
   "delete_contact": { "en": "Delete contact", "ar": "حذف جهة الاتصال" },
   "delete_contact_question": { "en": "Are you sure you want to delete this contact?", "ar": "هل أنت متأكد أنك تريد حذف جهة الاتصال هذه؟" },
   "error_deleting_contact": { "en": "An error occurred while deleting the contact", "ar": "حدث خطأ أثناء حذف جهة الاتصال" },
-  "mobile": { "en": "mobile", "ar": "محمول" }
+  "mobile": { "en": "mobile", "ar": "محمول" },
+  "academic_levels": { "en": "Academic Levels", "ar": "المراحل الأكاديمية" },
+  "academic_level": { "en": "Academic Level", "ar": "مرحلة أكاديمية" },
+  "education_type": { "en": "Education Type", "ar": "نوع التعليم" },
+  "level_code": { "en": "Level Code", "ar": "رمز المرحلة" },
+  "level_order": { "en": "Level Order", "ar": "ترتيب المرحلة" },
+  "enter_level_code": { "en": "Enter level code", "ar": "أدخل رمز المرحلة" },
+  "enter_level_order": { "en": "Enter level order", "ar": "أدخل ترتيب المرحلة" },
+  "delete_level": { "en": "Delete level", "ar": "حذف المرحلة" },
+  "delete_level_question": { "en": "Are you sure you want to delete this level?", "ar": "هل أنت متأكد من حذف هذه المرحلة؟" },
+  "error_deleting_level": { "en": "Error deleting level", "ar": "حدث خطأ أثناء حذف المرحلة" },
+  "elementry": { "en": "Elementary", "ar": "ابتدائي" },
+  "middle": { "en": "Middle", "ar": "إعدادي" },
+  "secondary": { "en": "Secondary", "ar": "ثانوي" },
+  "higher": { "en": "Higher", "ar": "عالي" }
 }
