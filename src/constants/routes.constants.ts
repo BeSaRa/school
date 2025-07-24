@@ -12,6 +12,7 @@ export const AppRoutes = {
   ACADEMIC_LEVEL: "academic-levels",
   STUDENTS: "students",
   SUBJECTS: "subjects",
+  SOURCES: "sources",
 
   // Error routes
   NOT_FOUND: "404",

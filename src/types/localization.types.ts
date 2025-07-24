@@ -194,6 +194,12 @@ export interface LangKeysContract {
   subjects: string;
   subject: string;
   conversation: string;
+  source: string;
+  sources: string;
+  source_value: string;
+  source_type: string;
+  path: string;
+  index: string;
 }
 
 export type SupportedLanguage = "en" | "ar";

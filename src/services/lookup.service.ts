@@ -18,6 +18,7 @@ export interface LookupMap {
   role: LookupItem[];
   contact_type: LookupItem[];
   education_type: LookupItem[];
+  source_type: LookupItem[];
 }
 
 @Injectable({ providedIn: "root" })
@@ -76,6 +77,10 @@ export class LookupService {
         { value: "middle", label: "middle" },
         { value: "secondary", label: "secondary" },
         { value: "higher", label: "higher" },
+      ],
+      source_type: [
+        { value: "path", label: "path" },
+        { value: "index", label: "index" },
       ],
     };
   }

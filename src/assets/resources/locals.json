@@ -190,5 +190,11 @@
   "enter_branch": { "en": "Enter branch", "ar": "أدخل الفرع" },
   "enter_person": { "en": "Enter person ID", "ar": "أدخل رقم الشخص" },
   "subjects": { "en": "Subjects", "ar": "المواد الدراسية" },
-  "subject": { "en": "Subject", "ar": "المادة الدراسية" }
+  "subject": { "en": "Subject", "ar": "المادة الدراسية" },
+  "source": { "en": "Source", "ar": "المصدر" },
+  "sources": { "en": "Sources", "ar": "المصادر" },
+  "source_value": { "en": "Source Value", "ar": "قيمة المصدر" },
+  "source_type": { "en": "Source Type", "ar": "نوع المصدر" },
+  "path": { "en": "path", "ar": "path" },
+  "index": { "en": "index", "ar": "index" }
 }
