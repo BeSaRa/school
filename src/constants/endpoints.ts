@@ -10,6 +10,7 @@ export const EndPoints = {
   FACE_REPO: "/face-repository/",
   STUDENTS: "/students/",
   SUBJECTS: "/subjects/",
+  SOURCES: "/sources/",
 };
 
 export type EndpointsType = typeof EndPoints;
