@@ -118,4 +118,12 @@ export class ProfilePopupComponent implements OnInit, OnDestroy {
       return user.nameEn;
     }
   }
+  getInitials(user: any): string {
+    const name = this.getName(user) || "";
+    return name
+      .split(" ")
+      .filter((word) => word)
+      .map((word) => word[0].toUpperCase())
+      .join(" ");
+  }
 }
