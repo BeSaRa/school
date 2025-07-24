@@ -8,11 +8,16 @@
   >
     <div class="flex flex-col items-center space-y-6">
       @for (item of menuItems; track item.id) {
-        <div class="relative group">
-          <a [routerLink]="item.route" class="flex items-center p-2 rounded-full transition hover:bg-tertiary" [attr.aria-current]="isActiveRoute(item.route) ? 'page' : undefined">
+        <div class="relative group/icon">
+          <a [routerLink]="item.route" class="flex items-center p-2 rounded-full transition hover:bg-tertiary relative" [attr.aria-current]="isActiveRoute(item.route) ? 'page' : undefined">
             <div class="flex items-center justify-center min-w-[2.5rem] min-h-[2.5rem]">
               <i [class]="item.icon | icon" class="text-2xl transition-all duration-300 ease-out text-white" [class.scale-110]="isActiveRoute(item.route)" aria-hidden="true"></i>
             </div>
+            <span
+              class="absolute top-1/2 ltr:left-full rtl:right-full ltr:ml-2 rtl:mr-2 -translate-y-1/2 px-2 py-1 text-sm text-white bg-gray-800 rounded opacity-0 group-hover/icon:opacity-100 pointer-events-none transition"
+            >
+              {{ localService.locals()[item.label] }}
+            </span>
           </a>
         </div>
       }
