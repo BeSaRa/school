@@ -82,7 +82,7 @@ export class ContactComponent extends AdminComponent<Contact> implements OnInit 
             label: this.localService.locals().contact_value,
             type: "text",
             required: true,
-            placeholder: this.localService.locals().enter_contact,
+            placeholder: this.localService.interpolate("enter_item", { item: "contact" }),
             validators: [Validators.minLength(3), Validators.maxLength(100)],
           },
           {

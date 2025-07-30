@@ -40,7 +40,7 @@ export class AcademicLevelComponent extends AdminComponent<AcademicLevel> implem
       columns: [
         {
           key: "systemNameAr",
-          label: "name_ar",
+          label: "ar_name",
           sortable: true,
           filterable: true,
           type: "text",
@@ -48,7 +48,7 @@ export class AcademicLevelComponent extends AdminComponent<AcademicLevel> implem
         },
         {
           key: "systemNameEn",
-          label: "name_en",
+          label: "en_name",
           sortable: true,
           filterable: true,
           type: "text",
@@ -102,18 +102,18 @@ export class AcademicLevelComponent extends AdminComponent<AcademicLevel> implem
         formFields: [
           {
             key: "systemNameEn",
-            label: this.localService.locals().name_en,
+            label: this.localService.locals().en_name,
             type: "text",
             required: true,
-            placeholder: this.localService.locals().enter_en_name,
+            placeholder: this.localService.interpolate("enter_item", { item: "en_name" }),
             validators: [Validators.minLength(2), Validators.maxLength(100)],
           },
           {
             key: "systemNameAr",
-            label: this.localService.locals().name_ar,
+            label: this.localService.locals().ar_name,
             type: "text",
             required: true,
-            placeholder: this.localService.locals().enter_ar_name,
+            placeholder: this.localService.interpolate("enter_item", { item: "ar_name" }),
             validators: [Validators.minLength(2), Validators.maxLength(100)],
           },
           {
@@ -121,14 +121,14 @@ export class AcademicLevelComponent extends AdminComponent<AcademicLevel> implem
             label: this.localService.locals().level_code,
             type: "text",
             required: true,
-            placeholder: this.localService.locals().enter_level_code,
+            placeholder: this.localService.interpolate("enter_item", { item: "level_code" }),
           },
           {
             key: "levelOrder",
             label: this.localService.locals().level_order,
             type: "number",
             required: true,
-            placeholder: this.localService.locals().enter_level_order,
+            placeholder: this.localService.interpolate("enter_item", { item: "level_order" }),
           },
           {
             key: "educationType",

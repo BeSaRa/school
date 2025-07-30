@@ -125,7 +125,9 @@ export class LocalService {
   interpolate(key: keyof LangKeysContract, params: Record<string, string | number>): string {
     const template = this.locals()[key] || this.getMissingKeyFallback(key);
     return Object.entries(params).reduce((acc, [paramKey, paramValue]) => {
-      return acc.replace(new RegExp(`{{\\s*${paramKey}\\s*}}`, "g"), String(paramValue));
+      const localizedValue = typeof paramValue === "string" && this.locals()[paramValue as keyof LangKeysContract] ? this.locals()[paramValue as keyof LangKeysContract] : paramValue;
+
+      return acc.replace(new RegExp(`{{\\s*${paramKey}\\s*}}`, "g"), String(localizedValue));
     }, template);
   }
 }

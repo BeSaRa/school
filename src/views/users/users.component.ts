@@ -37,7 +37,7 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
       columns: [
         {
           key: "nameAr",
-          label: "name_ar",
+          label: "ar_name",
           sortable: true,
           filterable: true,
           type: "text",
@@ -45,7 +45,7 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
         },
         {
           key: "nameEn",
-          label: "name_en",
+          label: "en_name",
           sortable: true,
           filterable: true,
           type: "text",
@@ -113,18 +113,18 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
         formFields: [
           {
             key: "nameEn",
-            label: this.localService.locals().name_en,
+            label: this.localService.locals().en_name,
             type: "text",
             required: true,
-            placeholder: this.localService.locals().enter_en_name,
+            placeholder: this.localService.interpolate("enter_your_item", { item: "en_name" }),
             validators: [Validators.minLength(2), Validators.maxLength(100)],
           },
           {
             key: "nameAr",
-            label: this.localService.locals().name_ar,
+            label: this.localService.locals().ar_name,
             type: "text",
             required: true,
-            placeholder: this.localService.locals().enter_ar_name,
+            placeholder: this.localService.interpolate("enter_your_item", { item: "ar_name" }),
             validators: [Validators.minLength(2), Validators.maxLength(100)],
           },
           {
@@ -132,7 +132,7 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
             label: this.localService.locals().username,
             type: "text",
             required: true,
-            placeholder: this.localService.locals().enter_username,
+            placeholder: this.localService.interpolate("enter_your_item", { item: "username" }),
             validators: [Validators.minLength(2), Validators.maxLength(100)],
           },
           {
@@ -140,7 +140,7 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
             label: this.localService.locals().contact,
             type: "number",
             required: false,
-            placeholder: this.localService.locals().enter_contact,
+            placeholder: this.localService.interpolate("enter_your_item", { item: "contact" }),
             value: null,
           },
           {
@@ -148,14 +148,14 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
             label: this.localService.locals().school_id,
             type: "number",
             required: true,
-            placeholder: this.localService.locals().enter_school_id,
+            placeholder: this.localService.interpolate("enter_your_item", { item: "school_id" }),
           },
           {
             key: "password",
             label: this.localService.locals().password,
             type: "password",
             required: true,
-            placeholder: this.localService.locals().enter_password,
+            placeholder: this.localService.interpolate("enter_your_item", { item: "password" }),
             validators: [Validators.minLength(8), Validators.maxLength(100)],
           },
           {

@@ -125,7 +125,7 @@ export class SchoolsComponent extends AdminComponent<School> implements OnInit {
             label: this.localService.locals().school_name,
             type: "text",
             required: true,
-            placeholder: this.localService.locals().enter_school_name,
+            placeholder: this.localService.interpolate("enter_item", { item: "school_name" }),
           },
           {
             key: "educationLevel",
