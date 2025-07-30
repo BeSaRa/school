@@ -8,8 +8,8 @@ const { send, receive } = new SourceInterceptor();
 @InterceptModel({ send, receive })
 export class Source extends BaseCrudModel<Source, SourceService> {
   override $$__service_name__$$ = "SourceService";
-  sourceNo!: string;
-  academicLevelId!: number;
-  branchId!: number;
-  personId!: number;
+  source!: string;
+  sourceType!: "path" | "index";
+  nameEn!: string;
+  nameAr!: string;
 }
