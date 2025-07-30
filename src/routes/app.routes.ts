@@ -24,38 +24,38 @@ export const routes: Routes = [
         path: AppRoutes.CHAT_ASSISTANT,
         loadComponent: () => import("../views/ai-chat-assistant/ai-chat-assistant.component").then((m) => m.AIChatAssistantComponent),
       },
-      {
-        path: AppRoutes.SCHOOLS,
-        loadComponent: () => import("../views/schools/schools.component").then((m) => m.SchoolsComponent),
-      },
+      // {
+      //   path: AppRoutes.SCHOOLS,
+      //   loadComponent: () => import("../views/schools/schools.component").then((m) => m.SchoolsComponent),
+      // },
       {
         path: AppRoutes.USERS,
         loadComponent: () => import("../views/users/users.component").then((m) => m.UsersComponent),
       },
-      {
-        path: AppRoutes.FACE_REPOSITORY,
-        loadComponent: () => import("../views/face-repo/face-repo.component").then((m) => m.FaceRepoComponent),
-      },
-      {
-        path: AppRoutes.CONTACT,
-        loadComponent: () => import("../views/contact/contact.component").then((m) => m.ContactComponent),
-      },
-      {
-        path: AppRoutes.ACADEMIC_LEVEL,
-        loadComponent: () => import("../views/academic-level/academic-level.component").then((m) => m.AcademicLevelComponent),
-      },
-      {
-        path: AppRoutes.STUDENTS,
-        loadComponent: () => import("../views/students/students.component").then((m) => m.StudentsComponent),
-      },
-      {
-        path: AppRoutes.SUBJECTS,
-        loadComponent: () => import("../views/subjects/subjects.component").then((m) => m.SubjectsComponent),
-      },
-      {
-        path: AppRoutes.SOURCES,
-        loadComponent: () => import("../views/sources/sources.component").then((m) => m.SourcesComponent),
-      },
+      // {
+      //   path: AppRoutes.FACE_REPOSITORY,
+      //   loadComponent: () => import("../views/face-repo/face-repo.component").then((m) => m.FaceRepoComponent),
+      // },
+      // {
+      //   path: AppRoutes.CONTACT,
+      //   loadComponent: () => import("../views/contact/contact.component").then((m) => m.ContactComponent),
+      // },
+      // {
+      //   path: AppRoutes.ACADEMIC_LEVEL,
+      //   loadComponent: () => import("../views/academic-level/academic-level.component").then((m) => m.AcademicLevelComponent),
+      // },
+      // {
+      //   path: AppRoutes.STUDENTS,
+      //   loadComponent: () => import("../views/students/students.component").then((m) => m.StudentsComponent),
+      // },
+      // {
+      //   path: AppRoutes.SUBJECTS,
+      //   loadComponent: () => import("../views/subjects/subjects.component").then((m) => m.SubjectsComponent),
+      // },
+      // {
+      //   path: AppRoutes.SOURCES,
+      //   loadComponent: () => import("../views/sources/sources.component").then((m) => m.SourcesComponent),
+      // },
     ],
   },
   {
