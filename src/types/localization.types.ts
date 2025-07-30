@@ -59,11 +59,9 @@ export interface LangKeysContract {
   active: string;
   inactive: string;
   username: string;
-  enter_username: string;
   username_required: string;
   username_minlength: string;
   password: string;
-  enter_password: string;
   password_required: string;
   password_minlength: string;
   forgot_password: string;
@@ -114,7 +112,6 @@ export interface LangKeysContract {
   local: string;
   cloud: string;
   school_name: string;
-  enter_school_name: string;
   education_level: string;
   school_type: string;
   gender: string;
@@ -157,13 +154,9 @@ export interface LangKeysContract {
   face_repository: string;
   confirm: string;
   contact: string;
-  name_ar: string;
-  name_en: string;
-  enter_contact: string;
-  enter_en_name: string;
-  enter_ar_name: string;
+  ar_name: string;
+  en_name: string;
   school_id: string;
-  enter_school_id: string;
   created_by: string;
   male: string;
   female: string;
@@ -177,8 +170,6 @@ export interface LangKeysContract {
   education_type: string;
   level_code: string;
   level_order: string;
-  enter_level_code: string;
-  enter_level_order: string;
   elementry: string;
   middle: string;
   secondary: string;
@@ -187,10 +178,6 @@ export interface LangKeysContract {
   student_no: string;
   branch: string;
   person: string;
-  enter_student_no: string;
-  enter_academic_level: string;
-  enter_branch: string;
-  enter_person: string;
   subjects: string;
   subject: string;
   conversation: string;
@@ -200,6 +187,10 @@ export interface LangKeysContract {
   source_type: string;
   path: string;
   index: string;
+  staff: string;
+  specialization: string;
+  enter_item: string;
+  enter_your_item: string;
 }
 
 export type SupportedLanguage = "en" | "ar";

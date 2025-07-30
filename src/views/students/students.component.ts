@@ -97,7 +97,7 @@ export class StudentsComponent extends AdminComponent<Student> implements OnInit
             label: this.localService.locals().student_no,
             type: "text",
             required: true,
-            placeholder: this.localService.locals().enter_student_no,
+            placeholder: this.localService.interpolate("enter_item", { item: "student_no" }),
             validators: [Validators.minLength(2), Validators.maxLength(50)],
           },
           {
@@ -105,21 +105,21 @@ export class StudentsComponent extends AdminComponent<Student> implements OnInit
             label: this.localService.locals().academic_level,
             type: "number",
             required: true,
-            placeholder: this.localService.locals().enter_academic_level,
+            placeholder: this.localService.interpolate("enter_item", { item: "academic_level" }),
           },
           {
             key: "branchId",
             label: this.localService.locals().branch,
             type: "number",
             required: true,
-            placeholder: this.localService.locals().enter_branch,
+            placeholder: this.localService.interpolate("enter_item", { item: "branch" }),
           },
           {
             key: "personId",
             label: this.localService.locals().person,
             type: "number",
             required: true,
-            placeholder: this.localService.locals().enter_person,
+            placeholder: this.localService.interpolate("enter_item", { item: "person" }),
           },
           {
             key: "createdBy",

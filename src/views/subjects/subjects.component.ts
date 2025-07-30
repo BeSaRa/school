@@ -39,7 +39,7 @@ export class SubjectsComponent extends AdminComponent<Subject> implements OnInit
       columns: [
         {
           key: "nameEn",
-          label: "name_en",
+          label: "en_name",
           sortable: true,
           filterable: true,
           type: "text",
@@ -47,7 +47,7 @@ export class SubjectsComponent extends AdminComponent<Subject> implements OnInit
         },
         {
           key: "nameAr",
-          label: "name_ar",
+          label: "ar_name",
           sortable: true,
           filterable: true,
           type: "text",
@@ -76,18 +76,18 @@ export class SubjectsComponent extends AdminComponent<Subject> implements OnInit
         formFields: [
           {
             key: "nameEn",
-            label: this.localService.locals().name_en,
+            label: this.localService.locals().en_name,
             type: "text",
             required: true,
-            placeholder: this.localService.locals().enter_en_name,
+            placeholder: this.localService.interpolate("enter_your_item", { item: "en_name" }),
             validators: [Validators.minLength(2), Validators.maxLength(100)],
           },
           {
             key: "nameAr",
-            label: this.localService.locals().name_ar,
+            label: this.localService.locals().ar_name,
             type: "text",
             required: true,
-            placeholder: this.localService.locals().enter_ar_name,
+            placeholder: this.localService.interpolate("enter_your_item", { item: "ar_name" }),
             validators: [Validators.minLength(2), Validators.maxLength(100)],
           },
         ],

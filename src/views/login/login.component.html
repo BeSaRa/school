@@ -32,7 +32,7 @@
               type="text"
               required
               class="pl-10 pr-3 py-2 w-full border border-gray-300 rounded-md shadow-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
-              [placeholder]="localService.locals().enter_username"
+              [placeholder]="localService.interpolate('enter_your_item', { item: 'username' })"
             />
           </div>
         </div>
@@ -52,7 +52,7 @@
               type="password"
               required
               class="pl-10 pr-3 py-2 w-full border border-gray-300 rounded-md shadow-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
-              [placeholder]="localService.locals().enter_password"
+              [placeholder]="localService.interpolate('enter_your_item', { item: 'password' })"
             />
           </div>
         </div>

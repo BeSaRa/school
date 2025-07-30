@@ -53,7 +53,7 @@ export class SourcesComponent extends AdminComponent<Source> {
         },
         {
           key: "nameEn",
-          label: "name_en",
+          label: "en_name",
           sortable: true,
           filterable: true,
           type: "text",
@@ -61,7 +61,7 @@ export class SourcesComponent extends AdminComponent<Source> {
         },
         {
           key: "nameAr",
-          label: "name_ar",
+          label: "ar_name",
           sortable: true,
           filterable: true,
           type: "text",
@@ -104,13 +104,13 @@ export class SourcesComponent extends AdminComponent<Source> {
           },
           {
             key: "nameEn",
-            label: this.localService.locals().name_en,
+            label: this.localService.locals().en_name,
             type: "text",
             required: true,
           },
           {
             key: "nameAr",
-            label: this.localService.locals().name_ar,
+            label: this.localService.locals().ar_name,
             type: "text",
             required: true,
           },
