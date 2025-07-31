@@ -1,6 +1,5 @@
 @import "@mdi/font/css/materialdesignicons.min.css";
 @import "katex/dist/katex.min.css";
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -12,29 +11,183 @@ html {
 }
 
 markdown {
-  @apply flex flex-col;
+  @apply flex flex-col leading-relaxed;
 
-  h1,
-  h2,
+  /* Typography hierarchy with better spacing */
+  h1 {
+    @apply text-3xl font-bold mt-8 mb-4 pb-2 border-b border-secondary/30 text-chat-assistant-text;
+  }
+
+  h2 {
+    @apply text-2xl font-semibold mt-6 mb-3 text-chat-assistant-text;
+  }
+
   h3 {
-    @apply mt-4;
+    @apply text-xl font-medium mt-5 mb-2 text-chat-assistant-text/90;
   }
 
-  ul,
+  h4 {
+    @apply text-lg font-medium mt-4 mb-2 text-chat-assistant-text/80;
+  }
+
+  h5,
+  h6 {
+    @apply text-base font-medium mt-3 mb-2 text-chat-assistant-text/80;
+  }
+
+  /* Paragraph spacing */
+  p {
+    @apply mb-4 text-chat-assistant-text/90 leading-7;
+  }
+
+  /* Enhanced list styles */
+  ul {
+    @apply ml-6 pl-2 mb-4 space-y-1;
+    list-style-type: none;
+  }
+
+  ul li {
+    @apply relative pl-4;
+  }
+
+  ul li::before {
+    content: "•";
+    @apply absolute left-0 text-chat-assistant-text/60 font-bold;
+  }
+
+  /* Nested ul styling */
+  ul ul {
+    @apply mt-2 mb-2 ml-4;
+  }
+
+  ul ul li::before {
+    content: "◦";
+    @apply text-chat-assistant-text/50;
+  }
+
+  ul ul ul li::before {
+    content: "▪";
+    @apply text-chat-assistant-text/50;
+  }
+
   ol {
-    @apply ml-6 pl-4;
+    @apply ml-6 pl-2 mb-4 space-y-1;
+    counter-reset: item;
   }
 
+  ol li {
+    @apply relative pl-4;
+    counter-increment: item;
+  }
+
+  ol li::before {
+    content: counter(item) ".";
+    @apply absolute left-0 text-chat-assistant-text/70 font-medium;
+  }
+
+  /* Nested ol styling */
+  ol ol {
+    @apply mt-2 mb-2 ml-4;
+    counter-reset: subitem;
+  }
+
+  ol ol li {
+    counter-increment: subitem;
+  }
+
+  ol ol li::before {
+    content: counter(item) "." counter(subitem);
+    @apply text-chat-assistant-text/60;
+  }
+
+  /* Mixed nested lists */
+  ul ol,
+  ol ul {
+    @apply mt-2 mb-2 ml-4;
+  }
+
+  /* Enhanced blockquotes */
   blockquote {
-    @apply border-l-4 border-slate-300 pl-4 italic text-chat-assistant-text;
+    @apply border-l-4 border-chat-button-primary-bg pl-6 py-2 my-4 italic text-chat-assistant-text/80 bg-tertiary/30 rounded-r-md;
   }
 
+  blockquote p {
+    @apply mb-2 last:mb-0;
+  }
+
+  /* Code styling */
   pre {
-    @apply text-chat-user-text p-4 rounded-lg bg-chat-user-bg font-mono max-w-full overflow-x-auto break-words;
+    @apply text-chat-user-text p-4 rounded-lg bg-primary font-mono text-sm max-w-full overflow-x-auto my-4 shadow-sm border border-secondary/20;
   }
 
   code {
-    @apply bg-chat-user-bg  px-1 py-0.5 rounded;
+    @apply bg-tertiary/50 text-chat-assistant-text px-2 py-1 rounded text-sm font-mono border border-secondary/20;
+  }
+
+  pre code {
+    @apply bg-transparent text-inherit px-0 py-0 border-0;
+  }
+
+  /* Enhanced table styling */
+  table {
+    @apply w-full border-collapse mt-6 mb-4 rounded-lg overflow-hidden shadow-sm;
+    border: 1px solid rgba(203, 213, 225, 0.3);
+  }
+
+  th {
+    @apply border px-4 py-3 text-left font-semibold text-chat-assistant-text;
+    background: rgba(30, 41, 59, 0.5);
+    border-color: rgba(203, 213, 225, 0.3);
+  }
+
+  td {
+    @apply border px-4 py-3 text-chat-assistant-text/90;
+    background-color: rgba(30, 41, 59, 0.2);
+    border-color: rgba(203, 213, 225, 0.3);
+  }
+
+  /* Zebra striping for tables */
+  tr:nth-child(even) td {
+    background-color: rgba(30, 41, 59, 0.3);
+  }
+
+  /* Hover effects */
+  tr:hover td {
+    background-color: rgba(14, 165, 233, 0.1);
+    transition: background-color 0.15s ease;
+  }
+
+  /* Links */
+  a {
+    @apply text-chat-button-primary-bg hover:text-chat-button-primary-hover underline decoration-1 underline-offset-2;
+    transition: color 0.15s ease;
+  }
+
+  /* Horizontal rules */
+  hr {
+    @apply my-6 border-0 border-t border-secondary/30;
+  }
+
+  /* Images */
+  img {
+    @apply max-w-full h-auto rounded-md shadow-sm my-4;
+  }
+
+  /* Strong and emphasis */
+  strong {
+    @apply font-semibold text-chat-assistant-text;
+  }
+
+  em {
+    @apply italic text-chat-assistant-text/80;
+  }
+  /* Strong and emphasis */
+  // strong {
+  //   @apply font-semibold text-slate-900;
+  // }
+
+  em {
+    @apply italic text-slate-600;
   }
 }
 
