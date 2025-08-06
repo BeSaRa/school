@@ -44,25 +44,25 @@ export class AdminDialogComponent<T extends BaseCrudModel<T, any>> {
     if (!control || !control.errors || !control.touched) return null;
 
     if (control.hasError("required")) {
-      return "This field is required.";
+      return this.localService.locals().is_required;
     }
 
     if (control.hasError("email")) {
-      return "Invalid email format.";
+      return this.localService.locals().invalid_email;
     }
 
     if (control.hasError("minlength")) {
       const requiredLength = control.getError("minlength").requiredLength;
-      return `Minimum ${requiredLength} characters required.`;
+      return this.localService.interpolate(`minimum_characters_required`, { requiredLength });
     }
 
     if (control.hasError("maxlength")) {
       const requiredLength = control.getError("maxlength").requiredLength;
-      return `Maximum ${requiredLength} characters allowed.`;
+      return this.localService.interpolate(`maximum_characters_allowed`, { requiredLength });
     }
 
     if (control.hasError("pattern")) {
-      return "Invalid format.";
+      return this.localService.locals().invalid_format;
     }
 
     return "Invalid input.";
@@ -100,7 +100,6 @@ export class AdminDialogComponent<T extends BaseCrudModel<T, any>> {
     this.modelName = this.data.modelName || "";
     this.modelConstructor = this.data.modelConstructor;
     this.initializeForm();
-    console.log(this.formFields);
   }
 
   private initializeForm(): void {

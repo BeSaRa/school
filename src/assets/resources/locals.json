@@ -187,5 +187,9 @@
   "staff": { "en": "Staff", "ar": "الكوادر" },
   "specialization": { "en": "Specialization", "ar": "الاختصاص" },
   "enter_item": { "en": "Enter {{item}}", "ar": "ادخل {{item}}" },
-  "enter_your_item": { "en": "Enter your {{item}}", "ar": "ادخل {{item}} الخاص بك" }
+  "enter_your_item": { "en": "Enter your {{item}}", "ar": "ادخل {{item}} الخاص بك" },
+  "invalid_email": { "en": "Invalid email", "ar": "ايميل غير صالح" },
+  "invalid_format": { "en": "Invalid format", "ar": "صيغة غير صالحة" },
+  "minimum_characters_required": { "en": "Minimun {{requiredLength}} characters required", "ar": "مطلوب عدد {{requiredLength}} من المحارف" },
+  "maximum_characters_allowed": { "en": "Maximum {{requiredLength}} characters allowed", "ar": "الحد الأقصى {{requiredLength}} من المحارف المسموح بها" }
 }

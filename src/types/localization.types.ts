@@ -191,6 +191,10 @@ export interface LangKeysContract {
   specialization: string;
   enter_item: string;
   enter_your_item: string;
+  invalid_email: string;
+  minimum_characters_required: string;
+  maximum_characters_allowed: string;
+  invalid_format: string;
 }
 
 export type SupportedLanguage = "en" | "ar";
