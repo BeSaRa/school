@@ -191,5 +191,11 @@
   "invalid_email": { "en": "Invalid email", "ar": "ايميل غير صالح" },
   "invalid_format": { "en": "Invalid format", "ar": "صيغة غير صالحة" },
   "minimum_characters_required": { "en": "Minimun {{requiredLength}} characters required", "ar": "مطلوب عدد {{requiredLength}} من المحارف" },
-  "maximum_characters_allowed": { "en": "Maximum {{requiredLength}} characters allowed", "ar": "الحد الأقصى {{requiredLength}} من المحارف المسموح بها" }
+  "maximum_characters_allowed": { "en": "Maximum {{requiredLength}} characters allowed", "ar": "الحد الأقصى {{requiredLength}} من المحارف المسموح بها" },
+  "english_letters_only": { "en": "Only English letters are allowed", "ar": "يسمح فقط بالأحرف الإنجليزية" },
+  "arabic_letters_only": { "en": "Only Arabic letters are allowed", "ar": "يسمح فقط بالأحرف العربية" },
+  "digits_only": { "en": "Only digits are allowed", "ar": "يسمح فقط بالأرقام" },
+  "email_format": { "en": "Please enter a valid email address", "ar": "يرجى إدخال بريد إلكتروني صالح" },
+  "username_format": { "en": "Username can contain letters, numbers, and underscores only", "ar": "اسم المستخدم يمكن أن يحتوي على أحرف وأرقام وشرطة سفلية فقط" },
+  "password_format": { "en": "Password must be at least 8 characters with uppercase, lowercase, and a number", "ar": "يجب أن تتكون كلمة المرور من 8 محارف على الأقل وتشمل حرفًا كبيرًا وصغيرًا ورقمًا" }
 }

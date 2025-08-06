@@ -39,6 +39,18 @@ export interface FormField {
   ],
 })
 export class AdminDialogComponent<T extends BaseCrudModel<T, any>> {
+  get patternMessages(): Record<string, string> {
+    const locals = this.localService.locals();
+    return {
+      nameEn: locals.english_letters_only,
+      nameAr: locals.arabic_letters_only,
+      phone: locals.digits_only,
+      email: locals.email_format,
+      username: locals.username_format,
+      password: locals.password_format,
+    };
+  }
+
   getErrorMessage(fieldKey: string): string | null {
     const control = this.form.get(fieldKey);
     if (!control || !control.errors || !control.touched) return null;
@@ -62,7 +74,7 @@ export class AdminDialogComponent<T extends BaseCrudModel<T, any>> {
     }
 
     if (control.hasError("pattern")) {
-      return this.localService.locals().invalid_format;
+      return this.patternMessages[fieldKey] || this.localService.locals().invalid_format;
     }
 
     return "Invalid input.";

@@ -195,6 +195,12 @@ export interface LangKeysContract {
   minimum_characters_required: string;
   maximum_characters_allowed: string;
   invalid_format: string;
+  english_letters_only: string;
+  arabic_letters_only: string;
+  digits_only: string;
+  email_format: string;
+  username_format: string;
+  password_format: string;
 }
 
 export type SupportedLanguage = "en" | "ar";
