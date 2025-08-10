@@ -196,5 +196,9 @@
   "digits_only": { "en": "Only digits are allowed", "ar": "يسمح فقط بالأرقام" },
   "email_format": { "en": "Please enter a valid email address", "ar": "يرجى إدخال بريد إلكتروني صالح" },
   "username_format": { "en": "Username can contain letters, numbers, and underscores only", "ar": "اسم المستخدم يمكن أن يحتوي على أحرف وأرقام وشرطة سفلية فقط" },
-  "password_format": { "en": "Password must be at least 8 characters with uppercase, lowercase, and a number", "ar": "يجب أن تتكون كلمة المرور من 8 محارف على الأقل وتشمل حرفًا كبيرًا وصغيرًا ورقمًا" }
+  "password_format": {
+    "en": "Password must be at least 8 characters with uppercase, lowercase, and a number",
+    "ar": "يجب أن تتكون كلمة المرور من 8 محارف على الأقل وتشمل حرفًا كبيرًا وصغيرًا ورقمًا"
+  },
+  "contact_mismatch_error": { "en": "Contact type and contact must be compatible.", "ar": "نوع جهة الاتصال وبيانات جهة الاتصال يجب أن تكون متوافقة." }
 }

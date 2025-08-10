@@ -18,6 +18,15 @@ export class Patterns {
   static readonly EN_AR_LETTERS = /^[A-Za-z\u0600-\u06FF\s]+$/;
 
   /**
+   * Website URL pattern:
+   * - Optional protocol (http or https)
+   * - Domain name with subdomains allowed (e.g., www.example.com)
+   * - Top-level domain of at least 2 characters
+   * - Optional path, query, and fragment parts with allowed URL characters
+   */
+  static readonly WEBSITE = /^(https?:\/\/)?([\w\-]+\.)+[\w\-]{2,}(\/[\w\-._~:/?#[\]@!$&'()*+,;=]*)?$/i;
+
+  /**
    * Username pattern:
    * - Allows English letters (A-Z, a-z)
    * - Allows numbers (0-9)
