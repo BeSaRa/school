@@ -29,7 +29,7 @@ export interface LangKeysContract {
   column_role: string;
   column_status: string;
   column_name: string;
-  column_education_level: string;
+  column_education_type: string;
   column_category: string;
   column_city: string;
   status_active: string;
@@ -38,10 +38,10 @@ export interface LangKeysContract {
   role_supervisor: string;
   role_teacher: string;
   role_superuser: string;
-  education_level_low: string;
-  education_level_higher: string;
-  education_level_secondary: string;
-  education_level_primary: string;
+  education_type_low: string;
+  education_type_higher: string;
+  education_type_secondary: string;
+  education_type_primary: string;
   action: string;
   users: string;
   no_face_repos_found: string;
@@ -112,7 +112,6 @@ export interface LangKeysContract {
   local: string;
   cloud: string;
   school_name: string;
-  education_level: string;
   school_type: string;
   gender: string;
   religious_affiliation: string;

@@ -10,5 +10,4 @@ export class Contact extends BaseCrudModel<Contact, ContactService> {
   override $$__service_name__$$ = "ContactService";
   contact!: string;
   type!: ContactType;
-  created_by!: number;
 }

@@ -13,5 +13,4 @@ export class AcademicLevel extends BaseCrudModel<AcademicLevel, AcademicLevelSer
   systemNameAr!: string;
   levelCode!: string;
   levelOrder!: number;
-  createdBy!: number;
 }

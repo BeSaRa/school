@@ -24,10 +24,10 @@ export const routes: Routes = [
         path: AppRoutes.CHAT_ASSISTANT,
         loadComponent: () => import("../views/ai-chat-assistant/ai-chat-assistant.component").then((m) => m.AIChatAssistantComponent),
       },
-      // {
-      //   path: AppRoutes.SCHOOLS,
-      //   loadComponent: () => import("../views/schools/schools.component").then((m) => m.SchoolsComponent),
-      // },
+      {
+        path: AppRoutes.SCHOOLS,
+        loadComponent: () => import("../views/schools/schools.component").then((m) => m.SchoolsComponent),
+      },
       {
         path: AppRoutes.USERS,
         loadComponent: () => import("../views/users/users.component").then((m) => m.UsersComponent),

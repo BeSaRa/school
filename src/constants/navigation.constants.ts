@@ -14,12 +14,12 @@ export const menuItems: NavigationItem[] = [
     icon: "USER",
     route: AppRoutes.USERS,
   },
-  // {
-  //   id: 3,
-  //   label: "schools",
-  //   icon: "SCHOOL",
-  //   route: AppRoutes.SCHOOLS,
-  // },
+  {
+    id: 3,
+    label: "schools",
+    icon: "SCHOOL",
+    route: AppRoutes.SCHOOLS,
+  },
   // {
   //   id: 4,
   //   label: "face_repo",

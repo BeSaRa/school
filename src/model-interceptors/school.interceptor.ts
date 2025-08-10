@@ -14,31 +14,31 @@ export class SchoolInterceptor extends GeneralInterceptor {
    * @returns Transformed school data
    */
   override receive(model: School): School {
-    if (!model) return model;
+    // if (!model) return model;
 
     // Sanitize basic fields
-    if (model.name) {
-      model.name = model.name.trim();
-    }
+    // if (model.name) {
+    //   model.name = model.name.trim();
+    // }
 
     // Handle contact information
-    if (model.contact) {
-      if (model.contact.email) {
-        model.contact.email = model.contact.email.toLowerCase().trim();
-      }
-      if (model.contact.website) {
-        model.contact.website = this.sanitizeUrl(model.contact.website);
-      }
-      if (model.contact.phone) {
-        model.contact.phone = this.sanitizePhone(model.contact.phone);
-      }
-    }
+    // if (model.contact) {
+    //   if (model.contact.email) {
+    //     model.contact.email = model.contact.email.toLowerCase().trim();
+    //   }
+    //   if (model.contact.website) {
+    //     model.contact.website = this.sanitizeUrl(model.contact.website);
+    //   }
+    //   if (model.contact.phone) {
+    //     model.contact.phone = this.sanitizePhone(model.contact.phone);
+    //   }
+    // }
 
     // Handle location coordinates
-    if (model.location?.coordinate) {
-      model.location.coordinate.latitude = Number(model.location.coordinate.latitude);
-      model.location.coordinate.longitude = Number(model.location.coordinate.longitude);
-    }
+    // if (model.location?.coordinate) {
+    //   model.location.coordinate.latitude = Number(model.location.coordinate.latitude);
+    //   model.location.coordinate.longitude = Number(model.location.coordinate.longitude);
+    // }
 
     return model;
   }
@@ -55,31 +55,31 @@ export class SchoolInterceptor extends GeneralInterceptor {
     const sanitizedModel = { ...model };
 
     // Sanitize and format basic school information
-    if (sanitizedModel.name) {
-      sanitizedModel.name = sanitizedModel.name.trim();
-    }
+    // if (sanitizedModel.name) {
+    //   sanitizedModel.name = sanitizedModel.name.trim();
+    // }
 
     // Format and validate contact information
-    if (sanitizedModel.contact) {
-      if (sanitizedModel.contact.phone) {
-        sanitizedModel.contact.phone = this.formatPhoneNumber(sanitizedModel.contact.phone);
-      }
-      if (sanitizedModel.contact.website) {
-        sanitizedModel.contact.website = this.formatWebsite(sanitizedModel.contact.website);
-      }
-      if (sanitizedModel.contact.email) {
-        sanitizedModel.contact.email = sanitizedModel.contact.email.toLowerCase().trim();
-      }
-    }
+    // if (sanitizedModel.contact) {
+    //   if (sanitizedModel.contact.phone) {
+    //     sanitizedModel.contact.phone = this.formatPhoneNumber(sanitizedModel.contact.phone);
+    //   }
+    //   if (sanitizedModel.contact.website) {
+    //     sanitizedModel.contact.website = this.formatWebsite(sanitizedModel.contact.website);
+    //   }
+    //   if (sanitizedModel.contact.email) {
+    //     sanitizedModel.contact.email = sanitizedModel.contact.email.toLowerCase().trim();
+    //   }
+    // }
 
     // Ensure location coordinates are properly formatted
-    if (sanitizedModel.location?.coordinate) {
-      sanitizedModel.location.coordinate = {
-        ...sanitizedModel.location.coordinate,
-        latitude: Number(sanitizedModel.location.coordinate.latitude),
-        longitude: Number(sanitizedModel.location.coordinate.longitude),
-      };
-    }
+    // if (sanitizedModel.location?.coordinate) {
+    //   sanitizedModel.location.coordinate = {
+    //     ...sanitizedModel.location.coordinate,
+    //     latitude: Number(sanitizedModel.location.coordinate.latitude),
+    //     longitude: Number(sanitizedModel.location.coordinate.longitude),
+    //   };
+    // }
 
     return sanitizedModel;
   }

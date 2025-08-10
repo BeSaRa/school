@@ -11,6 +11,10 @@ import { MatIconModule } from "@angular/material/icon";
 import { CommonModule } from "@angular/common";
 import { AdminTableComponent } from "../../abstracts/admin-component/components/admin-table/admin-table.component";
 import { LookupService } from "@/services/lookup.service";
+import { ContactService } from "@/services/contact.service";
+import { forkJoin } from "rxjs";
+import { SchoolService } from "@/services/school.service";
+import { Patterns } from "@/validators/patterns";
 
 @Component({
   selector: "app-users",
@@ -28,6 +32,8 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
   private dialog = inject(MatDialog);
   protected userService = inject(UserService);
   protected lookupService = inject(LookupService);
+  protected contactService = inject(ContactService);
+  protected schoolService = inject(SchoolService);
 
   constructor() {
     super();
@@ -55,9 +61,8 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
           key: "contactId",
           label: "contact",
           sortable: true,
-          filterable: true,
+          filterable: false,
           type: "text",
-          filterType: "text",
         },
         {
           key: "gender",
@@ -102,89 +107,97 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
     this.openDialog(user);
   }
 
-  private openDialog(user?: User): void {
-    const dialogRef = this.dialog.open(AdminDialogComponent, {
-      width: "800px",
-      disableClose: true,
-      data: {
-        model: user,
-        modelName: this.localService.locals().user,
-        modelConstructor: User,
-        formFields: [
-          {
-            key: "nameEn",
-            label: this.localService.locals().en_name,
-            type: "text",
-            required: true,
-            placeholder: this.localService.interpolate("enter_your_item", { item: "en_name" }),
-            validators: [Validators.minLength(2), Validators.maxLength(100)],
-          },
-          {
-            key: "nameAr",
-            label: this.localService.locals().ar_name,
-            type: "text",
-            required: true,
-            placeholder: this.localService.interpolate("enter_your_item", { item: "ar_name" }),
-            validators: [Validators.minLength(2), Validators.maxLength(100)],
-          },
-          {
-            key: "username",
-            label: this.localService.locals().username,
-            type: "text",
-            required: true,
-            placeholder: this.localService.interpolate("enter_your_item", { item: "username" }),
-            validators: [Validators.minLength(2), Validators.maxLength(100)],
-          },
-          {
-            key: "contactId",
-            label: this.localService.locals().contact,
-            type: "number",
-            required: false,
-            placeholder: this.localService.interpolate("enter_your_item", { item: "contact" }),
-            value: null,
-          },
-          {
-            key: "schoolId",
-            label: this.localService.locals().school_id,
-            type: "number",
-            required: true,
-            placeholder: this.localService.interpolate("enter_your_item", { item: "school_id" }),
-          },
-          {
-            key: "password",
-            label: this.localService.locals().password,
-            type: "password",
-            required: true,
-            placeholder: this.localService.interpolate("enter_your_item", { item: "password" }),
-            validators: [Validators.minLength(8), Validators.maxLength(100)],
-          },
-          {
-            key: "role",
-            label: this.localService.locals().role,
-            type: "select",
-            required: true,
-            options: this.lookupService.lookups.role,
-          },
-          {
-            key: "createdBy",
-            label: "",
-            type: "hidden",
-            required: true,
-            value: this.userService.currentUser?.id,
-          },
-          {
-            key: "isActive",
-            label: this.localService.locals().active,
-            type: "boolean",
-          },
-        ],
-      },
-    });
+  openDialog(user?: User): void {
+    forkJoin({
+      contacts: this.contactService.loadAsLookups(),
+      schools: this.schoolService.loadAsLookups(),
+    }).subscribe(({ contacts, schools }) => {
+      const dialogRef = this.dialog.open(AdminDialogComponent, {
+        width: "800px",
+        disableClose: true,
+        data: {
+          model: user,
+          modelName: this.localService.locals().user,
+          modelConstructor: User,
+          formFields: [
+            {
+              key: "nameEn",
+              label: this.localService.locals().en_name,
+              type: "text",
+              required: true,
+              placeholder: this.localService.interpolate("enter_your_item", { item: "en_name" }),
+              validators: [Validators.minLength(2), Validators.maxLength(100), Validators.pattern(Patterns.ENGLISH_ONLY)],
+            },
+            {
+              key: "nameAr",
+              label: this.localService.locals().ar_name,
+              type: "text",
+              required: true,
+              placeholder: this.localService.interpolate("enter_your_item", { item: "ar_name" }),
+              validators: [Validators.minLength(2), Validators.maxLength(100), Validators.pattern(Patterns.ARABIC_ONLY)],
+            },
+            {
+              key: "username",
+              label: this.localService.locals().username,
+              type: "text",
+              required: true,
+              placeholder: this.localService.interpolate("enter_your_item", { item: "username" }),
+              validators: [Validators.minLength(2), Validators.maxLength(100), Validators.pattern(Patterns.USERNAME)],
+            },
+            {
+              key: "contactId",
+              label: this.localService.locals().contact,
+              type: "select",
+              options: contacts,
+              required: true,
+              placeholder: this.localService.interpolate("enter_your_item", { item: "contact" }),
+              value: null,
+            },
+            {
+              key: "schoolId",
+              label: this.localService.locals().school_id,
+              type: "select",
+              options: schools,
+              required: true,
+              placeholder: this.localService.interpolate("enter_your_item", { item: "school_id" }),
+              value: null,
+            },
+            {
+              key: "password",
+              label: this.localService.locals().password,
+              type: "password",
+              required: true,
+              placeholder: this.localService.interpolate("enter_your_item", { item: "password" }),
+              validators: [Validators.minLength(8), Validators.maxLength(100), Validators.pattern(Patterns.PASSWORD)],
+            },
+            {
+              key: "role",
+              label: this.localService.locals().role,
+              type: "select",
+              required: true,
+              options: this.lookupService.lookups.role,
+            },
+            {
+              key: "createdBy",
+              label: "",
+              type: "hidden",
+              required: true,
+              value: this.userService.currentUser?.id,
+            },
+            {
+              key: "isActive",
+              label: this.localService.locals().active,
+              type: "boolean",
+            },
+          ],
+        },
+      });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.loadData();
-      }
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.loadData();
+        }
+      });
     });
   }
 }

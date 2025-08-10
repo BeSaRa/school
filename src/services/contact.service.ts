@@ -2,6 +2,7 @@ import { BaseCrudService } from "@/abstracts/base-crud-service";
 import { Contact } from "@/models/contact";
 import { Injectable } from "@angular/core";
 import { CastResponseContainer } from "cast-response";
+import { map, Observable } from "rxjs";
 
 @CastResponseContainer({
   $default: {
@@ -16,5 +17,15 @@ export class ContactService extends BaseCrudService<Contact> {
 
   getUrlSegment(): string {
     return this.urlService.URLS.CONTACTS;
+  }
+  loadAsLookups(): Observable<{ value: number; label: string }[]> {
+    return this.load().pipe(
+      map((res: any) =>
+        res.contacts.map((item: Contact) => ({
+          value: item.id,
+          label: item.contact,
+        }))
+      )
+    );
   }
 }

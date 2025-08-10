@@ -93,6 +93,10 @@ export interface SchoolBranch {
   latitude: number | null;
   longitude: number | null;
 }
+export interface ClassRoom {
+  id: number;
+  classNo: string;
+}
 export interface Teacher {
   teacherNo: string;
 }

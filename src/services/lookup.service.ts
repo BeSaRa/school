@@ -10,7 +10,6 @@ export interface LookupItem {
 
 export interface LookupMap {
   religious_affiliation: LookupItem[];
-  education_level: LookupItem[];
   school_type: LookupItem[];
   gender: LookupItem[];
   visionProvider: LookupItem[];
@@ -33,13 +32,6 @@ export class LookupService {
         { value: "christian", label: "religious_affiliation_christian" },
         { value: "jewish", label: "religious_affiliation_jewish" },
         { value: "other", label: "religious_affiliation_other" },
-      ],
-      education_level: [
-        { value: "all", label: "education_level_all" },
-        { value: "elementary", label: "education_level_elementary" },
-        { value: "middle", label: "education_level_middle" },
-        { value: "secondary", label: "education_level_secondary" },
-        { value: "higher", label: "education_level_higher" },
       ],
       school_type: [
         { value: "public", label: "school_type_public" },

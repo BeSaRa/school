@@ -2,6 +2,9 @@ import { BaseCrudModel } from "@/abstracts/base-crud-model";
 import { InterceptModel } from "cast-response";
 import { SchoolService } from "@/services/school.service";
 import { SchoolInterceptor } from "@/model-interceptors/school.interceptor";
+import { Contact } from "./contact";
+import { AcademicLevel } from "./academic-level";
+import { ClassRoom, SchoolBranch } from "@/types/face-repo.types";
 
 const interceptor = new SchoolInterceptor();
 export const send = interceptor.send.bind(interceptor);
@@ -10,40 +13,13 @@ export const receive = interceptor.receive.bind(interceptor);
 export class School extends BaseCrudModel<School, SchoolService> {
   override $$__service_name__$$: string = "SchoolService";
 
-  name!: string;
-  educationLevel!: "all" | "primary" | "secondary";
-
-  schoolType!: {
-    category: "public" | "private";
-    gender: "boys" | "girls" | "mixed";
-    religiousAffiliation: string;
-    id: number;
-  };
-
-  location!: {
-    country: string;
-    city: string;
-    area: string;
-    street: string;
-    coordinate: {
-      latitude: number;
-      longitude: number;
-    };
-    id: number;
-  };
-
-  contact!: {
-    phone: string;
-    email: string;
-    website: string;
-    id: number;
-  };
-
-  systemConfiguration!: {
-    visionProvider: "azure" | "aws" | "google" | "none";
-    storageProvider: "local" | "cloud";
-    cameras: any[]; // TODO: Replace with Camera[] when camera model is defined
-    timezone: string;
-    id: number;
-  };
+  category!: "public" | "private" | "international" | "religious" | "independent";
+  nameEn!: string;
+  nameAr!: string;
+  isActive!: boolean;
+  isDeleted!: boolean;
+  contact!: Contact;
+  academicLevels!: AcademicLevel[];
+  branches!: SchoolBranch[];
+  classrooms!: ClassRoom[];
 }
