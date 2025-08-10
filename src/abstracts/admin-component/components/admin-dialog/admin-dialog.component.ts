@@ -1,6 +1,6 @@
 import { Component, inject, computed, effect, Output, EventEmitter } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from "@angular/forms";
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule, ValidatorFn } from "@angular/forms";
 import { BaseCrudModel } from "@/abstracts/base-crud-model";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { DialogService } from "@/services/dialog.service";
@@ -13,7 +13,7 @@ export interface FormField {
   type?: "text" | "number" | "email" | "password" | "textarea" | "select" | "boolean" | "date" | "hidden";
   required?: boolean;
   options?: Array<{ value: any; label: keyof LangKeysContract }>;
-  validators?: any[];
+  validators?: ValidatorFn[];
   disabled?: boolean;
   placeholder?: string;
   width?: "1" | "1/2" | "1/3";
@@ -48,11 +48,12 @@ export class AdminDialogComponent<T extends BaseCrudModel<T, any>> {
       email: locals.email_format,
       username: locals.username_format,
       password: locals.password_format,
+      "contact.contact": locals.contact_mismatch_error,
     };
   }
 
   getErrorMessage(fieldKey: string): string | null {
-    const control = this.form.get(fieldKey);
+    const control = this.form.get([fieldKey]);
     if (!control || !control.errors || !control.touched) return null;
 
     if (control.hasError("required")) {
@@ -87,7 +88,7 @@ export class AdminDialogComponent<T extends BaseCrudModel<T, any>> {
   @Output() saved = new EventEmitter<T>();
   @Output() cancelled = new EventEmitter<void>();
 
-  protected form!: FormGroup;
+  form!: FormGroup;
   protected isEditMode = computed(() => !!(this.model as any)?.id);
 
   private fb = inject(FormBuilder);

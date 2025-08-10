@@ -200,6 +200,7 @@ export interface LangKeysContract {
   email_format: string;
   username_format: string;
   password_format: string;
+  contact_mismatch_error: string;
 }
 
 export type SupportedLanguage = "en" | "ar";
