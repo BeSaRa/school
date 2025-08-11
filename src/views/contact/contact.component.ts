@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from "@angular/core";
-import { ReactiveFormsModule, Validators } from "@angular/forms";
+import { ReactiveFormsModule, ValidatorFn, Validators } from "@angular/forms";
 import { CommonModule } from "@angular/common";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
@@ -13,6 +13,7 @@ import { AdminTableComponent } from "@/abstracts/admin-component/components/admi
 import { AdminDialogComponent } from "@/abstracts/admin-component/components/admin-dialog/admin-dialog.component";
 import { LookupService } from "@/services/lookup.service";
 import { UserService } from "@/services/user.service";
+import { Patterns } from "@/validators/patterns";
 
 @Component({
   selector: "app-contacts",
@@ -37,7 +38,6 @@ export class ContactComponent extends AdminComponent<Contact> implements OnInit 
     this.config.set({
       itemsPerPage: 20,
       responseKey: "contacts",
-      customLoadPath: this.contactService.getUrlSegment() + "list_contacts",
       columns: [
         {
           key: "contact",
@@ -83,7 +83,7 @@ export class ContactComponent extends AdminComponent<Contact> implements OnInit 
             type: "text",
             required: true,
             placeholder: this.localService.interpolate("enter_item", { item: "contact" }),
-            validators: [Validators.minLength(3), Validators.maxLength(100)],
+            validators: [Validators.minLength(3), Validators.maxLength(100), this.dependentValidator("type")],
           },
           {
             key: "type",
@@ -102,11 +102,48 @@ export class ContactComponent extends AdminComponent<Contact> implements OnInit 
         ],
       },
     });
+    dialogRef.afterOpened().subscribe(() => {
+      const form = (dialogRef.componentInstance as any).form;
 
+      if (form) {
+        const contactTypeControl = form.get(["type"]);
+        const contactContactControl = form.get(["contact"]);
+
+        if (contactTypeControl && contactContactControl) {
+          contactTypeControl.valueChanges.subscribe(() => {
+            contactContactControl.updateValueAndValidity();
+          });
+        }
+      }
+    });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.loadData();
       }
     });
+  }
+  dependentValidator(dependentKey: string): ValidatorFn {
+    return (control) => {
+      if (!control || !control.parent) return null;
+
+      const dependentControl = control.parent.get([dependentKey]);
+      if (!dependentControl) return null;
+
+      const dependentValue = dependentControl.value;
+      const currentValue = control.value;
+      if (dependentValue === "email") {
+        const emailPattern = Patterns.EMAIL;
+        return emailPattern.test(currentValue) ? null : { pattern: true };
+      }
+      if (dependentValue === "website") {
+        const emailPattern = Patterns.WEBSITE;
+        return emailPattern.test(currentValue) ? null : { pattern: true };
+      }
+      if (dependentValue === "phone" || dependentValue === "mobile") {
+        const phonePattern = Patterns.PHONE;
+        return phonePattern.test(currentValue) ? null : { pattern: true };
+      }
+      return null;
+    };
   }
 }
