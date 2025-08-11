@@ -20,18 +20,18 @@ export const menuItems: NavigationItem[] = [
     icon: "SCHOOL",
     route: AppRoutes.SCHOOLS,
   },
-  // {
-  //   id: 4,
-  //   label: "face_repo",
-  //   icon: "FACE_REPOSITORY",
-  //   route: AppRoutes.FACE_REPOSITORY,
-  // },
-  // {
-  //   id: 5,
-  //   label: "contact",
-  //   icon: "EMAIL",
-  //   route: AppRoutes.CONTACT,
-  // },
+  {
+    id: 4,
+    label: "face_repo",
+    icon: "FACE_REPOSITORY",
+    route: AppRoutes.FACE_REPOSITORY,
+  },
+  {
+    id: 5,
+    label: "contact",
+    icon: "EMAIL",
+    route: AppRoutes.CONTACT,
+  },
   // {
   //   id: 6,
   //   label: "academic_level",
