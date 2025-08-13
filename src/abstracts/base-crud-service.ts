@@ -17,7 +17,9 @@ export abstract class BaseCrudService<Model, PrimaryKey = number> extends Regist
   protected http = inject(HttpClient);
 
   @CastResponse()
-  load(options?: OptionsContract, customPath?: string): Observable<Model[]> {
+  load(options?: OptionsContract, customLoadPath?: string): Observable<Model[]> {
+    const customPath = customLoadPath ? this.urlService.addBaseUrl(customLoadPath) : undefined;
+
     return this.http.get<Model[]>(customPath ?? this.getUrlSegment(), {
       params: new HttpParams({
         fromObject: options as never,
@@ -27,14 +29,16 @@ export abstract class BaseCrudService<Model, PrimaryKey = number> extends Regist
 
   @CastResponse()
   @HasInterception
-  create(@InterceptParam() model: Model): Observable<Model> {
-    return this.http.post<Model>(this.getUrlSegment(), model);
+  create(@InterceptParam() model: Model, customPath?: string): Observable<Model> {
+    const customCreatePath = customPath ? this.urlService.addBaseUrl(customPath) : undefined;
+    return this.http.post<Model>(customCreatePath ?? this.getUrlSegment(), model);
   }
 
   @CastResponse()
   @HasInterception
-  update(@InterceptParam() model: Model): Observable<Model> {
-    return this.http.put<Model>(this.getUrlSegment(), model);
+  update(@InterceptParam() model: Model, customPath?: string): Observable<Model> {
+    const customUpdatePath = customPath ? this.urlService.addBaseUrl(customPath) : undefined;
+    return this.http.put<Model>(customUpdatePath ?? this.getUrlSegment(), model);
   }
 
   @CastResponse()
