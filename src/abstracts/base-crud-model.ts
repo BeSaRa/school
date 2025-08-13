@@ -18,12 +18,12 @@ export abstract class BaseCrudModel<Model, Service extends BaseCrudServiceContra
   updatedAt!: string;
   abstract override $$__service_name__$$: string;
 
-  create(): Observable<Model> {
-    return this.$$getService$$<Service>().create(this as unknown as Model);
+  create(customPath?: string): Observable<Model> {
+    return this.$$getService$$<Service>().create(this as unknown as Model, customPath);
   }
 
-  update(): Observable<Model> {
-    return this.$$getService$$<Service>().update(this as unknown as Model);
+  update(customPath?: string): Observable<Model> {
+    return this.$$getService$$<Service>().update(this as unknown as Model, customPath);
   }
 
   delete(): Observable<Model> {

@@ -10,6 +10,7 @@ import { DialogService } from "@/services/dialog.service";
 import { FilterType, TableColumn } from "./components/admin-table/admin-table.component";
 import { LocalService } from "@/services/local.service";
 import { LangKeysContract } from "@/types/localization.types";
+import { UrlService } from "@/services/url.service";
 
 export type SortDirection = "asc" | "desc" | null;
 
@@ -30,6 +31,7 @@ export interface AdminComponentConfig<T> {
   itemsPerPage?: number;
   responseKey?: string;
   customLoadPath?: string;
+  loadDataOnInit?: boolean;
 }
 
 @Component({
@@ -50,6 +52,7 @@ export abstract class AdminComponent<T extends BaseCrudModel<T, any>> implements
   protected dialogService = inject(DialogService);
   protected destroyRef = inject(DestroyRef);
   protected localService = inject(LocalService);
+  protected urlService = inject(UrlService);
 
   // Signals
   protected items = signal<T[]>([]);
@@ -94,7 +97,9 @@ export abstract class AdminComponent<T extends BaseCrudModel<T, any>> implements
 
   ngOnInit(): void {
     this.initializeDefaultSort();
-    this.loadData();
+    if (this.config().loadDataOnInit ?? true) {
+      this.loadData();
+    }
   }
 
   ngOnDestroy(): void {
@@ -111,10 +116,10 @@ export abstract class AdminComponent<T extends BaseCrudModel<T, any>> implements
   }
 
   protected loadData(): void {
-    const customPath = this.config().customLoadPath;
-
+    const config = this.config();
+    const { customLoadPath, responseKey } = config;
     this.service
-      .load(undefined, customPath)
+      .load(undefined, customLoadPath)
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         catchError((error) => {
@@ -123,8 +128,8 @@ export abstract class AdminComponent<T extends BaseCrudModel<T, any>> implements
         })
       )
       .subscribe((response: any) => {
-        const data = response[this.config().responseKey || "items"] || [];
-        this.items.set(data);
+        const key = responseKey || "items";
+        this.items.set(response?.[key] ?? []);
       });
   }
 
@@ -166,7 +171,6 @@ export abstract class AdminComponent<T extends BaseCrudModel<T, any>> implements
         return 0;
       });
     }
-
     return result;
   });
 

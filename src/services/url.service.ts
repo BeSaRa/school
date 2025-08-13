@@ -36,7 +36,7 @@ export class UrlService {
     return this.URLS;
   }
 
-  private addBaseUrl(url: string): string {
+  public addBaseUrl(url: string): string {
     const external = (this.config.CONFIG.EXTERNAL_PROTOCOLS ?? []).some((protocol) => {
       return url.toLowerCase().indexOf(protocol) === 0;
     });

@@ -81,6 +81,7 @@ export class AdminDialogComponent<T extends BaseCrudModel<T, any>> {
     return "Invalid input.";
   }
   modelName = "Item";
+  customPath = undefined;
   model: T | null = null;
   formFields: FormField[] = [];
   modelConstructor: new () => T = null!;
@@ -112,6 +113,8 @@ export class AdminDialogComponent<T extends BaseCrudModel<T, any>> {
     this.model = this.data.model;
     this.modelName = this.data.modelName || "";
     this.modelConstructor = this.data.modelConstructor;
+    this.customPath = this.data.customPath;
+
     this.initializeForm();
   }
 
@@ -152,7 +155,7 @@ export class AdminDialogComponent<T extends BaseCrudModel<T, any>> {
       }
     }
 
-    const save$ = this.isEditMode() ? modelInstance.update() : modelInstance.create();
+    const save$ = this.isEditMode() ? modelInstance.update(this.customPath) : modelInstance.create(this.customPath);
 
     save$.subscribe({
       next: (savedModel) => {
