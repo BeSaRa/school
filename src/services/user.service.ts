@@ -1,5 +1,5 @@
 import { Injectable, inject } from "@angular/core";
-import { Observable, catchError, throwError, BehaviorSubject } from "rxjs";
+import { Observable, catchError, throwError, BehaviorSubject, map } from "rxjs";
 import { DialogService } from "./dialog.service";
 import { isPlatformBrowser } from "@angular/common";
 import { PLATFORM_ID } from "@angular/core";
@@ -69,5 +69,15 @@ export class UserService extends BaseCrudService<User> {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem("current_user");
     }
+  }
+  loadAsLookups(): Observable<{ value: number; label: string }[]> {
+    return this.load().pipe(
+      map((res: any) =>
+        res.persons.map((item: User) => ({
+          value: item.id,
+          label: item.nameAr,
+        }))
+      )
+    );
   }
 }

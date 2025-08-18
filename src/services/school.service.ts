@@ -4,6 +4,7 @@ import { BaseCrudService } from "@/abstracts/base-crud-service";
 import { School } from "@/models/school";
 import { CastResponseContainer } from "cast-response";
 import { map, Observable } from "rxjs";
+import { SchoolBranch } from "@/types/face-repo.types";
 
 @CastResponseContainer({
   $default: {
@@ -24,6 +25,16 @@ export class SchoolService extends BaseCrudService<School> {
         res.schools.map((item: School) => ({
           value: item.id,
           label: item.nameAr,
+        }))
+      )
+    );
+  }
+  loadBranchesAsLookup(schoolId: number): Observable<{ value: number; label: string }[]> {
+    return this.load(undefined, `schools/${schoolId}/branches`).pipe(
+      map((res: any) =>
+        res.branches.map((item: SchoolBranch) => ({
+          value: item.id,
+          label: `${item.country} - ${item.city} - ${item.area}`,
         }))
       )
     );
