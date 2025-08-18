@@ -9,7 +9,7 @@ export class Patterns {
   static readonly EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   /** Phone number (digits only, 10–15 digits) */
-  static readonly PHONE = /^\d{10,15}$/;
+  static readonly PHONE = /^\+\d{1,4}\s?\d{6,14}$/;
 
   /** Only Arabic letters (with optional spaces) */
   static readonly ARABIC_ONLY = /^[\u0600-\u06FF\s]+$/;
