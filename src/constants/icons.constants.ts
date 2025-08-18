@@ -151,6 +151,7 @@ export const AppIcons = {
   CHEVRON_DOUBLE_LEFT: "chevron-double-left",
   CHEVRON_DOUBLE_RIGHT: "chevron-double-right",
   SOURCES: "file-document-multiple-outline",
+  BRANCHES: "office-building",
 } as const;
 
 export type AppIconsType = typeof AppIcons;

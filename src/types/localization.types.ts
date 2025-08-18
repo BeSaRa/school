@@ -206,6 +206,7 @@ export interface LangKeysContract {
   load_students: string;
   description: string;
   date_of_birth: string;
+  branches: string;
 }
 
 export type SupportedLanguage = "en" | "ar";

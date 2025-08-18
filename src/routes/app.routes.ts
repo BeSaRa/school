@@ -29,6 +29,10 @@ export const routes: Routes = [
         loadComponent: () => import("../views/schools/schools.component").then((m) => m.SchoolsComponent),
       },
       {
+        path: AppRoutes.BRANCHES,
+        loadComponent: () => import("../views/school-branches/school-branches.component").then((m) => m.SchoolBranchesComponent),
+      },
+      {
         path: AppRoutes.USERS,
         loadComponent: () => import("../views/users/users.component").then((m) => m.UsersComponent),
       },
@@ -40,10 +44,10 @@ export const routes: Routes = [
         path: AppRoutes.CONTACT,
         loadComponent: () => import("../views/contact/contact.component").then((m) => m.ContactComponent),
       },
-      // {
-      //   path: AppRoutes.ACADEMIC_LEVEL,
-      //   loadComponent: () => import("../views/academic-level/academic-level.component").then((m) => m.AcademicLevelComponent),
-      // },
+      {
+        path: AppRoutes.ACADEMIC_LEVEL,
+        loadComponent: () => import("../views/academic-level/academic-level.component").then((m) => m.AcademicLevelComponent),
+      },
       {
         path: AppRoutes.STUDENTS,
         loadComponent: () => import("../views/students/students.component").then((m) => m.StudentsComponent),

@@ -4,7 +4,8 @@ import { SchoolService } from "@/services/school.service";
 import { SchoolInterceptor } from "@/model-interceptors/school.interceptor";
 import { Contact } from "./contact";
 import { AcademicLevel } from "./academic-level";
-import { ClassRoom, SchoolBranch } from "@/types/face-repo.types";
+import { ClassRoom } from "@/types/face-repo.types";
+import { SchoolBranch } from "./school-branch";
 
 const interceptor = new SchoolInterceptor();
 export const send = interceptor.send.bind(interceptor);

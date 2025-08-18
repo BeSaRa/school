@@ -1,4 +1,6 @@
 import { AcademicLevel } from "@/models/academic-level";
+import { School } from "@/models/school";
+import { SchoolBranch } from "@/models/school-branch";
 
 export enum PhotoType {
   PATH = "path",
@@ -60,39 +62,39 @@ export interface PersonalInfo {
 //   createdBy: number;
 // }
 
-export interface School {
-  id: number;
-  category: string;
-  nameEn: string;
-  nameAr: string;
-  isActive: boolean;
-  isDeleted: boolean;
-  createdBy: number;
-  updatedBy: number | null;
-  createdAt: string;
-  updatedAt: string | null;
-  contact: SchoolContact;
-}
+// export interface School {
+//   id: number;
+//   category: string;
+//   nameEn: string;
+//   nameAr: string;
+//   isActive: boolean;
+//   isDeleted: boolean;
+//   createdBy: number;
+//   updatedBy: number | null;
+//   createdAt: string;
+//   updatedAt: string | null;
+//   contact: SchoolContact;
+// }
 
-export interface SchoolContact {
-  id: number;
-  type: string;
-  contact: string;
-  createdBy: number;
-  updatedBy: number | null;
-  createdAt: string;
-  updatedAt: string | null;
-}
+// export interface SchoolContact {
+//   id: number;
+//   type: string;
+//   contact: string;
+//   createdBy: number;
+//   updatedBy: number | null;
+//   createdAt: string;
+//   updatedAt: string | null;
+// }
 
-export interface SchoolBranch {
-  id: number;
-  country: string;
-  city: string;
-  area: string | null;
-  street: string | null;
-  latitude: number | null;
-  longitude: number | null;
-}
+// export interface SchoolBranch {
+//   id: number;
+//   country: string;
+//   city: string;
+//   area: string | null;
+//   street: string | null;
+//   latitude: number | null;
+//   longitude: number | null;
+// }
 export interface ClassRoom {
   id: number;
   classNo: string;
