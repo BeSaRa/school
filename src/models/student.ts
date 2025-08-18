@@ -4,7 +4,7 @@ import { StudentService } from "@/services/student.service";
 import { InterceptModel } from "cast-response";
 import { AcademicLevel } from "./academic-level";
 import { School } from "./school";
-import { SchoolBranch } from "@/types/face-repo.types";
+import { SchoolBranch } from "./school-branch";
 
 const { send, receive } = new StudentInterceptor();
 

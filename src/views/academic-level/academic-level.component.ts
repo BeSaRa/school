@@ -9,7 +9,6 @@ import { AdminDialogComponent } from "../../abstracts/admin-component/components
 import { AdminComponent } from "../../abstracts/admin-component/admin-component";
 import { BaseCrudService } from "../../abstracts/base-crud-service";
 import { LookupService } from "@/services/lookup.service";
-import { filter, switchMap } from "rxjs";
 import { AcademicLevel } from "@/models/academic-level";
 import { AcademicLevelService } from "@/services/academic-level.service";
 import { UserService } from "@/services/user.service";

@@ -32,17 +32,23 @@ export const menuItems: NavigationItem[] = [
     icon: "EMAIL",
     route: AppRoutes.CONTACT,
   },
-  // {
-  //   id: 6,
-  //   label: "academic_level",
-  //   icon: "EDUCATION_LEVEL",
-  //   route: AppRoutes.ACADEMIC_LEVEL,
-  // },
+  {
+    id: 6,
+    label: "academic_level",
+    icon: "EDUCATION_LEVEL",
+    route: AppRoutes.ACADEMIC_LEVEL,
+  },
   {
     id: 7,
     label: "students",
     icon: "STUDENTS",
     route: AppRoutes.STUDENTS,
+  },
+  {
+    id: 8,
+    label: "branches",
+    icon: "BRANCHES",
+    route: AppRoutes.BRANCHES,
   },
   // {
   //   id: 7,

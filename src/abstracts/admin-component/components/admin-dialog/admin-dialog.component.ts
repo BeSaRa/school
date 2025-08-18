@@ -103,7 +103,7 @@ export class AdminDialogComponent<T extends BaseCrudModel<T, any>> {
     effect(() => {
       this.initializeForm();
       if (this.isEditMode() && this.model) {
-        this.form.patchValue(this.flatten(this.model as any));
+        this.form.patchValue(this.flatten(this.model as T));
       }
     });
   }
@@ -144,17 +144,12 @@ export class AdminDialogComponent<T extends BaseCrudModel<T, any>> {
     let modelInstance: T;
 
     if (this.isEditMode() && this.model) {
-      modelInstance = Object.assign(this.model, nestedValue);
+      modelInstance = new this.modelConstructor();
+      Object.assign(modelInstance, this.model, nestedValue);
     } else {
-      try {
-        modelInstance = new this.modelConstructor();
-        Object.assign(modelInstance, nestedValue);
-      } catch (error) {
-        console.error("Error creating model instance:", error);
-        return;
-      }
+      modelInstance = new this.modelConstructor();
+      Object.assign(modelInstance, nestedValue);
     }
-
     const save$ = this.isEditMode() ? modelInstance.update(this.customPath) : modelInstance.create(this.customPath);
 
     save$.subscribe({

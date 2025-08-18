@@ -7,6 +7,7 @@ export const AppRoutes = {
   CHAT_ASSISTANT: "chat-assistant",
   USERS: "users",
   SCHOOLS: "schools",
+  BRANCHES: "branches",
   FACE_REPOSITORY: "face-repository",
   CONTACT: "contact",
   ACADEMIC_LEVEL: "academic-levels",

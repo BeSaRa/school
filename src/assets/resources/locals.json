@@ -175,6 +175,7 @@
   "student": { "en": "Student", "ar": "طالب" },
   "student_no": { "en": "Student No", "ar": "الرقم الجامعي" },
   "branch": { "en": "Branch", "ar": "الفرع" },
+  "branches": { "en": "Branches", "ar": "الفروع" },
   "person": { "en": "Person", "ar": "الشخص" },
   "subjects": { "en": "Subjects", "ar": "المواد الدراسية" },
   "subject": { "en": "Subject", "ar": "المادة الدراسية" },
