@@ -156,6 +156,7 @@ export interface LangKeysContract {
   ar_name: string;
   en_name: string;
   school_id: string;
+  branch_id: string;
   created_by: string;
   male: string;
   female: string;
@@ -201,6 +202,10 @@ export interface LangKeysContract {
   username_format: string;
   password_format: string;
   contact_mismatch_error: string;
+  load: string;
+  load_students: string;
+  description: string;
+  date_of_birth: string;
 }
 
 export type SupportedLanguage = "en" | "ar";
