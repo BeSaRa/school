@@ -35,7 +35,7 @@ export class SubjectsComponent extends AdminComponent<Subject> implements OnInit
     super();
     this.config.set({
       itemsPerPage: 20,
-      responseKey: "items",
+      responseKey: "subjects",
       columns: [
         {
           key: "nameEn",
