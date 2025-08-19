@@ -12,6 +12,7 @@ import { ContactService } from "@/services/contact.service";
 import { forkJoin } from "rxjs";
 import { UserService } from "@/services/user.service";
 import { Patterns } from "@/validators/patterns";
+import { dependentContactValidator } from "@/utils/custom-validators";
 
 @Component({
   selector: "app-schools",
@@ -126,7 +127,7 @@ export class SchoolsComponent extends AdminComponent<School> implements OnInit {
               type: "text",
               required: true,
               placeholder: this.localService.interpolate("enter_item", { item: "contact" }),
-              validators: [this.dependentValidator("contact.type")],
+              validators: [dependentContactValidator("contact.type")],
               width: "1/2",
             },
             {
@@ -168,29 +169,5 @@ export class SchoolsComponent extends AdminComponent<School> implements OnInit {
         }
       });
     });
-  }
-  dependentValidator(dependentKey: string): ValidatorFn {
-    return (control) => {
-      if (!control || !control.parent) return null;
-
-      const dependentControl = control.parent.get([dependentKey]);
-      if (!dependentControl) return null;
-
-      const dependentValue = dependentControl.value;
-      const currentValue = control.value;
-      if (dependentValue === "email") {
-        const emailPattern = Patterns.EMAIL;
-        return emailPattern.test(currentValue) ? null : { pattern: true };
-      }
-      if (dependentValue === "website") {
-        const emailPattern = Patterns.WEBSITE;
-        return emailPattern.test(currentValue) ? null : { pattern: true };
-      }
-      if (dependentValue === "phone" || dependentValue === "mobile") {
-        const phonePattern = Patterns.PHONE;
-        return phonePattern.test(currentValue) ? null : { pattern: true };
-      }
-      return null;
-    };
   }
 }
