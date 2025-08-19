@@ -52,10 +52,10 @@ export const routes: Routes = [
         path: AppRoutes.STUDENTS,
         loadComponent: () => import("../views/students/students.component").then((m) => m.StudentsComponent),
       },
-      // {
-      //   path: AppRoutes.SUBJECTS,
-      //   loadComponent: () => import("../views/subjects/subjects.component").then((m) => m.SubjectsComponent),
-      // },
+      {
+        path: AppRoutes.SUBJECTS,
+        loadComponent: () => import("../views/subjects/subjects.component").then((m) => m.SubjectsComponent),
+      },
       // {
       //   path: AppRoutes.SOURCES,
       //   loadComponent: () => import("../views/sources/sources.component").then((m) => m.SourcesComponent),

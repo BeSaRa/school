@@ -11,5 +11,4 @@ export class Subject extends BaseCrudModel<Subject, SubjectService> {
   override $$__service_name__$$ = "SubjectService";
   nameEn!: string;
   nameAr!: string;
-  createdBy!: number;
 }
