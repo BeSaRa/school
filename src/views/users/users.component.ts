@@ -15,6 +15,7 @@ import { ContactService } from "@/services/contact.service";
 import { forkJoin } from "rxjs";
 import { SchoolService } from "@/services/school.service";
 import { Patterns } from "@/validators/patterns";
+import { dependentContactValidator } from "@/utils/custom-validators";
 
 @Component({
   selector: "app-users",
@@ -145,13 +146,37 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
               validators: [Validators.minLength(2), Validators.maxLength(100), Validators.pattern(Patterns.USERNAME)],
             },
             {
-              key: "contactId",
-              label: this.localService.locals().contact,
+              key: "description",
+              label: this.localService.locals().description,
+              type: "textarea",
+              required: false,
+              placeholder: this.localService.interpolate("enter_your_item", { item: "description" }),
+            },
+            {
+              key: "gender",
+              label: this.localService.locals().gender,
               type: "select",
-              options: contacts,
+              required: false,
+              placeholder: this.localService.interpolate("enter_your_item", { item: "gender" }),
+              options: this.lookupService.lookups.gender,
+            },
+            {
+              key: "contact.contact",
+              label: this.localService.locals().contact,
+              type: "text",
               required: true,
-              placeholder: this.localService.interpolate("enter_your_item", { item: "contact" }),
-              value: null,
+              placeholder: this.localService.interpolate("enter_item", { item: "contact" }),
+              validators: [dependentContactValidator("contact.type")],
+              width: "1/2",
+            },
+            {
+              key: "contact.type",
+              label: this.localService.locals().contact_type,
+              type: "select",
+              options: this.lookupService.lookups.contact_type,
+              required: true,
+              placeholder: this.localService.interpolate("enter_item", { item: "contact_type" }),
+              width: "1/2",
             },
             {
               key: "schoolId",
@@ -192,7 +217,20 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
           ],
         },
       });
+      dialogRef.afterOpened().subscribe(() => {
+        const form = (dialogRef.componentInstance as any).form;
 
+        if (form) {
+          const contactTypeControl = form.get(["contact.type"]);
+          const contactContactControl = form.get(["contact.contact"]);
+
+          if (contactTypeControl && contactContactControl) {
+            contactTypeControl.valueChanges.subscribe(() => {
+              contactContactControl.updateValueAndValidity();
+            });
+          }
+        }
+      });
       dialogRef.afterClosed().subscribe((result) => {
         if (result) {
           this.loadData();
