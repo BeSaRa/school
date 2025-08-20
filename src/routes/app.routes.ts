@@ -56,6 +56,10 @@ export const routes: Routes = [
         path: AppRoutes.SUBJECTS,
         loadComponent: () => import("../views/subjects/subjects.component").then((m) => m.SubjectsComponent),
       },
+      {
+        path: AppRoutes.STAFF,
+        loadComponent: () => import("../views/staff/staff.component").then((m) => m.StaffComponent),
+      },
       // {
       //   path: AppRoutes.SOURCES,
       //   loadComponent: () => import("../views/sources/sources.component").then((m) => m.SourcesComponent),

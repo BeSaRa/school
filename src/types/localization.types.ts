@@ -188,6 +188,8 @@ export interface LangKeysContract {
   path: string;
   index: string;
   staff: string;
+  title: string;
+  employee_no: string;
   specialization: string;
   enter_item: string;
   enter_your_item: string;

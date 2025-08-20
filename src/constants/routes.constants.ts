@@ -13,6 +13,7 @@ export const AppRoutes = {
   ACADEMIC_LEVEL: "academic-levels",
   STUDENTS: "students",
   SUBJECTS: "subjects",
+  STAFF: "staff",
   SOURCES: "sources",
 
   // Error routes
