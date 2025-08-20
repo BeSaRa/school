@@ -213,6 +213,7 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
               key: "isActive",
               label: this.localService.locals().active,
               type: "boolean",
+              value: true,
             },
           ],
         },

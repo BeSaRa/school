@@ -11,7 +11,6 @@ import { LookupService } from "@/services/lookup.service";
 import { ContactService } from "@/services/contact.service";
 import { forkJoin } from "rxjs";
 import { UserService } from "@/services/user.service";
-import { Patterns } from "@/validators/patterns";
 import { dependentContactValidator } from "@/utils/custom-validators";
 
 @Component({
@@ -75,9 +74,6 @@ export class SchoolsComponent extends AdminComponent<School> implements OnInit {
     });
     super.ngOnInit();
   }
-  // private formatEducationLevel(level: keyof LangKeysContract): string {
-  //   return level ? this.localService.locals()[level] : "";
-  // }
 
   protected openAddDialog(): void {
     this.openDialog();

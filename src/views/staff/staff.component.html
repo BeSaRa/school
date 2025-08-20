@@ -1,0 +1,55 @@
+<div class="flex flex-col h-full p-6 bg-white/10">
+  <!-- School Select -->
+  <form [formGroup]="form" class="mb-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div [hidden]="schoolsLoading()">
+        <label class="block text-white mb-1">{{ localService.locals().school_name }}</label>
+        <select formControlName="schoolId" class="w-full rounded-lg p-2 text-black">
+          @for (school of schools; track school.value) {
+            <option [value]="school.value">{{ school.label }}</option>
+          }
+        </select>
+      </div>
+    </div>
+  </form>
+
+  <!-- Table -->
+  @if (showTable) {
+    <div class="flex flex-col h-full border-t border-white/30 mt-6 pt-6">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-semibold text-white">
+          {{ localService.locals().staff }}
+        </h1>
+        <button (click)="openAddDialog()" class="px-4 py-2 rounded-xl text-sm font-medium bg-white hover:bg-white/90 shadow transition">
+          {{ localService.locals().add_new }}
+        </button>
+      </div>
+
+      <div class="bg-white/10 rounded-2xl shadow-md p-2">
+        <app-admin-table
+          [data]="paginatedItems()"
+          [columns]="config().columns"
+          [pagination]="{
+            currentPage: currentPage(),
+            totalPages: totalPages(),
+            itemsPerPage: itemsPerPage(),
+          }"
+          [hasColumnFilters]="true"
+          [columnFilters]="columnFilters()"
+          (pageChange)="setPage($event)"
+          (sortChange)="onColumnSort($event)"
+          (filterChange)="updateFilter($event)"
+        >
+          <ng-template #actions let-item>
+            <button (click)="$event.stopPropagation(); openEditDialog(item)" class="text-secondary font-medium me-4 transition">
+              {{ localService.locals().edit }}
+            </button>
+            <button (click)="$event.stopPropagation(); onDelete(item, 'staff')" class="text-secondary font-medium transition">
+              {{ localService.locals().delete }}
+            </button>
+          </ng-template>
+        </app-admin-table>
+      </div>
+    </div>
+  }
+</div>
