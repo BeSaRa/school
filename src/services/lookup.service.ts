@@ -18,6 +18,7 @@ export interface LookupMap {
   contact_type: LookupItem[];
   education_type: LookupItem[];
   source_type: LookupItem[];
+  relation_options: LookupItem[];
 }
 
 @Injectable({ providedIn: "root" })
@@ -73,6 +74,18 @@ export class LookupService {
       source_type: [
         { value: "path", label: "path" },
         { value: "index", label: "index" },
+      ],
+      relation_options: [
+        { value: "father", label: "father" },
+        { value: "mother", label: "mother" },
+        { value: "grandfather", label: "grandfather" },
+        { value: "grandmother", label: "grandmother" },
+        { value: "uncle", label: "uncle" },
+        { value: "aunt", label: "aunt" },
+        { value: "brother", label: "brother" },
+        { value: "sister", label: "sister" },
+        { value: "guardian", label: "legal_guardian" },
+        { value: "other", label: "other" },
       ],
     };
   }

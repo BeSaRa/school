@@ -9,6 +9,7 @@ export const EndPoints = {
   ACADEMIC_LEVEL: "/academic-levels/",
   FACE_REPO: "/face-repository/",
   STUDENTS: "/students/",
+  GUARDIANS: "/guardians/",
   SUBJECTS: "/subjects/",
   SOURCES: "/sources/",
 };
