@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from "@angular/core";
+import { Component, InjectionToken, OnInit, inject, signal } from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { CommonModule } from "@angular/common";
 import { MatDialog } from "@angular/material/dialog";
@@ -16,6 +16,8 @@ import { UserService } from "@/services/user.service";
 import { SchoolService } from "@/services/school.service";
 import { forkJoin } from "rxjs";
 import { AcademicLevelService } from "@/services/academic-level.service";
+import { GuardiansComponent } from "../guardians/guardians.component";
+import { BRANCH_ID, SCHOOL_ID, STUDENT_ID } from "../guardians/injection-token-inputs";
 
 @Component({
   selector: "app-students",
@@ -143,46 +145,64 @@ export class StudentsComponent extends AdminComponent<Student> implements OnInit
 
   private openDialog(student?: Student): void {
     const { schoolId, branchId } = this.form.value;
+    const isEditMode = !!student;
 
     forkJoin({
       academicLevels: this.academicLevelService.loadAsLookups(),
       persons: this.userService.loadAsLookups(),
     }).subscribe(({ academicLevels, persons }) => {
+      const dialogData: any = {
+        customPath: `/schools/${schoolId}/branches/${branchId}/students`,
+        model: student,
+        modelName: this.localService.locals().student,
+        modelConstructor: Student,
+        formFields: [
+          {
+            key: "studentNo",
+            label: this.localService.locals().student_no,
+            type: "text",
+            required: true,
+            placeholder: this.localService.interpolate("enter_item", { item: "student_no" }),
+            validators: [Validators.minLength(2), Validators.maxLength(50)],
+          },
+          {
+            key: "academicLevelId",
+            label: this.localService.locals().academic_level,
+            type: "select",
+            options: academicLevels,
+            required: true,
+            placeholder: this.localService.interpolate("enter_item", { item: "academic_level" }),
+          },
+          {
+            key: "personId",
+            label: this.localService.locals().person,
+            type: "select",
+            options: persons,
+            required: true,
+            placeholder: this.localService.interpolate("enter_item", { item: "person" }),
+          },
+        ],
+      };
+
+      if (isEditMode) {
+        const inputs = new Map<InjectionToken<any>, any>();
+        inputs.set(STUDENT_ID, student.id);
+        inputs.set(SCHOOL_ID, schoolId);
+        inputs.set(BRANCH_ID, branchId);
+        dialogData.extraTabs = [
+          {
+            label: this.localService.locals().guardians,
+            component: GuardiansComponent,
+            key: "guardians",
+            inputs,
+          },
+        ];
+      }
+
       const dialogRef = this.dialog.open(AdminDialogComponent, {
-        width: "800px",
+        width: "1600px",
         disableClose: true,
-        data: {
-          customPath: `/schools/${schoolId}/branches/${branchId}/students`,
-          model: student,
-          modelName: this.localService.locals().student,
-          modelConstructor: Student,
-          formFields: [
-            {
-              key: "studentNo",
-              label: this.localService.locals().student_no,
-              type: "text",
-              required: true,
-              placeholder: this.localService.interpolate("enter_item", { item: "student_no" }),
-              validators: [Validators.minLength(2), Validators.maxLength(50)],
-            },
-            {
-              key: "academicLevelId",
-              label: this.localService.locals().academic_level,
-              type: "select",
-              options: academicLevels,
-              required: true,
-              placeholder: this.localService.interpolate("enter_item", { item: "academic_level" }),
-            },
-            {
-              key: "personId",
-              label: this.localService.locals().person,
-              type: "select",
-              options: persons,
-              required: true,
-              placeholder: this.localService.interpolate("enter_item", { item: "person" }),
-            },
-          ],
-        },
+        data: dialogData,
       });
 
       dialogRef.afterClosed().subscribe((result) => {

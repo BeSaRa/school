@@ -190,6 +190,8 @@ export interface LangKeysContract {
   staff: string;
   title: string;
   employee_no: string;
+  form: string;
+  guardians: string;
   specialization: string;
   enter_item: string;
   enter_your_item: string;
@@ -209,6 +211,17 @@ export interface LangKeysContract {
   description: string;
   date_of_birth: string;
   branches: string;
+  father: string;
+  mother: string;
+  sister: string;
+  brother: string;
+  grandfather: string;
+  grandmother: string;
+  uncle: string;
+  aunt: string;
+  legal_guardian: string;
+  other: string;
+  relation: string;
 }
 
 export type SupportedLanguage = "en" | "ar";

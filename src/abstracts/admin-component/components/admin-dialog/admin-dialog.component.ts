@@ -1,4 +1,4 @@
-import { Component, inject, computed, effect, Output, EventEmitter } from "@angular/core";
+import { Component, inject, computed, effect, Output, EventEmitter, Injector, signal, InjectionToken } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule, ValidatorFn } from "@angular/forms";
 import { BaseCrudModel } from "@/abstracts/base-crud-model";
@@ -18,6 +18,12 @@ export interface FormField {
   placeholder?: string;
   width?: "1" | "1/2" | "1/3";
   value?: any;
+}
+export interface ExtraTab {
+  label: string;
+  key: string;
+  component: any;
+  inputs?: Map<InjectionToken<any>, any>;
 }
 
 @Component({
@@ -85,7 +91,11 @@ export class AdminDialogComponent<T extends BaseCrudModel<T, any>> {
   model: T | null = null;
   formFields: FormField[] = [];
   modelConstructor: new () => T = null!;
-
+  extraTabs: ExtraTab[] = [];
+  activeTab = signal<string>("form");
+  setActiveTab(tab: string) {
+    this.activeTab.set(tab);
+  }
   @Output() saved = new EventEmitter<T>();
   @Output() cancelled = new EventEmitter<void>();
 
@@ -96,6 +106,7 @@ export class AdminDialogComponent<T extends BaseCrudModel<T, any>> {
   private dialogRef = inject(MatDialogRef<AdminDialogComponent<T>>);
   private dialogService = inject(DialogService);
   localService = inject(LocalService);
+  injector = inject(Injector);
   private data = inject(MAT_DIALOG_DATA);
 
   constructor() {
@@ -114,10 +125,23 @@ export class AdminDialogComponent<T extends BaseCrudModel<T, any>> {
     this.modelName = this.data.modelName || "";
     this.modelConstructor = this.data.modelConstructor;
     this.customPath = this.data.customPath;
+    this.extraTabs = this.data.extraTabs || [];
 
     this.initializeForm();
   }
+  createInjector(inputs?: Map<InjectionToken<any>, any>) {
+    const providers = inputs
+      ? Array.from(inputs.entries()).map(([token, value]) => ({
+          provide: token,
+          useValue: value,
+        }))
+      : [];
 
+    return Injector.create({
+      providers,
+      parent: this.injector,
+    });
+  }
   private initializeForm(): void {
     const formGroup: { [key: string]: any } = {};
 

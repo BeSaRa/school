@@ -1,0 +1,194 @@
+import { Component, OnInit, inject } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { ReactiveFormsModule } from "@angular/forms";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
+import { MatDialog } from "@angular/material/dialog";
+import { AdminTableComponent } from "../../abstracts/admin-component/components/admin-table/admin-table.component";
+import { AdminDialogComponent } from "../../abstracts/admin-component/components/admin-dialog/admin-dialog.component";
+import { AdminComponent } from "../../abstracts/admin-component/admin-component";
+import { LookupService } from "@/services/lookup.service";
+import { UserService } from "@/services/user.service";
+import { ContactService } from "@/services/contact.service";
+import { forkJoin } from "rxjs";
+import { GuardianService } from "@/services/guardian.service";
+import { Guardian } from "@/models/guardian";
+import { BaseCrudService } from "@/abstracts/base-crud-service";
+import { BRANCH_ID, SCHOOL_ID, STUDENT_ID } from "./injection-token-inputs";
+
+@Component({
+  selector: "app-guardians",
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, MatButtonModule, MatIconModule, AdminTableComponent],
+  providers: [
+    {
+      provide: BaseCrudService,
+      useExisting: GuardianService,
+    },
+  ],
+  templateUrl: "./guardians.component.html",
+})
+export class GuardiansComponent extends AdminComponent<Guardian> implements OnInit {
+  private dialog = inject(MatDialog);
+  protected guardianService = inject(GuardianService);
+  protected userService = inject(UserService);
+  protected contactService = inject(ContactService);
+  protected lookupService = inject(LookupService);
+
+  studentId = inject(STUDENT_ID);
+  schoolId = inject(SCHOOL_ID);
+  branchId = inject(BRANCH_ID);
+
+  constructor() {
+    super();
+    this.config.set({
+      itemsPerPage: 20,
+      customLoadPath: `/schools/${this.schoolId}/branches/${this.branchId}/students/${this.studentId}/guardians`,
+      responseKey: "guardians",
+      columns: [
+        {
+          key: "nameEn",
+          label: "en_name",
+          sortable: true,
+          filterable: true,
+          type: "text",
+          filterType: "text",
+        },
+        {
+          key: "nameAr",
+          label: "ar_name",
+          sortable: true,
+          filterable: true,
+          type: "text",
+          filterType: "text",
+        },
+        {
+          key: "relation",
+          label: "relation",
+          sortable: true,
+          filterable: true,
+          type: "text",
+          filterType: "select",
+          filterOptions: this.lookupService.lookups.relation_options,
+        },
+        {
+          key: "gender",
+          label: "gender",
+          sortable: true,
+          filterable: true,
+          type: "text",
+          filterType: "select",
+          filterOptions: this.lookupService.lookups.gender,
+        },
+      ],
+    });
+  }
+
+  protected openAddDialog(): void {
+    this.openDialog();
+  }
+
+  protected openEditDialog(guardian: Guardian): void {
+    this.openDialog(guardian);
+  }
+
+  private openDialog(guardian?: Guardian): void {
+    forkJoin({
+      contacts: this.contactService.loadAsLookups(),
+    }).subscribe(({ contacts }) => {
+      const dialogRef = this.dialog.open(AdminDialogComponent, {
+        width: "900px",
+        disableClose: true,
+        data: {
+          model: guardian,
+          modelName: this.localService.locals().guardians,
+          modelConstructor: Guardian,
+          formFields: [
+            // {
+            //   key: "nameEn",
+            //   label: this.localService.locals().en_name,
+            //   type: "text",
+            //   required: true,
+            //   placeholder: this.localService.interpolate("enter_item", { item: "en_name" }),
+            //   validators: [Validators.minLength(2), Validators.maxLength(100)],
+            // },
+            // {
+            //   key: "nameAr",
+            //   label: this.localService.locals().ar_name,
+            //   type: "text",
+            //   required: true,
+            //   placeholder: this.localService.interpolate("enter_item", { item: "ar_name" }),
+            //   validators: [Validators.minLength(2), Validators.maxLength(100)],
+            // },
+            // {
+            //   key: "username",
+            //   label: this.localService.locals().username,
+            //   type: "text",
+            //   required: true,
+            //   placeholder: this.localService.interpolate("enter_item", { item: "username" }),
+            //   validators: [Validators.minLength(3), Validators.maxLength(50)],
+            // },
+            // {
+            //   key: "password",
+            //   label: this.localService.locals().password,
+            //   type: "text",
+            //   required: true,
+            //   placeholder: this.localService.interpolate("enter_item", { item: "password" }),
+            //   validators: [Validators.pattern(Patterns.PASSWORD)],
+            // },
+            {
+              key: "relation",
+              label: this.localService.locals().relation,
+              type: "select",
+              required: true,
+              options: this.lookupService.lookups.relation_options,
+              placeholder: this.localService.interpolate("enter_item", { item: "relation" }),
+            },
+            // {
+            //   key: "gender",
+            //   label: this.localService.locals().gender,
+            //   type: "select",
+            //   required: true,
+            //   options: this.lookupService.lookups.gender,
+            //   placeholder: this.localService.interpolate("enter_item", { item: "gender" }),
+            // },
+            // {
+            //   key: "dateOfBirth",
+            //   label: this.localService.locals().date_of_birth,
+            //   type: "date",
+            //   required: true,
+            //   placeholder: this.localService.interpolate("enter_item", { item: "date_of_birth" }),
+            // },
+            // {
+            //   key: "contactId",
+            //   label: this.localService.locals().contact,
+            //   type: "select",
+            //   required: false,
+            //   options: contacts,
+            //   placeholder: this.localService.interpolate("enter_item", { item: "contact" }),
+            // },
+            // {
+            //   key: "isActive",
+            //   label: this.localService.locals().active,
+            //   type: "boolean",
+            //   value: true,
+            // },
+            {
+              key: "createdBy",
+              label: "",
+              type: "hidden",
+              required: true,
+              value: this.userService.currentUser?.id,
+            },
+          ],
+        },
+      });
+
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.loadData();
+        }
+      });
+    });
+  }
+}
