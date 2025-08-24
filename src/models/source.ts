@@ -10,6 +10,4 @@ export class Source extends BaseCrudModel<Source, SourceService> {
   override $$__service_name__$$ = "SourceService";
   source!: string;
   sourceType!: "path" | "index";
-  nameEn!: string;
-  nameAr!: string;
 }

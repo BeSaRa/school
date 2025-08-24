@@ -48,8 +48,8 @@
                         <option value="true">{{ localService.locals()[column.filterTrueLabel ?? "filter_yes"] }}</option>
                         <option value="false">{{ localService.locals()[column.filterFalseLabel ?? "filter_no"] }}</option>
                       } @else {
-                        @for (option of column.filterOptions; track option.value) {
-                          <option [value]="option.value">{{ localService.locals()[option.label] }}</option>
+                        @for (option of column.filterOptions; track option.id) {
+                          <option [value]="option.id">{{ option.nameEn }} | {{ option.nameAr }}</option>
                         }
                       }
                     </select>

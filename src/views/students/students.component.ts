@@ -18,6 +18,7 @@ import { forkJoin } from "rxjs";
 import { AcademicLevelService } from "@/services/academic-level.service";
 import { GuardiansComponent } from "../guardians/guardians.component";
 import { BRANCH_ID, SCHOOL_ID, STUDENT_ID } from "../guardians/injection-token-inputs";
+import { School } from "@/models/school";
 
 @Component({
   selector: "app-students",
@@ -39,7 +40,7 @@ export class StudentsComponent extends AdminComponent<Student> implements OnInit
   protected schoolService = inject(SchoolService);
   protected formBuilder = inject(FormBuilder);
   protected academicLevelService = inject(AcademicLevelService);
-  schools!: { value: number; label: string }[];
+  schools!: School[];
   branches!: { value: number; label: string }[];
   schoolsLoading = signal(true);
   branchesLoading = signal(true);
@@ -99,7 +100,7 @@ export class StudentsComponent extends AdminComponent<Student> implements OnInit
   override ngOnInit(): void {
     super.ngOnInit();
 
-    this.schoolService.loadAsLookups().subscribe((data) => {
+    this.schoolService.loadAsLookups("schools").subscribe((data) => {
       this.schools = data;
       this.schoolsLoading.set(false);
       this.form.get("schoolId")?.valueChanges.subscribe((schoolId) => {
@@ -148,8 +149,8 @@ export class StudentsComponent extends AdminComponent<Student> implements OnInit
     const isEditMode = !!student;
 
     forkJoin({
-      academicLevels: this.academicLevelService.loadAsLookups(),
-      persons: this.userService.loadAsLookups(),
+      academicLevels: this.academicLevelService.loadAsLookups("levels"),
+      persons: this.userService.loadAsLookups("users"),
     }).subscribe(({ academicLevels, persons }) => {
       const dialogData: any = {
         customPath: `/schools/${schoolId}/branches/${branchId}/students`,

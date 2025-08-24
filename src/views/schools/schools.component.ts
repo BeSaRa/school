@@ -84,86 +84,82 @@ export class SchoolsComponent extends AdminComponent<School> implements OnInit {
   }
 
   private openDialog(school?: School): void {
-    forkJoin({
-      contacts: this.contactService.loadAsLookups(),
-    }).subscribe(({ contacts }) => {
-      const dialogRef = this.dialog.open(AdminDialogComponent, {
-        width: "1200px",
-        disableClose: true,
-        data: {
-          model: school,
-          modelName: this.localService.locals().school,
-          modelConstructor: School,
-          formFields: [
-            {
-              key: "nameEn",
-              label: this.localService.locals().en_name,
-              type: "text",
-              required: true,
-              placeholder: this.localService.interpolate("enter_item", { item: "en_name" }),
-            },
-            {
-              key: "nameAr",
-              label: this.localService.locals().ar_name,
-              type: "text",
-              required: true,
-              placeholder: this.localService.interpolate("enter_item", { item: "ar_name" }),
-            },
-            {
-              key: "category",
-              label: this.localService.locals().column_category,
-              type: "select",
-              options: this.lookupService.lookups.school_type,
-              required: true,
-              placeholder: this.localService.interpolate("enter_item", { item: "column_category" }),
-            },
-            {
-              key: "contact.contact",
-              label: this.localService.locals().contact,
-              type: "text",
-              required: true,
-              placeholder: this.localService.interpolate("enter_item", { item: "contact" }),
-              validators: [dependentContactValidator("contact.type")],
-              width: "1/2",
-            },
-            {
-              key: "contact.type",
-              label: this.localService.locals().contact_type,
-              type: "select",
-              options: this.lookupService.lookups.contact_type,
-              required: true,
-              placeholder: this.localService.interpolate("enter_item", { item: "contact_type" }),
-              width: "1/2",
-            },
-            {
-              key: "createdBy",
-              label: "",
-              type: "hidden",
-              required: true,
-              value: this.userService.currentUser?.id,
-            },
-          ],
-        },
-      });
-      dialogRef.afterOpened().subscribe(() => {
-        const form = (dialogRef.componentInstance as any).form;
+    const dialogRef = this.dialog.open(AdminDialogComponent, {
+      width: "1200px",
+      disableClose: true,
+      data: {
+        model: school,
+        modelName: this.localService.locals().school,
+        modelConstructor: School,
+        formFields: [
+          {
+            key: "nameEn",
+            label: this.localService.locals().en_name,
+            type: "text",
+            required: true,
+            placeholder: this.localService.interpolate("enter_item", { item: "en_name" }),
+          },
+          {
+            key: "nameAr",
+            label: this.localService.locals().ar_name,
+            type: "text",
+            required: true,
+            placeholder: this.localService.interpolate("enter_item", { item: "ar_name" }),
+          },
+          {
+            key: "category",
+            label: this.localService.locals().column_category,
+            type: "select",
+            options: this.lookupService.lookups.school_type,
+            required: true,
+            placeholder: this.localService.interpolate("enter_item", { item: "column_category" }),
+          },
+          {
+            key: "contact.contact",
+            label: this.localService.locals().contact,
+            type: "text",
+            required: true,
+            placeholder: this.localService.interpolate("enter_item", { item: "contact" }),
+            validators: [dependentContactValidator("contact.type")],
+            width: "1/2",
+          },
+          {
+            key: "contact.type",
+            label: this.localService.locals().contact_type,
+            type: "select",
+            options: this.lookupService.lookups.contact_type,
+            required: true,
+            placeholder: this.localService.interpolate("enter_item", { item: "contact_type" }),
+            width: "1/2",
+          },
+          {
+            key: "createdBy",
+            label: "",
+            type: "hidden",
+            required: true,
+            value: this.userService.currentUser?.id,
+          },
+        ],
+      },
+    });
+    dialogRef.afterOpened().subscribe(() => {
+      const form = (dialogRef.componentInstance as any).form;
 
-        if (form) {
-          const contactTypeControl = form.get(["contact.type"]);
-          const contactContactControl = form.get(["contact.contact"]);
+      if (form) {
+        const contactTypeControl = form.get(["contact.type"]);
+        const contactContactControl = form.get(["contact.contact"]);
 
-          if (contactTypeControl && contactContactControl) {
-            contactTypeControl.valueChanges.subscribe(() => {
-              contactContactControl.updateValueAndValidity();
-            });
-          }
+        if (contactTypeControl && contactContactControl) {
+          contactTypeControl.valueChanges.subscribe(() => {
+            contactContactControl.updateValueAndValidity();
+          });
         }
-      });
-      dialogRef.afterClosed().subscribe((result) => {
-        if (result) {
-          this.loadData();
-        }
-      });
+      }
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.loadData();
+      }
     });
   }
 }

@@ -15,8 +15,6 @@ export class School extends BaseCrudModel<School, SchoolService> {
   override $$__service_name__$$: string = "SchoolService";
 
   category!: "public" | "private" | "international" | "religious" | "independent";
-  nameEn!: string;
-  nameAr!: string;
   isActive!: boolean;
   isDeleted!: boolean;
   contact!: Contact;

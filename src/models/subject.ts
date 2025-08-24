@@ -9,6 +9,4 @@ const { send, receive } = new SubjectInterceptor();
 @InterceptModel({ send, receive })
 export class Subject extends BaseCrudModel<Subject, SubjectService> {
   override $$__service_name__$$ = "SubjectService";
-  nameEn!: string;
-  nameAr!: string;
 }

@@ -12,6 +12,7 @@ import { SchoolBranchService } from "@/services/school-branch.service";
 import { SchoolService } from "@/services/school.service";
 import { AdminTableComponent } from "@/abstracts/admin-component/components/admin-table/admin-table.component";
 import { AdminDialogComponent } from "@/abstracts/admin-component/components/admin-dialog/admin-dialog.component";
+import { School } from "@/models/school";
 
 @Component({
   selector: "app-school-branches",
@@ -31,7 +32,7 @@ export class SchoolBranchesComponent extends AdminComponent<SchoolBranch> implem
   protected schoolService = inject(SchoolService);
   protected formBuilder = inject(FormBuilder);
 
-  schools!: { value: number; label: string }[];
+  schools!: School[];
   schoolsLoading = signal(true);
 
   showTable = false;
@@ -60,7 +61,7 @@ export class SchoolBranchesComponent extends AdminComponent<SchoolBranch> implem
   override ngOnInit(): void {
     super.ngOnInit();
 
-    this.schoolService.loadAsLookups().subscribe((data) => {
+    this.schoolService.loadAsLookups("schools").subscribe((data) => {
       this.schools = data;
       this.schoolsLoading.set(false);
 

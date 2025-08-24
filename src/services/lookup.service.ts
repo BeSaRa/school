@@ -1,11 +1,10 @@
 // lookup.service.ts
 import { Injectable } from "@angular/core";
-import { LocalService } from "./local.service";
-import { LangKeysContract } from "@/types/localization.types";
 
 export interface LookupItem {
-  value: string;
-  label: keyof LangKeysContract;
+  id: string | number;
+  nameEn: string;
+  nameAr: string;
 }
 
 export interface LookupMap {
@@ -25,67 +24,67 @@ export interface LookupMap {
 export class LookupService {
   lookups: LookupMap;
 
-  constructor(private localService: LocalService) {
+  constructor() {
     this.lookups = {
       religious_affiliation: [
-        { value: "catholic", label: "religious_affiliation_catholic" },
-        { value: "islamic", label: "religious_affiliation_islamic" },
-        { value: "christian", label: "religious_affiliation_christian" },
-        { value: "jewish", label: "religious_affiliation_jewish" },
-        { value: "other", label: "religious_affiliation_other" },
+        { id: "catholic", nameEn: "Catholic", nameAr: "كاثوليكي" },
+        { id: "islamic", nameEn: "Islamic", nameAr: "إسلامي" },
+        { id: "christian", nameEn: "Christian", nameAr: "مسيحي" },
+        { id: "jewish", nameEn: "Jewish", nameAr: "يهودي" },
+        { id: "other", nameEn: "Other", nameAr: "أخرى" },
       ],
       school_type: [
-        { value: "public", label: "school_type_public" },
-        { value: "private", label: "school_type_private" },
-        { value: "international", label: "school_type_international" },
-        { value: "religious", label: "school_type_religious" },
-        { value: "independent", label: "school_type_independent" },
+        { id: "public", nameEn: "Public", nameAr: "حكومي" },
+        { id: "private", nameEn: "Private", nameAr: "خاص" },
+        { id: "international", nameEn: "International", nameAr: "دولي" },
+        { id: "religious", nameEn: "Religious", nameAr: "ديني" },
+        { id: "independent", nameEn: "Independent", nameAr: "مستقل" },
       ],
       gender: [
-        { value: "male", label: "male" },
-        { value: "female", label: "female" },
+        { id: "male", nameEn: "Male", nameAr: "ذكر" },
+        { id: "female", nameEn: "Female", nameAr: "أنثى" },
       ],
       visionProvider: [
-        { value: "azure", label: "azure" },
-        { value: "custom", label: "custom" },
+        { id: "azure", nameEn: "Azure", nameAr: "أزور" },
+        { id: "custom", nameEn: "Custom", nameAr: "مخصص" },
       ],
       storageProvider: [
-        { value: "azure", label: "azure" },
-        { value: "local", label: "local" },
+        { id: "azure", nameEn: "Azure", nameAr: "أزور" },
+        { id: "local", nameEn: "Local", nameAr: "محلي" },
       ],
       role: [
-        { value: "student", label: "role_student" },
-        { value: "supervisor", label: "role_supervisor" },
-        { value: "teacher", label: "role_teacher" },
-        { value: "superuser", label: "role_superuser" },
+        { id: "student", nameEn: "Student", nameAr: "طالب" },
+        { id: "supervisor", nameEn: "Supervisor", nameAr: "مشرف" },
+        { id: "teacher", nameEn: "Teacher", nameAr: "معلم" },
+        { id: "superuser", nameEn: "Superuser", nameAr: "مدير النظام" },
       ],
       contact_type: [
-        { value: "email", label: "email" },
-        { value: "mobile", label: "mobile" },
-        { value: "phone", label: "phone" },
-        { value: "website", label: "website" },
+        { id: "email", nameEn: "Email", nameAr: "بريد إلكتروني" },
+        { id: "mobile", nameEn: "Mobile", nameAr: "جوال" },
+        { id: "phone", nameEn: "Phone", nameAr: "هاتف" },
+        { id: "website", nameEn: "Website", nameAr: "موقع إلكتروني" },
       ],
       education_type: [
-        { value: "elementry", label: "elementry" },
-        { value: "middle", label: "middle" },
-        { value: "secondary", label: "secondary" },
-        { value: "higher", label: "higher" },
+        { id: "elementry", nameEn: "Elementary", nameAr: "ابتدائي" },
+        { id: "middle", nameEn: "Middle", nameAr: "إعدادي" },
+        { id: "secondary", nameEn: "Secondary", nameAr: "ثانوي" },
+        { id: "higher", nameEn: "Higher", nameAr: "جامعي" },
       ],
       source_type: [
-        { value: "path", label: "path" },
-        { value: "index", label: "index" },
+        { id: "path", nameEn: "Path", nameAr: "مسار" },
+        { id: "index", nameEn: "Index", nameAr: "فهرس" },
       ],
       relation_options: [
-        { value: "father", label: "father" },
-        { value: "mother", label: "mother" },
-        { value: "grandfather", label: "grandfather" },
-        { value: "grandmother", label: "grandmother" },
-        { value: "uncle", label: "uncle" },
-        { value: "aunt", label: "aunt" },
-        { value: "brother", label: "brother" },
-        { value: "sister", label: "sister" },
-        { value: "guardian", label: "legal_guardian" },
-        { value: "other", label: "other" },
+        { id: "father", nameEn: "Father", nameAr: "أب" },
+        { id: "mother", nameEn: "Mother", nameAr: "أم" },
+        { id: "grandfather", nameEn: "Grandfather", nameAr: "جد" },
+        { id: "grandmother", nameEn: "Grandmother", nameAr: "جدة" },
+        { id: "uncle", nameEn: "Uncle", nameAr: "عم/خال" },
+        { id: "aunt", nameEn: "Aunt", nameAr: "عمة/خالة" },
+        { id: "brother", nameEn: "Brother", nameAr: "أخ" },
+        { id: "sister", nameEn: "Sister", nameAr: "أخت" },
+        { id: "guardian", nameEn: "Guardian", nameAr: "ولي أمر" },
+        { id: "other", nameEn: "Other", nameAr: "أخرى" },
       ],
     };
   }

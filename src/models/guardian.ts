@@ -11,8 +11,6 @@ export class Guardian extends BaseCrudModel<Guardian, GuardianService> {
   relation!: string;
   dateOfBirth!: string;
   gender!: string;
-  nameAr!: string;
-  nameEn!: string;
   username!: string;
   password!: string;
   isDeleted!: boolean;

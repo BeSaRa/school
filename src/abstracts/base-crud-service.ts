@@ -1,6 +1,6 @@
 import { BaseCrudServiceContract } from "@/contracts/base-crud-service-contract";
 import { OptionsContract } from "@/contracts/options-contract";
-import { Observable } from "rxjs";
+import { map, Observable } from "rxjs";
 import { inject } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { UrlService } from "@/services/url.service";
@@ -49,5 +49,17 @@ export abstract class BaseCrudService<Model, PrimaryKey = number> extends Regist
   @CastResponse()
   getById(id: PrimaryKey): Observable<Model> {
     return this.http.get<Model>(this.getUrlSegment() + "/" + id);
+  }
+
+  @CastResponse()
+  loadAsLookups(responseKey: string, options?: OptionsContract, customPath?: string): Observable<Model[]> {
+    const customLoadLookupsPath = customPath ? this.urlService.addBaseUrl(customPath) : undefined;
+    return this.http
+      .get<Model[]>(customLoadLookupsPath ?? this.getUrlSegment() + "/lookup", {
+        params: new HttpParams({
+          fromObject: options as never,
+        }),
+      })
+      .pipe(map((response: any) => response?.[responseKey] ?? []));
   }
 }

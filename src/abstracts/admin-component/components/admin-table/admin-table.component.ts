@@ -5,6 +5,7 @@ import { ColumnFilter } from "../../admin-component";
 import { IconService } from "../../../../services/icon.service";
 import { LocalService } from "@/services/local.service";
 import { LangKeysContract } from "@/types/localization.types";
+import { LookupItem } from "@/services/lookup.service";
 
 export type FilterType = "text" | "select" | "date" | "boolean" | "number" | "custom";
 
@@ -15,7 +16,7 @@ export interface TableColumn<T = any> {
   filterable?: boolean;
   type?: FilterType;
   filterType?: FilterType;
-  filterOptions?: Array<{ value: any; label: keyof LangKeysContract }>;
+  filterOptions?: Array<LookupItem>;
   customTemplate?: (value: any, item: T) => string;
   width?: string;
   filterFalseLabel?: keyof LangKeysContract;

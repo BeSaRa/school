@@ -86,10 +86,8 @@
                       {{ field.placeholder }}
                     </option>
                   }
-                  @for (option of field.options; track option.value) {
-                    <option [ngValue]="option.value">
-                      {{ localService.locals()[option.label] || option.label }}
-                    </option>
+                  @for (option of field.options; track option.id) {
+                    <option [ngValue]="option.id">{{ option.nameEn }} | {{ option.nameAr }}</option>
                   }
                 </select>
               } @else if (field.type === "boolean") {

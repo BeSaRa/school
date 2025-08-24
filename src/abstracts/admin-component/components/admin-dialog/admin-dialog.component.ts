@@ -5,14 +5,14 @@ import { BaseCrudModel } from "@/abstracts/base-crud-model";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { DialogService } from "@/services/dialog.service";
 import { LocalService } from "@/services/local.service";
-import { LangKeysContract } from "@/types/localization.types";
+import { LookupItem } from "@/services/lookup.service";
 
 export interface FormField {
   key: string;
   label: string;
   type?: "text" | "number" | "email" | "password" | "textarea" | "select" | "boolean" | "date" | "hidden";
   required?: boolean;
-  options?: Array<{ value: any; label: keyof LangKeysContract }>;
+  options?: Array<LookupItem>;
   validators?: ValidatorFn[];
   disabled?: boolean;
   placeholder?: string;

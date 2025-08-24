@@ -5,8 +5,8 @@
       <div [hidden]="schoolsLoading()">
         <label class="block text-white mb-1">{{ localService.locals().school_name }}</label>
         <select formControlName="schoolId" class="w-full rounded-lg p-2 text-black">
-          @for (school of schools; track school.value) {
-            <option [value]="school.value">{{ school.label }}</option>
+          @for (school of schools; track school.id) {
+            <option [value]="school.id">{{ school.nameEn }} | {{ school.nameAr }}</option>
           }
         </select>
       </div>
