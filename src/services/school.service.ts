@@ -5,6 +5,7 @@ import { School } from "@/models/school";
 import { CastResponseContainer } from "cast-response";
 import { map, Observable } from "rxjs";
 import { SchoolBranch } from "@/models/school-branch";
+import { Staff } from "@/models/staff";
 
 @CastResponseContainer({
   $default: {
@@ -25,6 +26,16 @@ export class SchoolService extends BaseCrudService<School> {
         res.schools.map((item: School) => ({
           value: item.id,
           label: item.nameAr,
+        }))
+      )
+    );
+  }
+  loadStaffsAsLookups(): Observable<{ value: number; label: string }[]> {
+    return this.load(undefined, `schools/staff`).pipe(
+      map((res: any) =>
+        res.staffs.map((item: Staff) => ({
+          value: item.id,
+          label: item.personalInfo.nameAr,
         }))
       )
     );

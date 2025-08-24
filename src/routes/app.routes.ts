@@ -60,10 +60,14 @@ export const routes: Routes = [
         path: AppRoutes.STAFF,
         loadComponent: () => import("../views/staff/staff.component").then((m) => m.StaffComponent),
       },
-      // {
-      //   path: AppRoutes.SOURCES,
-      //   loadComponent: () => import("../views/sources/sources.component").then((m) => m.SourcesComponent),
-      // },
+      {
+        path: AppRoutes.SOURCES,
+        loadComponent: () => import("../views/sources/sources.component").then((m) => m.SourcesComponent),
+      },
+      {
+        path: AppRoutes.COURSE,
+        loadComponent: () => import("../views/courses/courses.component").then((m) => m.CoursesComponent),
+      },
     ],
   },
   {

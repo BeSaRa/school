@@ -11,6 +11,7 @@ export const EndPoints = {
   STUDENTS: "/students/",
   GUARDIANS: "/guardians/",
   SUBJECTS: "/subjects/",
+  COURSES: "/courses/",
   SOURCES: "/sources/",
 };
 

@@ -14,6 +14,7 @@ export const AppRoutes = {
   STUDENTS: "students",
   SUBJECTS: "subjects",
   STAFF: "staff",
+  COURSE: "courses",
   SOURCES: "sources",
 
   // Error routes
