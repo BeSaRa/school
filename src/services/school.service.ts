@@ -20,16 +20,6 @@ export class SchoolService extends BaseCrudService<School> {
   override getUrlSegment(): string {
     return this.urlService.URLS.SCHOOLS;
   }
-  loadAsLookups(): Observable<{ value: number; label: string }[]> {
-    return this.load().pipe(
-      map((res: any) =>
-        res.schools.map((item: School) => ({
-          value: item.id,
-          label: item.nameAr,
-        }))
-      )
-    );
-  }
   loadStaffsAsLookups(): Observable<{ value: number; label: string }[]> {
     return this.load(undefined, `schools/staff`).pipe(
       map((res: any) =>

@@ -11,7 +11,6 @@ import { MatIconModule } from "@angular/material/icon";
 import { CommonModule } from "@angular/common";
 import { AdminTableComponent } from "../../abstracts/admin-component/components/admin-table/admin-table.component";
 import { LookupService } from "@/services/lookup.service";
-import { ContactService } from "@/services/contact.service";
 import { forkJoin } from "rxjs";
 import { SchoolService } from "@/services/school.service";
 import { Patterns } from "@/validators/patterns";
@@ -33,7 +32,6 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
   private dialog = inject(MatDialog);
   protected userService = inject(UserService);
   protected lookupService = inject(LookupService);
-  protected contactService = inject(ContactService);
   protected schoolService = inject(SchoolService);
 
   constructor() {
@@ -110,9 +108,8 @@ export class UsersComponent extends AdminComponent<User> implements OnInit {
 
   openDialog(user?: User): void {
     forkJoin({
-      contacts: this.contactService.loadAsLookups(),
-      schools: this.schoolService.loadAsLookups(),
-    }).subscribe(({ contacts, schools }) => {
+      schools: this.schoolService.loadAsLookups("schools"),
+    }).subscribe(({ schools }) => {
       const dialogRef = this.dialog.open(AdminDialogComponent, {
         width: "800px",
         disableClose: true,

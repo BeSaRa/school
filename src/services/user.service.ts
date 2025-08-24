@@ -70,14 +70,4 @@ export class UserService extends BaseCrudService<User> {
       localStorage.removeItem("current_user");
     }
   }
-  loadAsLookups(): Observable<{ value: number; label: string }[]> {
-    return this.load().pipe(
-      map((res: any) =>
-        res.persons.map((item: User) => ({
-          value: item.id,
-          label: item.nameAr,
-        }))
-      )
-    );
-  }
 }

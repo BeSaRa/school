@@ -14,6 +14,7 @@ import { AdminDialogComponent } from "@/abstracts/admin-component/components/adm
 import { StaffService } from "@/services/staff.service";
 import { forkJoin } from "rxjs";
 import { UserService } from "@/services/user.service";
+import { School } from "@/models/school";
 
 @Component({
   selector: "app-staff",
@@ -34,7 +35,7 @@ export class StaffComponent extends AdminComponent<Staff> implements OnInit {
   protected userService = inject(UserService);
   protected formBuilder = inject(FormBuilder);
 
-  schools!: { value: number; label: string }[];
+  schools!: School[];
   schoolsLoading = signal(true);
 
   showTable = false;
@@ -65,7 +66,7 @@ export class StaffComponent extends AdminComponent<Staff> implements OnInit {
   override ngOnInit(): void {
     super.ngOnInit();
 
-    this.schoolService.loadAsLookups().subscribe((data) => {
+    this.schoolService.loadAsLookups("schools").subscribe((data) => {
       this.schools = data;
       this.schoolsLoading.set(false);
 
@@ -100,7 +101,7 @@ export class StaffComponent extends AdminComponent<Staff> implements OnInit {
   private openDialog(staff?: Staff): void {
     const { schoolId } = this.form.value;
     forkJoin({
-      users: this.userService.loadAsLookups(),
+      users: this.userService.loadAsLookups("users"),
     }).subscribe(({ users }) => {
       const dialogRef = this.dialog.open(AdminDialogComponent, {
         width: "800px",

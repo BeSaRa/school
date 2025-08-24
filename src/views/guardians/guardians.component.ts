@@ -93,102 +93,37 @@ export class GuardiansComponent extends AdminComponent<Guardian> implements OnIn
   }
 
   private openDialog(guardian?: Guardian): void {
-    forkJoin({
-      contacts: this.contactService.loadAsLookups(),
-    }).subscribe(({ contacts }) => {
-      const dialogRef = this.dialog.open(AdminDialogComponent, {
-        width: "900px",
-        disableClose: true,
-        data: {
-          model: guardian,
-          modelName: this.localService.locals().guardians,
-          modelConstructor: Guardian,
-          formFields: [
-            // {
-            //   key: "nameEn",
-            //   label: this.localService.locals().en_name,
-            //   type: "text",
-            //   required: true,
-            //   placeholder: this.localService.interpolate("enter_item", { item: "en_name" }),
-            //   validators: [Validators.minLength(2), Validators.maxLength(100)],
-            // },
-            // {
-            //   key: "nameAr",
-            //   label: this.localService.locals().ar_name,
-            //   type: "text",
-            //   required: true,
-            //   placeholder: this.localService.interpolate("enter_item", { item: "ar_name" }),
-            //   validators: [Validators.minLength(2), Validators.maxLength(100)],
-            // },
-            // {
-            //   key: "username",
-            //   label: this.localService.locals().username,
-            //   type: "text",
-            //   required: true,
-            //   placeholder: this.localService.interpolate("enter_item", { item: "username" }),
-            //   validators: [Validators.minLength(3), Validators.maxLength(50)],
-            // },
-            // {
-            //   key: "password",
-            //   label: this.localService.locals().password,
-            //   type: "text",
-            //   required: true,
-            //   placeholder: this.localService.interpolate("enter_item", { item: "password" }),
-            //   validators: [Validators.pattern(Patterns.PASSWORD)],
-            // },
-            {
-              key: "relation",
-              label: this.localService.locals().relation,
-              type: "select",
-              required: true,
-              options: this.lookupService.lookups.relation_options,
-              placeholder: this.localService.interpolate("enter_item", { item: "relation" }),
-            },
-            // {
-            //   key: "gender",
-            //   label: this.localService.locals().gender,
-            //   type: "select",
-            //   required: true,
-            //   options: this.lookupService.lookups.gender,
-            //   placeholder: this.localService.interpolate("enter_item", { item: "gender" }),
-            // },
-            // {
-            //   key: "dateOfBirth",
-            //   label: this.localService.locals().date_of_birth,
-            //   type: "date",
-            //   required: true,
-            //   placeholder: this.localService.interpolate("enter_item", { item: "date_of_birth" }),
-            // },
-            // {
-            //   key: "contactId",
-            //   label: this.localService.locals().contact,
-            //   type: "select",
-            //   required: false,
-            //   options: contacts,
-            //   placeholder: this.localService.interpolate("enter_item", { item: "contact" }),
-            // },
-            // {
-            //   key: "isActive",
-            //   label: this.localService.locals().active,
-            //   type: "boolean",
-            //   value: true,
-            // },
-            {
-              key: "createdBy",
-              label: "",
-              type: "hidden",
-              required: true,
-              value: this.userService.currentUser?.id,
-            },
-          ],
-        },
-      });
+    const dialogRef = this.dialog.open(AdminDialogComponent, {
+      width: "900px",
+      disableClose: true,
+      data: {
+        model: guardian,
+        modelName: this.localService.locals().guardians,
+        modelConstructor: Guardian,
+        formFields: [
+          {
+            key: "relation",
+            label: this.localService.locals().relation,
+            type: "select",
+            required: true,
+            options: this.lookupService.lookups.relation_options,
+            placeholder: this.localService.interpolate("enter_item", { item: "relation" }),
+          },
+          {
+            key: "createdBy",
+            label: "",
+            type: "hidden",
+            required: true,
+            value: this.userService.currentUser?.id,
+          },
+        ],
+      },
+    });
 
-      dialogRef.afterClosed().subscribe((result) => {
-        if (result) {
-          this.loadData();
-        }
-      });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.loadData();
+      }
     });
   }
 }

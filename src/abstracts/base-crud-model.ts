@@ -16,6 +16,8 @@ export abstract class BaseCrudModel<Model, Service extends BaseCrudServiceContra
   updatedBy!: number;
   createdAt!: string;
   updatedAt!: string;
+  nameEn!: string;
+  nameAr!: string;
   abstract override $$__service_name__$$: string;
 
   create(customPath?: string): Observable<Model> {

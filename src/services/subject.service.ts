@@ -30,14 +30,4 @@ export class SubjectService extends BaseCrudService<Subject> {
       }),
     });
   }
-  loadAsLookups(): Observable<{ value: number; label: string }[]> {
-    return this.load().pipe(
-      map((res: any) =>
-        res.subjects.map((item: Subject) => ({
-          value: item.id,
-          label: item.nameAr,
-        }))
-      )
-    );
-  }
 }

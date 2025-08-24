@@ -12,8 +12,6 @@ export class SchoolBranch extends BaseCrudModel<SchoolBranch, SchoolBranchServic
 
   country!: string;
   city!: string;
-  nameEn!: string;
-  nameAr!: string;
   area!: string;
   street!: string;
   latitude!: number;

@@ -95,8 +95,8 @@ export class CoursesComponent extends AdminComponent<Course> implements OnInit {
 
   private openDialog(course?: Course): void {
     forkJoin({
-      subjects: this.subjectService.loadAsLookups(),
-      academicLevels: this.academicLevelService.loadAsLookups(),
+      subjects: this.subjectService.loadAsLookups("subjects"),
+      academicLevels: this.academicLevelService.loadAsLookups("academicLevels"),
       teachers: this.schoolService.loadStaffsAsLookups(),
     }).subscribe(({ subjects, academicLevels, teachers }) => {
       const dialogRef = this.dialog.open(AdminDialogComponent, {

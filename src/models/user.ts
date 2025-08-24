@@ -15,8 +15,6 @@ export class User extends BaseCrudModel<User, UserService> {
   isSystemRole!: boolean;
   dateOfBirth!: string;
   gender!: "male" | "female";
-  nameEn!: string;
-  nameAr!: string;
   username!: string;
   isActive!: boolean;
   isDeleted!: boolean;
