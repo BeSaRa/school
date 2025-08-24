@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpParams } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { map, Observable } from "rxjs";
 import { CastResponse, CastResponseContainer } from "cast-response";
 
 import { BaseCrudService } from "@/abstracts/base-crud-service";
@@ -29,5 +29,15 @@ export class SubjectService extends BaseCrudService<Subject> {
         fromObject: options as any,
       }),
     });
+  }
+  loadAsLookups(): Observable<{ value: number; label: string }[]> {
+    return this.load().pipe(
+      map((res: any) =>
+        res.subjects.map((item: Subject) => ({
+          value: item.id,
+          label: item.nameAr,
+        }))
+      )
+    );
   }
 }

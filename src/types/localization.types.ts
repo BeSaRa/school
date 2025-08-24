@@ -222,6 +222,10 @@ export interface LangKeysContract {
   legal_guardian: string;
   other: string;
   relation: string;
+  course_no: string;
+  teacher: string;
+  course: string;
+  courses: string;
 }
 
 export type SupportedLanguage = "en" | "ar";
