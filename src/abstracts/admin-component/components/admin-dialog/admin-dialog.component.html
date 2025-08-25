@@ -87,7 +87,7 @@
                     </option>
                   }
                   @for (option of field.options; track option.id) {
-                    <option [ngValue]="option.id">{{ option.nameEn }} | {{ option.nameAr }}</option>
+                    <option [ngValue]="option.id">{{ option.getNames() }}</option>
                   }
                 </select>
               } @else if (field.type === "boolean") {

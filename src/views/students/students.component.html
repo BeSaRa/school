@@ -7,7 +7,7 @@
 
         <select formControlName="schoolId" class="w-full rounded-lg p-2 text-black">
           @for (school of schools; track school.id) {
-            <option [value]="school.id">{{ school.nameEn }} | {{ school.nameAr }}</option>
+            <option [value]="school.id">{{ school.getNames() }}</option>
           }
         </select>
 

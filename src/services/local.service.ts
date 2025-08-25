@@ -1,6 +1,6 @@
 import { Injectable, signal, computed, effect, inject, PLATFORM_ID } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { BehaviorSubject, Observable, catchError, firstValueFrom, of, tap } from "rxjs";
+import { BehaviorSubject, firstValueFrom } from "rxjs";
 import { DOCUMENT } from "@angular/common";
 import { isPlatformBrowser } from "@angular/common";
 import { LangKeysContract, LocalizationData, SupportedLanguage } from "@/types/localization.types";
@@ -70,22 +70,6 @@ export class LocalService {
     const newLang = this.currentLang() === "en" ? "ar" : "en";
     this.setLanguage(newLang);
   }
-
-  /**
-   * Updates a translation key and reloads translations
-   * @param key The key to update
-   * @param value The new value for the key
-   */
-  // createLocal(
-  //   key: string,
-  //   value: { ar: string; en: string }
-  // ): Observable<LocalizationData> {
-  //   const updatedData = { ...this.localizationData() };
-  //   updatedData[key] = value;
-  //   this.localizationData.set(updatedData);
-
-  //   return of(updatedData);
-  // }
 
   /**
    * Gets the current language

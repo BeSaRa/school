@@ -49,7 +49,7 @@
                         <option value="false">{{ localService.locals()[column.filterFalseLabel ?? "filter_no"] }}</option>
                       } @else {
                         @for (option of column.filterOptions; track option.id) {
-                          <option [value]="option.id">{{ option.nameEn }} | {{ option.nameAr }}</option>
+                          <option [value]="option.id">{{ option.getNames() }}</option>
                         }
                       }
                     </select>

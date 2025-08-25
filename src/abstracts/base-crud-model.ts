@@ -6,9 +6,10 @@ import { CloneContract } from "@/contracts/clone-contract";
 import { BaseCrudModelContract } from "@/contracts/base-crud-model-contract";
 import { HasServiceNameContract } from "@/contracts/has-service-name-contract";
 import { BaseCrudServiceContract } from "@/contracts/base-crud-service-contract";
+import { GetNamesMixin } from "@/mixins/get-names-mixin";
 
 export abstract class BaseCrudModel<Model, Service extends BaseCrudServiceContract<Model, PrimaryKey>, PrimaryKey = number>
-  extends HasServiceMixin(ClonerMixin(class {}))
+  extends HasServiceMixin(ClonerMixin(GetNamesMixin(class {})))
   implements BaseModelContract, CloneContract, BaseCrudModelContract<Model, PrimaryKey>, HasServiceNameContract
 {
   id!: PrimaryKey;
@@ -16,8 +17,6 @@ export abstract class BaseCrudModel<Model, Service extends BaseCrudServiceContra
   updatedBy!: number;
   createdAt!: string;
   updatedAt!: string;
-  nameEn!: string;
-  nameAr!: string;
   abstract override $$__service_name__$$: string;
 
   create(customPath?: string): Observable<Model> {
