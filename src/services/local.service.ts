@@ -4,6 +4,17 @@ import { BehaviorSubject, firstValueFrom } from "rxjs";
 import { DOCUMENT } from "@angular/common";
 import { isPlatformBrowser } from "@angular/common";
 import { LangKeysContract, LocalizationData, SupportedLanguage } from "@/types/localization.types";
+import { UrlService } from "./url.service";
+
+interface ServerLocalizationEntity {
+  lookupKey: string;
+  nameEn: string;
+  nameAr: string;
+}
+
+interface ServerLocalizationResponse {
+  entities: ServerLocalizationEntity[];
+}
 
 @Injectable({
   providedIn: "root",
@@ -11,6 +22,7 @@ import { LangKeysContract, LocalizationData, SupportedLanguage } from "@/types/l
 export class LocalService {
   private readonly document = inject(DOCUMENT);
   private readonly http = inject(HttpClient);
+  private readonly urlService = inject(UrlService);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly currentLang = signal<SupportedLanguage>("en");
   private readonly localizationData = signal<LocalizationData>({});
@@ -41,11 +53,22 @@ export class LocalService {
   }
 
   /**
-   * Loads translations from the JSON file
+   * Loads translations from the server
    */
   async loadTranslations(): Promise<void> {
     try {
-      const data = await firstValueFrom(this.http.get<LocalizationData>("assets/resources/locals.json"));
+      const url = this.urlService.addBaseUrl("/localization/");
+      const response = await firstValueFrom(this.http.get<ServerLocalizationResponse>(url));
+
+      // Transform server response to LocalizationData
+      const data: LocalizationData = {};
+      response.entities.forEach((entity) => {
+        data[entity.lookupKey] = {
+          en: entity.nameEn,
+          ar: entity.nameAr,
+        };
+      });
+
       this.localizationData.set(data);
     } catch (error) {
       console.error("Failed to load translations:", error);
