@@ -55,7 +55,7 @@ export abstract class BaseCrudService<Model, PrimaryKey = number> extends Regist
   loadAsLookups(responseKey: string, options?: OptionsContract, customPath?: string): Observable<Model[]> {
     const customLoadLookupsPath = customPath ? this.urlService.addBaseUrl(customPath) : undefined;
     return this.http
-      .get<Model[]>(customLoadLookupsPath ?? this.getUrlSegment() + "/lookup", {
+      .get<Model[]>(customLoadLookupsPath ?? this.getUrlSegment() + "lookup", {
         params: new HttpParams({
           fromObject: options as never,
         }),
