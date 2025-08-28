@@ -13,6 +13,7 @@ export const EndPoints = {
   SUBJECTS: "/subjects/",
   COURSES: "/courses/",
   SOURCES: "/sources/",
+  TIMETABLE: "/timetables/",
 };
 
 export type EndpointsType = typeof EndPoints;
