@@ -13,7 +13,19 @@ export class LookupItem extends ClonerMixin(GetNamesMixin(class {})) {
   }
 }
 
-const lookupKeys = ["religious_affiliation", "school_type", "gender", "visionProvider", "storageProvider", "role", "contact_type", "education_type", "source_type", "relation_options"] as const;
+const lookupKeys = [
+  "religious_affiliation",
+  "school_type",
+  "gender",
+  "visionProvider",
+  "storageProvider",
+  "role",
+  "contact_type",
+  "education_type",
+  "source_type",
+  "relation_options",
+  "week_days",
+] as const;
 type LookupKeys = (typeof lookupKeys)[number];
 
 @Injectable({ providedIn: "root" })
@@ -80,6 +92,15 @@ export class LookupService {
       { id: "sister", nameEn: "Sister", nameAr: "أخت" },
       { id: "guardian", nameEn: "Guardian", nameAr: "ولي أمر" },
       { id: "other", nameEn: "Other", nameAr: "أخرى" },
+    ],
+    week_days: [
+      { id: 0, nameEn: "Sunday", nameAr: "الأحد" },
+      { id: 1, nameEn: "Monday", nameAr: "الإثنين" },
+      { id: 2, nameEn: "Tuesday", nameAr: "الثلاثاء" },
+      { id: 3, nameEn: "Wednesday", nameAr: "الأربعاء" },
+      { id: 4, nameEn: "Thursday", nameAr: "الخميس" },
+      { id: 5, nameEn: "Friday", nameAr: "الجمعة" },
+      { id: 6, nameEn: "Saturday", nameAr: "السبت" },
     ],
   };
 

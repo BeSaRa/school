@@ -226,6 +226,13 @@ export interface LangKeysContract {
   teacher: string;
   course: string;
   courses: string;
+  timetable: string;
+  timetables: string;
+  weekday: string;
+  start_time: string;
+  end_time: string;
+  educator: string;
+  classroom: string;
 }
 
 export type SupportedLanguage = "en" | "ar";

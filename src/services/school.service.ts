@@ -3,9 +3,7 @@ import { BaseCrudService } from "@/abstracts/base-crud-service";
 
 import { School } from "@/models/school";
 import { CastResponseContainer } from "cast-response";
-import { map, Observable } from "rxjs";
-import { SchoolBranch } from "@/models/school-branch";
-import { Staff } from "@/models/staff";
+import { Observable } from "rxjs";
 import { LookupItem } from "./lookup.service";
 
 @CastResponseContainer({
@@ -26,5 +24,8 @@ export class SchoolService extends BaseCrudService<School> {
   }
   loadBranchesAsLookup(schoolId: number): Observable<LookupItem[]> {
     return this.loadAsLookups("branches", undefined, `schools/${schoolId}/branches/lookup`);
+  }
+  loadClassRoomsAsLookups(schoolId: number, branchId: number): Observable<LookupItem[]> {
+    return this.loadAsLookups("classrooms", undefined, `schools/${schoolId}/branches/${branchId}/classrooms/lookup`);
   }
 }
