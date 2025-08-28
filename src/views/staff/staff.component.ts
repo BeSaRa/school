@@ -15,6 +15,7 @@ import { StaffService } from "@/services/staff.service";
 import { forkJoin } from "rxjs";
 import { UserService } from "@/services/user.service";
 import { School } from "@/models/school";
+import { LookupItem } from "@/services/lookup.service";
 
 @Component({
   selector: "app-staff",
@@ -35,7 +36,7 @@ export class StaffComponent extends AdminComponent<Staff> implements OnInit {
   protected userService = inject(UserService);
   protected formBuilder = inject(FormBuilder);
 
-  schools!: School[];
+  schools!: LookupItem[];
   schoolsLoading = signal(true);
 
   showTable = false;

@@ -7,6 +7,7 @@ import { UrlService } from "@/services/url.service";
 import { CastResponse, HasInterception, InterceptParam } from "cast-response";
 import { ServiceContract } from "@/contracts/service-contract";
 import { RegisterServiceMixin } from "@/mixins/register-service-mixin";
+import { LookupItem } from "@/services/lookup.service";
 
 export abstract class BaseCrudService<Model, PrimaryKey = number> extends RegisterServiceMixin(class {}) implements BaseCrudServiceContract<Model, PrimaryKey>, ServiceContract {
   abstract serviceName: string;
@@ -52,7 +53,7 @@ export abstract class BaseCrudService<Model, PrimaryKey = number> extends Regist
   }
 
   @CastResponse()
-  loadAsLookups(responseKey: string, options?: OptionsContract, customPath?: string): Observable<Model[]> {
+  loadAsLookups(responseKey: string, options?: OptionsContract, customPath?: string): Observable<LookupItem[]> {
     const customLoadLookupsPath = customPath ? this.urlService.addBaseUrl(customPath) : undefined;
     return this.http
       .get<Model[]>(customLoadLookupsPath ?? this.getUrlSegment() + "lookup", {

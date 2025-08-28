@@ -6,6 +6,7 @@ import { CastResponseContainer } from "cast-response";
 import { map, Observable } from "rxjs";
 import { SchoolBranch } from "@/models/school-branch";
 import { Staff } from "@/models/staff";
+import { LookupItem } from "./lookup.service";
 
 @CastResponseContainer({
   $default: {
@@ -20,24 +21,10 @@ export class SchoolService extends BaseCrudService<School> {
   override getUrlSegment(): string {
     return this.urlService.URLS.SCHOOLS;
   }
-  loadStaffsAsLookups(): Observable<{ value: number; label: string }[]> {
-    return this.load(undefined, `schools/staff`).pipe(
-      map((res: any) =>
-        res.staffs.map((item: Staff) => ({
-          value: item.id,
-          label: item.personalInfo.nameAr,
-        }))
-      )
-    );
+  loadStaffsAsLookups(): Observable<LookupItem[]> {
+    return this.loadAsLookups("staffs", undefined, "schools/staff/lookup");
   }
-  loadBranchesAsLookup(schoolId: number): Observable<{ value: number; label: string }[]> {
-    return this.load(undefined, `schools/${schoolId}/branches`).pipe(
-      map((res: any) =>
-        res.branches.map((item: SchoolBranch) => ({
-          value: item.id,
-          label: `${item.country} - ${item.city} - ${item.area}`,
-        }))
-      )
-    );
+  loadBranchesAsLookup(schoolId: number): Observable<LookupItem[]> {
+    return this.loadAsLookups("branches", undefined, `schools/${schoolId}/branches/lookup`);
   }
 }
