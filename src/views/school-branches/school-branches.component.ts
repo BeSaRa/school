@@ -13,6 +13,7 @@ import { SchoolService } from "@/services/school.service";
 import { AdminTableComponent } from "@/abstracts/admin-component/components/admin-table/admin-table.component";
 import { AdminDialogComponent } from "@/abstracts/admin-component/components/admin-dialog/admin-dialog.component";
 import { School } from "@/models/school";
+import { LookupItem } from "@/services/lookup.service";
 
 @Component({
   selector: "app-school-branches",
@@ -32,7 +33,7 @@ export class SchoolBranchesComponent extends AdminComponent<SchoolBranch> implem
   protected schoolService = inject(SchoolService);
   protected formBuilder = inject(FormBuilder);
 
-  schools!: School[];
+  schools!: LookupItem[];
   schoolsLoading = signal(true);
 
   showTable = false;

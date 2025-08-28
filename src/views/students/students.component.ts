@@ -11,7 +11,7 @@ import { Student } from "@/models/student";
 import { StudentService } from "@/services/student.service";
 import { AdminTableComponent } from "@/abstracts/admin-component/components/admin-table/admin-table.component";
 import { AdminDialogComponent } from "@/abstracts/admin-component/components/admin-dialog/admin-dialog.component";
-import { LookupService } from "@/services/lookup.service";
+import { LookupItem, LookupService } from "@/services/lookup.service";
 import { UserService } from "@/services/user.service";
 import { SchoolService } from "@/services/school.service";
 import { forkJoin } from "rxjs";
@@ -40,8 +40,8 @@ export class StudentsComponent extends AdminComponent<Student> implements OnInit
   protected schoolService = inject(SchoolService);
   protected formBuilder = inject(FormBuilder);
   protected academicLevelService = inject(AcademicLevelService);
-  schools!: School[];
-  branches!: { value: number; label: string }[];
+  schools!: LookupItem[];
+  branches!: LookupItem[];
   schoolsLoading = signal(true);
   branchesLoading = signal(true);
 

@@ -21,8 +21,8 @@
         <label class="block text-white mb-1">{{ localService.locals().branch }}</label>
 
         <select formControlName="branchId" class="w-full rounded-lg p-2 text-black">
-          @for (branch of branches; track branch.value) {
-            <option [value]="branch.value">{{ branch.label }}</option>
+          @for (branch of branches; track branch.id) {
+            <option [value]="branch.id">{{ branch.getNames() }}</option>
           }
         </select>
 
