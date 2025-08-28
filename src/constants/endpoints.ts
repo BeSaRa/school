@@ -6,7 +6,7 @@ export const EndPoints = {
   CONVERSATION: "/conversations/",
   USERS: "/users/",
   CONTACTS: "/contacts/",
-  ACADEMIC_LEVEL: "/academic-levels/",
+  ACADEMIC_LEVEL: "/academic_levels/",
   FACE_REPO: "/face-repository/",
   STUDENTS: "/students/",
   GUARDIANS: "/guardians/",

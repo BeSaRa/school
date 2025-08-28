@@ -93,37 +93,50 @@ export class GuardiansComponent extends AdminComponent<Guardian> implements OnIn
   }
 
   private openDialog(guardian?: Guardian): void {
-    const dialogRef = this.dialog.open(AdminDialogComponent, {
-      width: "900px",
-      disableClose: true,
-      data: {
-        model: guardian,
-        modelName: this.localService.locals().guardians,
-        modelConstructor: Guardian,
-        formFields: [
-          {
-            key: "relation",
-            label: this.localService.locals().relation,
-            type: "select",
-            required: true,
-            options: this.lookupService.lookups.relation_options,
-            placeholder: this.localService.interpolate("enter_item", { item: "relation" }),
-          },
-          {
-            key: "createdBy",
-            label: "",
-            type: "hidden",
-            required: true,
-            value: this.userService.currentUser?.id,
-          },
-        ],
-      },
-    });
+    forkJoin({
+      persons: this.userService.loadAsLookups("persons"),
+    }).subscribe(({ persons }) => {
+      const dialogRef = this.dialog.open(AdminDialogComponent, {
+        width: "900px",
+        disableClose: true,
+        data: {
+          model: guardian,
+          modelName: this.localService.locals().guardians,
+          modelConstructor: Guardian,
+          customPath: `/schools/${this.schoolId}/branches/${this.branchId}/students/${this.studentId}/guardians`,
+          formFields: [
+            {
+              key: "relation",
+              label: this.localService.locals().relation,
+              type: "select",
+              required: true,
+              options: this.lookupService.lookups.relation_options,
+              placeholder: this.localService.interpolate("enter_item", { item: "relation" }),
+            },
+            {
+              key: "personId",
+              label: this.localService.locals().person,
+              type: "select",
+              options: persons,
+              required: true,
+              placeholder: this.localService.interpolate("enter_item", { item: "person" }),
+            },
+            {
+              key: "createdBy",
+              label: "",
+              type: "hidden",
+              required: true,
+              value: this.userService.currentUser?.id,
+            },
+          ],
+        },
+      });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.loadData();
-      }
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.loadData();
+        }
+      });
     });
   }
 }

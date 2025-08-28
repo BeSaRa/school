@@ -149,8 +149,8 @@ export class StudentsComponent extends AdminComponent<Student> implements OnInit
     const isEditMode = !!student;
 
     forkJoin({
-      academicLevels: this.academicLevelService.loadAsLookups("levels"),
-      persons: this.userService.loadAsLookups("users"),
+      academicLevels: this.academicLevelService.loadAsLookups("academicLevels"),
+      persons: this.userService.loadAsLookups("persons"),
     }).subscribe(({ academicLevels, persons }) => {
       const dialogData: any = {
         customPath: `/schools/${schoolId}/branches/${branchId}/students`,
